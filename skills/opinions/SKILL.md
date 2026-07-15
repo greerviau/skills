@@ -19,5 +19,6 @@ When a task involves a judgment call that benefits from the user's informed opin
 If the user states an opinion while you're working — a preference, a correction, a "no, do it this way" that generalizes beyond the immediate task — ask whether to capture it in `~/OPINIONS.md`. Don't add it unprompted; confirm first, since the document is meant to reflect only opinions they've chosen to make durable.
 
 When adding an entry:
+- If `~/OPINIONS.md` doesn't exist yet, create it with a short header explaining what the document is.
 - File it under the existing section it belongs to (e.g. `## UI/UX`), or create a new section if it's a new domain.
 - Write it as a direct, standalone rule someone else could follow without extra context — include the reasoning if it clarifies when the rule applies.

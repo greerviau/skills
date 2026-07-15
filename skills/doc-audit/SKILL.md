@@ -13,7 +13,7 @@ Documentation and comments should describe the current state of the code, in pre
 - When editing existing docs, rewrite the affected passages to reflect current reality instead of appending "changed from ..." notes.
 - **Exception**: records whose purpose is to capture a decision or history may describe before/after and motivation — ADRs, decision logs, design proposals, CHANGELOGs, release notes, migration guides, commit messages, and PR descriptions. This exception does not extend to code comments or documentation living alongside the code.
 - Don't add repo layouts to documentation.
-- In prose markdown (docs, READMEs, plans, design docs), use semantic line breaks: one sentence per line, no hard-wrapping to a fixed column width. This keeps diffs and blame scoped to the sentence that changed and has no effect on rendered output. Does not apply to code, tables, or code blocks.
+- In prose markdown (docs, READMEs, plans, design docs), use semantic line breaks: one sentence per line, no hard-wrapping to a fixed column width. This keeps diffs and blame scoped to the sentence that changed. Does not apply to code, tables, or code blocks.
 - Favor mermaid diagrams over ASCII diagrams, unless mermaid can't express the diagram or the user asks otherwise.
 
 ## Procedure: auditing after a code change
