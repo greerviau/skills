@@ -29,18 +29,17 @@ npx skills@latest list
 
 ### Claude Code plugin
 
-This repo is also a Claude Code plugin, registered as `greerviau-skills` — `.claude-plugin/plugin.json` declares it, and every folder under `skills/` is auto-discovered as a skill. Note the plugin form installs all skills; use the npx installer for per-skill installs.
+This repo is also a Claude Code plugin marketplace: `.claude-plugin/marketplace.json` registers the `greerviau` marketplace, which serves the `greerviau-skills` plugin, and every folder under `skills/` is auto-discovered as a skill. Note the plugin form installs all skills; use the npx installer for per-skill installs.
 
 ```bash
-claude plugin install github:greerviau/skills
-# or, from a local clone:
-claude plugin install ./skills
+claude plugin marketplace add greerviau/skills
+claude plugin install greerviau-skills@greerviau
 ```
 
 ```bash
-claude plugin list                         # confirm it's installed
-claude plugin update greerviau-skills      # pull in new/changed skills later
-claude plugin uninstall greerviau-skills   # remove it
+claude plugin list                                   # confirm it's installed
+claude plugin marketplace update greerviau           # pull in new/changed skills later
+claude plugin uninstall greerviau-skills@greerviau   # remove it
 ```
 
 ## Skills reference

@@ -1,0 +1,13 @@
+{
+  "name": "greerviau",
+  "owner": {
+    "name": "Greer"
+  },
+  "plugins": [
+    {
+      "name": "greerviau-skills",
+      "source": "./",
+      "description": "Reusable agent skills for engineering and scientific research."
+    }
+  ]
+}
