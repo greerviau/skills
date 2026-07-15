@@ -14,6 +14,7 @@ If you remember a relevant paper, confirm it exists via `lit_search.py` before c
 
 Scripts live in `scripts/` next to this file and run with `uv run` (inline dependencies, no install step).
 Run them from the `scripts/` directory so the `common.py` import resolves.
+The only prerequisite is [uv](https://docs.astral.sh/uv/) itself; if it's missing, install it with `curl -LsSf https://astral.sh/uv/install.sh | sh`.
 
 Environment variables (both optional but recommended):
 
