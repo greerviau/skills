@@ -1,0 +1,13 @@
+{
+  "name": "skills",
+  "version": "1.0.0",
+  "description": "Reusable agent skills for engineering and scientific research.",
+  "bin": {
+    "skills": "./skills.sh"
+  },
+  "files": [
+    "skills.sh",
+    "skills/"
+  ],
+  "license": "MIT"
+}

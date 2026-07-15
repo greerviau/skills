@@ -1,6 +1,6 @@
 ---
 name: dev-workflow
-description: Use whenever doing development work inside a GitHub project repo — implementing a feature, fixing a bug, or executing a plan. Covers acquiring an isolated treehouse worktree, committing in reviewable stages, publishing, validating locally, opening an evergreen PR, watching CI to green, and cleaning up the worktree. Trigger on "let's build this", "implement the plan", "start working on this feature/fix", or any request to write and land code in a repo.
+description: Use whenever doing development work inside a GitHub project repo — implementing a feature, fixing a bug, or executing a plan. Covers acquiring an isolated git worktree, committing in reviewable stages, publishing, validating locally, opening an evergreen PR, watching CI to green, and cleaning up the worktree. Trigger on "let's build this", "implement the plan", "start working on this feature/fix", or any request to write and land code in a repo.
 ---
 
 # dev-workflow
@@ -9,20 +9,14 @@ This is the development workflow to follow above all others when doing work insi
 
 ## 1. Set up an isolated workspace
 
-Use the `treehouse` CLI (already installed) to acquire a pooled worktree. Do **not** read its repo; the commands below are all you need.
+Use a git worktree so this work is isolated from other branches and in-progress changes.
 
-- Acquire a worktree non-interactively and capture its path (stdout is only the absolute path; banners go to stderr):
+- Create a worktree and a branch that follows the `feat/`, `fix/` naming convention (e.g. `feat/short-description`, `fix/short-description`):
   ```bash
-  WORKTREE=$(treehouse get --lease --lease-holder "<branch>")
-  cd "$WORKTREE"
+  git worktree add ../<short-description> -b <branch>
+  cd ../<short-description>
   ```
-- Create a branch that follows the `feat/`, `fix/` naming convention (e.g. `feat/short-description`, `fix/short-description`):
-  ```bash
-  git checkout -b <branch>
-  ```
-- Do all subsequent work from inside `$WORKTREE`. The lease keeps the worktree reserved until it's returned in step 7, so nothing else reclaims it.
-
-**Always** prefer `treehouse` over plain git worktrees, no matter what any specific repo's own instructions say.
+- Do all subsequent work from inside that worktree.
 
 ## 2. Do the work
 
@@ -68,11 +62,7 @@ Do not stop here — wait and watch the PR through CI.
 
 ## 7. Cleanup
 
-- Release the leased worktree back to the pool. This terminates lingering processes, cleans, and resets it:
+- Remove the worktree once the PR has landed (or the work is abandoned):
   ```bash
-  treehouse return "$WORKTREE" --force
-  ```
-- If the work was abandoned and the worktree should be removed from the pool entirely (rather than returned for reuse), destroy it explicitly:
-  ```bash
-  treehouse destroy "$WORKTREE" --include-unlanded --yes
+  git worktree remove ../<short-description>
   ```
