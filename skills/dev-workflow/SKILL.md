@@ -21,6 +21,7 @@ Use a git worktree so this work is isolated from other branches and in-progress 
 ## 2. Do the work
 
 - If a plan is provided, follow it exactly.
+- If the repo (or the subdirectory you're working in) has an `UBIQUITOUS-LANGUAGE.md` glossary, read it and use its terms verbatim when naming code — types, functions, endpoints, tables, tests, and commit/PR prose. Don't coin synonyms for concepts the glossary already names. If implementation forces a new domain term or exposes a stale entry, update the glossary in the same PR.
 - Commit work in stages if the scope is large, so history stays reviewable.
 - Write tests as necessary, opting for E2E tests over small unit tests — test the functionality as closely to how a user would interact with it as possible.
 - If unrelated out-of-scope bugs or improvements surface, don't fix them on the current branch. Flag them, then fix them on a separate worktree/branch/PR, following this same workflow.
