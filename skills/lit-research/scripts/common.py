@@ -160,7 +160,9 @@ def from_pubmed_summary(doc: dict) -> Record:
 
 
 def from_crossref(msg: dict) -> Record:
-    updates = msg.get("update-to", [])
+    # A retracted work carries the retraction notice in `updated-by`
+    # (sourced from Retraction Watch); `update-to` appears on the notice itself.
+    updates = (msg.get("updated-by") or []) + (msg.get("update-to") or [])
     retracted = any((u.get("type") or "").lower().startswith("retract") for u in updates)
     year = None
     parts = (msg.get("issued") or {}).get("date-parts") or [[None]]

@@ -1,6 +1,6 @@
 # lit-research skill
 
-Status: planned, not yet implemented.
+Status: implemented — see `skills/lit-research/`.
 
 ## Summary
 

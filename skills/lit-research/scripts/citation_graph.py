@@ -30,7 +30,18 @@ def resolve_seed(ident: str) -> dict:
     doi = common.normalize_doi(ident) if not ident.upper().startswith("W") else None
     path = f"doi:{doi}" if doi and "/" in doi else ident.upper()
     params = {"mailto": common.polite_mailto()} if common.polite_mailto() else None
-    return common.get_json(f"{common.OPENALEX_API}/works/{path}", params)
+    try:
+        return common.get_json(f"{common.OPENALEX_API}/works/{path}", params)
+    except LookupError:
+        if not doi:
+            raise
+        # Some DOIs (notably arXiv's 10.48550/*) aren't registered as work DOIs in
+        # OpenAlex; fall back to a title-bearing search on the DOI string.
+        data = common.get_json(f"{common.OPENALEX_API}/works", {**(params or {}), "filter": f"doi:{doi}", "per-page": 1})
+        results = data.get("results", [])
+        if not results:
+            raise
+        return results[0]
 
 
 def fetch_batch(openalex_ids: list[str]) -> list[Record]:

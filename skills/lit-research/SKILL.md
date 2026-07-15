@@ -37,8 +37,8 @@ uv run lit_search.py "..." --source s2 --json
 ### citation_graph.py — snowball from a seed
 
 ```bash
-uv run citation_graph.py 10.48550/arxiv.1706.03762 --direction both --limit 25
-uv run citation_graph.py W2741809807 --direction cites --depth 2 --json
+uv run citation_graph.py 10.18653/v1/2021.emnlp-main.132 --direction both --limit 25
+uv run citation_graph.py W3199258042 --direction cites --depth 2 --json
 ```
 
 - `refs` walks backward (what the seed builds on), `cites` walks forward (what builds on the seed), `both` is the default.
