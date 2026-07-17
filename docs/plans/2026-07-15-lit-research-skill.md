@@ -1,6 +1,6 @@
 # lit-research skill
 
-Status: implemented — see `skills/lit-research/`.
+Status: implemented — see `skills/research/lit-research/`.
 
 ## Summary
 
@@ -12,7 +12,7 @@ API access is implemented as small Python CLIs under the skill's `scripts/` dire
 
 Gathered in the specing interview (2026-07-15):
 
-- **Scope**: one skill folder, `skills/lit-research/`, covering the core lit family — search, citation graph, reference-check, lit-review orchestration.
+- **Scope**: one skill folder, `skills/research/lit-research/`, covering the core lit family — search, citation graph, reference-check, lit-review orchestration.
 - **Follow-ups, explicitly out of scope for this pass**: `paper-fetch` (DOI → open-access PDF + text extraction), `dataset-search` (Zenodo/Figshare/Dryad/HF), and writing/review skills (`paper-writing`, `peer-review`). Each gets its own future spec; this plan's design should leave room for them (see Approach).
 - **Architecture**: Python scripts via `uv` (never plain `pip`), not prose-only curl instructions. Deterministic, low token cost, testable.
 - **Sources**: OpenAlex (primary), Semantic Scholar, PubMed, Crossref. arXiv is not in scope.
@@ -22,7 +22,7 @@ Gathered in the specing interview (2026-07-15):
 ## Scope
 
 - **Primary repo**: `skills` (this repo). No other repos affected.
-- New files, all under `skills/lit-research/`:
+- New files, all under `skills/research/lit-research/`:
   - `SKILL.md`
   - `scripts/lit_search.py`
   - `scripts/citation_graph.py`
@@ -59,7 +59,7 @@ The canonical record includes the best OA URL from OpenAlex/Unpaywall data, whic
 
 ## Steps
 
-1. **Scaffold the skill folder.** Create `skills/lit-research/` with a stub `SKILL.md` (frontmatter `name: lit-research` plus a trigger-rich `description:` matching the style of the existing skills' frontmatter) and empty `scripts/` dir.
+1. **Scaffold the skill folder.** Create `skills/research/lit-research/` with a stub `SKILL.md` (frontmatter `name: lit-research` plus a trigger-rich `description:` matching the style of the existing skills' frontmatter) and empty `scripts/` dir.
 2. **`scripts/common.py`.** Shared `httpx` client with retry/backoff and polite headers; the canonical paper-record dataclass and normalizers for OpenAlex, Semantic Scholar, PubMed, and Crossref payloads; text and `--json` renderers; env-var handling for `OPENALEX_MAILTO` and `S2_API_KEY`.
 3. **`scripts/lit_search.py`.** CLI: `uv run lit_search.py "<query>" [--source openalex|s2|pubmed] [--limit N] [--year-from/--year-to] [--json]`. OpenAlex default; dedupes by DOI when multiple sources are combined via repeated `--source`.
 4. **`scripts/citation_graph.py`.** CLI: `uv run citation_graph.py <doi-or-id> [--direction refs|cites|both] [--depth 1|2] [--limit N] [--json]`. Walks references and citing papers via OpenAlex (S2 fallback for citation contexts/TLDRs); ranks output by citation count and recency; flags likely-seminal works (highly cited references shared across the seed's neighborhood).

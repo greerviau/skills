@@ -17,10 +17,11 @@ Turn a raw request into a concrete, reviewed plan of action. The request may be 
 
 ## The ubiquitous-language glossary
 
-Each repo carries a glossary of its domain terms — the shared vocabulary between user, spec, and code. It lives in version control so it travels with the code:
+Each repo carries a glossary of its domain terms — the shared vocabulary between user, spec, and code. It is scoped to the repo (or, in a large repo, to a bounded context within it), never to an individual spec. It lives in version control so it travels with the code:
 
 - **Default layout:** a single `docs/UBIQUITOUS-LANGUAGE.md` at the repo root, one entry per term: the term, its precise meaning in this domain, and (where useful) the code artifacts that embody it. Honor an existing glossary location or standing convention over the default.
 - **Large repos with distinct bounded contexts** (e.g. a monorepo of several services plus a frontend): each context keeps its own `UBIQUITOUS-LANGUAGE.md` in its subdirectory, scoped to that context's meanings. The root glossary then acts as the global map — it lists each context, links to its glossary, and records cross-context mappings where the same concept goes by different names (or the same name means different things) on either side of a boundary.
+- **Scope entries to the repo, not to the spec.** A glossary entry names a domain concept as it lives in the code and the team's language — it is not tied to the spec that happened to introduce it. Never add a per-spec section, reference the originating plan from an entry, or tag an entry with a planning status like *(planned)*. Group entries only by where in the repo they belong (repo-wide, or a bounded context / subdirectory), and write every definition in present tense describing what the term means — not what a plan intends to build.
 - A term belongs in the glossary when it names a domain concept people could misunderstand — not every variable or utility. Keep entries short and precise; a glossary nobody reads is worse than none.
 
 During specing: **read** the relevant glossaries before the interview and use their terms exactly — never introduce a synonym for a concept that already has a name. **Extend** them as the interview and exploration settle new terms or reveal that an existing entry is stale, confirming definitions with the user as part of the interview rather than inventing them. Glossary updates are written with the plan and are part of the spec's deliverable.
@@ -74,7 +75,7 @@ Write the plan in the glossary's terms throughout — don't define terms inline 
 
 Write the plan to a `.md` file with the native Write tool. Honor an explicit location from the request or a standing convention (a `CLAUDE.md` directive, a memory, a location the user has set before); otherwise default to `docs/plans/` inside the primary repo, creating the folder if needed. Name the file descriptively in kebab-case, prefixed with the actual current date, e.g. `2026-07-07-fix-xic-shard-lookup.md`.
 
-Alongside the plan, write any new or corrected glossary entries to the appropriate `UBIQUITOUS-LANGUAGE.md` file(s), creating them (and the root map, for multi-context repos) if they don't exist yet.
+Alongside the plan, write any new or corrected glossary entries to the appropriate `UBIQUITOUS-LANGUAGE.md` file(s), creating them (and the root map, for multi-context repos) if they don't exist yet. Place each entry under the repo-wide or bounded-context grouping it belongs to — never a section named for this spec — and define it in present tense without referencing the plan or a planning status. The glossary is the plan's deliverable, but it reads as the repo's standing vocabulary, not as a record of this spec.
 
 After writing, report only the file paths and a one-line description each — don't dump the plan's full contents back into the conversation.
 
