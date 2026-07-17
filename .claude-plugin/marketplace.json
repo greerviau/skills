@@ -9,7 +9,7 @@
       "name": "greerviau-engineering",
       "source": "./",
       "strict": false,
-      "description": "Engineering skills: spec/plan, the GitHub dev workflow, doc audits, and opinion-aware decisions.",
+      "description": "Engineering skills: spec/plan, the GitHub dev workflow, and doc audits.",
       "category": "engineering",
       "keywords": [
         "engineering",
@@ -36,6 +36,21 @@
       ],
       "skills": [
         "./skills/research"
+      ]
+    },
+    {
+      "name": "greerviau-personal",
+      "source": "./",
+      "strict": false,
+      "description": "Personal skills: opinion-aware decisions backed by ~/OPINIONS.md.",
+      "category": "personal",
+      "keywords": [
+        "personal",
+        "skills",
+        "opinions"
+      ],
+      "skills": [
+        "./skills/personal"
       ]
     }
   ]
