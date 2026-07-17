@@ -7,7 +7,7 @@ One entry per term; keep entries short and precise.
 
 - **skill**: a self-contained, plain-markdown procedure doc (`SKILL.md` with YAML frontmatter) in a folder under `skills/`, auto-discovered by the plugin loader. May carry supporting scripts in a `scripts/` subfolder.
 
-## lit-research (planned — see docs/plans/2026-07-15-lit-research-skill.md)
+## lit-research (skills/research/lit-research)
 
 - **canonical record**: the normalized paper representation all sources map into, keyed by DOI (source-native id when no DOI exists). Embodied by the record dataclass in `scripts/common.py`.
 - **snowballing**: expanding a paper set by walking a seed paper's citation graph — backward through its references and forward through papers citing it — iterating until new results stop appearing (saturation).
