@@ -3,11 +3,40 @@
   "owner": {
     "name": "Greer"
   },
+  "description": "Reusable agent skills for engineering and scientific research, one installable plugin per category.",
   "plugins": [
     {
-      "name": "greerviau-skills",
+      "name": "greerviau-engineering",
       "source": "./",
-      "description": "Reusable agent skills for engineering and scientific research."
+      "strict": false,
+      "description": "Engineering skills: spec/plan, the GitHub dev workflow, doc audits, and opinion-aware decisions.",
+      "category": "engineering",
+      "keywords": [
+        "engineering",
+        "skills",
+        "spec",
+        "dev-workflow",
+        "doc-audit"
+      ],
+      "skills": [
+        "./skills/engineering"
+      ]
+    },
+    {
+      "name": "greerviau-research",
+      "source": "./",
+      "strict": false,
+      "description": "Scientific-research skills backed by OpenAlex, Semantic Scholar, PubMed, and Crossref.",
+      "category": "research",
+      "keywords": [
+        "research",
+        "skills",
+        "literature",
+        "citations"
+      ],
+      "skills": [
+        "./skills/research"
+      ]
     }
   ]
 }

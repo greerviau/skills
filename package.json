@@ -1,13 +1,24 @@
 {
-  "name": "skills",
+  "name": "greerviau-skills",
   "version": "1.0.0",
+  "private": true,
   "description": "Reusable agent skills for engineering and scientific research.",
-  "bin": {
-    "skills": "./skills.sh"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/greerviau/skills"
   },
-  "files": [
-    "skills.sh",
-    "skills/"
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "research",
+    "skills",
+    "claude-code"
   ],
-  "license": "MIT"
+  "skills": [
+    "./skills/engineering/spec",
+    "./skills/engineering/dev-workflow",
+    "./skills/engineering/doc-audit",
+    "./skills/engineering/opinions",
+    "./skills/research/lit-research"
+  ]
 }

@@ -1,54 +1,72 @@
 # skills
 
-Reusable agent skills for engineering and scientific research. Each skill is a self-contained, plain-markdown procedure doc with a small YAML frontmatter header.
+Reusable agent skills for engineering and scientific research.
+Each skill is a self-contained, plain-markdown procedure doc with a small YAML frontmatter header.
 
-## Installation
+Skills are organized into two categories, `engineering` and `research`, and ship as two separately installable Claude Code plugins so you can take one category and skip the other.
 
-Skills are independently installable — install only the ones you want (see the [reference](#skills-reference) below).
+## Install with skills.sh
 
-### npx
+The [skills.sh](https://skills.sh/greerviau/skills) installer copies the skills into your project so you can hack on them and make them your own.
+It fetches this repo directly - no manual cloning or symlinking required.
 
 Install every skill:
 
 ```bash
-npx skills@latest add
+npx skills@latest add greerviau/skills
 ```
 
-Or just the ones you want:
+Then pick the skills you want and the agents to install them on.
 
-```bash
-npx skills@latest add spec doc-audit
-```
+## Install as Claude Code plugins
 
-Skills are symlinked into `~/.claude/skills`. Pass `--target` to install elsewhere, and use `list` to see what's available:
+Prefer a plug-and-play install you don't maintain by hand?
+The skills also ship as native [Claude Code plugins](https://code.claude.com/docs/en/plugins): a read-only, always-current bundle you don't edit, updated when this repo ships a new version.
 
-```bash
-npx skills@latest add spec --target /path/to/other/skills/dir
-npx skills@latest list
-```
-
-### Claude Code plugin
-
-This repo is also a Claude Code plugin marketplace: `.claude-plugin/marketplace.json` registers the `greerviau` marketplace, which serves the `greerviau-skills` plugin, and every folder under `skills/` is auto-discovered as a skill. Note the plugin form installs all skills; use the npx installer for per-skill installs.
+This repo is a Claude Code plugin marketplace (`.claude-plugin/marketplace.json`) that registers the `greerviau` marketplace and serves one plugin per category.
+Install only the categories you want:
 
 ```bash
 claude plugin marketplace add greerviau/skills
-claude plugin install greerviau-skills@greerviau
+claude plugin install greerviau-engineering@greerviau   # engineering skills
+claude plugin install greerviau-research@greerviau       # research skills
 ```
 
+Both are optional and independent - install engineering and skip research, or vice versa.
+Manage them the usual way:
+
 ```bash
-claude plugin list                                   # confirm it's installed
-claude plugin marketplace update greerviau           # pull in new/changed skills later
-claude plugin uninstall greerviau-skills@greerviau   # remove it
+claude plugin list                                        # confirm what's installed
+claude plugin marketplace update greerviau                # pull in new/changed skills later
+claude plugin uninstall greerviau-research@greerviau      # remove a category
 ```
+
+Two ways to install, two philosophies:
+
+- **[skills.sh](https://skills.sh/greerviau/skills)** copies the skills into your project so you can hack on them and make them your own.
+- **The plugins** keep them as read-only, always-current bundles you don't edit - best when you just want the set to work and follow along as it evolves.
 
 ## Skills reference
 
-- **[spec](skills/spec/SKILL.md)** — turns a raw request into a reviewed plan of action: interviews the user to pin down requirements and terminology, explores the code to discover scope, maintains the repo's ubiquitous-language glossary, and writes the plan to a markdown file for review before any building starts.
-- **[dev-workflow](skills/dev-workflow/SKILL.md)** — the end-to-end development loop for a GitHub repo: isolated worktree, staged commits, local validation, an evergreen PR, watching CI to green, and cleanup.
-- **[doc-audit](skills/doc-audit/SKILL.md)** — after any code change, audits the documentation surface it touched (docstrings, comments, READMEs, docs, examples) and rewrites stale passages in present tense describing current state.
-- **[opinions](skills/opinions/SKILL.md)** — consults `~/OPINIONS.md` before making subjective calls the user has likely already formed a view on, and offers to record new opinions the user states mid-task.
-- **[lit-research](skills/lit-research/SKILL.md)** — scientific-literature tooling backed by OpenAlex, Semantic Scholar, PubMed, and Crossref: search, citation-graph snowballing, bibliography reference-checks, and an orchestrated literature-review workflow, with every citation grounded in real API records.
+### Engineering
+
+- **[spec](skills/engineering/spec/SKILL.md)** — turns a raw request into a reviewed plan of action: interviews the user to pin down requirements and terminology, explores the code to discover scope, maintains the repo's ubiquitous-language glossary, and writes the plan to a markdown file for review before any building starts.
+- **[dev-workflow](skills/engineering/dev-workflow/SKILL.md)** — the end-to-end development loop for a GitHub repo: isolated worktree, staged commits, local validation, an evergreen PR, watching CI to green, and cleanup.
+- **[doc-audit](skills/engineering/doc-audit/SKILL.md)** — after any code change, audits the documentation surface it touched (docstrings, comments, READMEs, docs, examples) and rewrites stale passages in present tense describing current state.
+- **[opinions](skills/engineering/opinions/SKILL.md)** — consults `~/OPINIONS.md` before making subjective calls the user has likely already formed a view on, and offers to record new opinions the user states mid-task.
+
+### Research
+
+- **[lit-research](skills/research/lit-research/SKILL.md)** — scientific-literature tooling backed by OpenAlex, Semantic Scholar, PubMed, and Crossref: search, citation-graph snowballing, bibliography reference-checks, and an orchestrated literature-review workflow, with every citation grounded in real API records.
+
+## Contributing
+
+Maintainer dev scripts live in [`scripts/`](scripts):
+
+- `scripts/link-skills.sh` symlinks every skill into `~/.claude/skills` and `~/.agents/skills` so local edits are live.
+- `scripts/list-skills.sh` lists every skill in the repo.
+
+Add a new skill by creating `skills/<category>/<name>/SKILL.md`, then register it in both `package.json` (the `skills` array, for the skills.sh installer) and, if it's a new category, `.claude-plugin/marketplace.json` (a new plugin entry).
 
 ## License
 
