@@ -5,7 +5,7 @@ description: Use whenever doing development work inside a GitHub project repo â€
 
 # dev-workflow
 
-This is the development workflow to follow above all others when doing work inside a GitHub project repo.
+This is the development workflow to follow when doing work inside a GitHub project repo.
 
 ## 1. Set up an isolated workspace
 
