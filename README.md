@@ -3,7 +3,7 @@
 Reusable agent skills for engineering and scientific research.
 Each skill is a self-contained, plain-markdown procedure doc with a small YAML frontmatter header.
 
-Skills are organized into three categories, `engineering`, `research`, and `personal`, and ship as three separately installable Claude Code plugins so you can take the categories you want and skip the rest.
+Skills are organized into categories, and ship as separately installable Claude Code plugins so you can take the categories you want and skip the rest.
 
 ## Install with skills.sh
 
