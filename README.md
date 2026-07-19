@@ -45,17 +45,23 @@ Two ways to install, two philosophies:
 
 ## Skills reference
 
-### Engineering `install greerviau-engineering@greerviau`
+### Engineering 
+
+`/plugin install greerviau-engineering@greerviau`
 
 - **[spec](skills/engineering/spec/SKILL.md)** — turns a raw request into a reviewed plan of action: interviews the user to pin down requirements and terminology, explores the code to discover scope, maintains the repo's ubiquitous-language glossary, and writes the plan to a markdown file for review before any building starts.
 - **[dev-workflow](skills/engineering/dev-workflow/SKILL.md)** — the end-to-end development loop for a GitHub repo: isolated worktree, staged commits, local validation, an evergreen PR, watching CI to green, and cleanup.
 - **[doc-audit](skills/engineering/doc-audit/SKILL.md)** — after any code change, audits the documentation surface it touched (docstrings, comments, READMEs, docs, examples) and rewrites stale passages in present tense describing current state.
 
-### Research `install greerviau-research@greerviau`
+### Research 
+
+`/plugin install greerviau-research@greerviau`
 
 - **[lit-research](skills/research/lit-research/SKILL.md)** — scientific-literature tooling backed by OpenAlex, Semantic Scholar, PubMed, and Crossref: search, citation-graph snowballing, bibliography reference-checks, and an orchestrated literature-review workflow, with every citation grounded in real API records.
 
-### Personal `install greerviau-personal@greerviau`
+### Personal 
+
+`/plugin install greerviau-personal@greerviau`
 
 - **[opinions](skills/personal/opinions/SKILL.md)** — consults `~/OPINIONS.md` before making subjective calls the user has likely already formed a view on, and offers to record new opinions the user states mid-task.
 
