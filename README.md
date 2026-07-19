@@ -26,20 +26,16 @@ The skills also ship as native [Claude Code plugins](https://code.claude.com/doc
 This repo is a Claude Code plugin marketplace (`.claude-plugin/marketplace.json`) that registers the `greerviau` marketplace and serves one plugin per category.
 Install only the categories you want:
 
+Inside Claude Code:
 ```bash
-claude plugin marketplace add greerviau/skills
-claude plugin install greerviau-engineering@greerviau   # engineering skills
-claude plugin install greerviau-research@greerviau       # research skills
-claude plugin install greerviau-personal@greerviau       # personal skills
+/plugin marketplace add greerviau/skills
+/plugin install <skill>@greerviau
 ```
 
-Each is optional and independent - install any subset of the categories.
-Manage them the usual way:
-
+Or from your shell:
 ```bash
-claude plugin list                                        # confirm what's installed
-claude plugin marketplace update greerviau                # pull in new/changed skills later
-claude plugin uninstall greerviau-research@greerviau      # remove a category
+claude plugin marketplace add greerviau/skills
+claude plugin install <skill>@greerviau
 ```
 
 Two ways to install, two philosophies:
@@ -49,17 +45,17 @@ Two ways to install, two philosophies:
 
 ## Skills reference
 
-### Engineering
+### Engineering `install greerviau-engineering@greerviau`
 
 - **[spec](skills/engineering/spec/SKILL.md)** — turns a raw request into a reviewed plan of action: interviews the user to pin down requirements and terminology, explores the code to discover scope, maintains the repo's ubiquitous-language glossary, and writes the plan to a markdown file for review before any building starts.
 - **[dev-workflow](skills/engineering/dev-workflow/SKILL.md)** — the end-to-end development loop for a GitHub repo: isolated worktree, staged commits, local validation, an evergreen PR, watching CI to green, and cleanup.
 - **[doc-audit](skills/engineering/doc-audit/SKILL.md)** — after any code change, audits the documentation surface it touched (docstrings, comments, READMEs, docs, examples) and rewrites stale passages in present tense describing current state.
 
-### Research
+### Research `install greerviau-research@greerviau`
 
 - **[lit-research](skills/research/lit-research/SKILL.md)** — scientific-literature tooling backed by OpenAlex, Semantic Scholar, PubMed, and Crossref: search, citation-graph snowballing, bibliography reference-checks, and an orchestrated literature-review workflow, with every citation grounded in real API records.
 
-### Personal
+### Personal `install greerviau-personal@greerviau`
 
 - **[opinions](skills/personal/opinions/SKILL.md)** — consults `~/OPINIONS.md` before making subjective calls the user has likely already formed a view on, and offers to record new opinions the user states mid-task.
 
