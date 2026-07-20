@@ -17,7 +17,7 @@
         "spec",
         "spec-to-tickets",
         "dev-workflow",
-        "pr-describe",
+        "open-pr",
         "debug",
         "review",
         "refactor",
