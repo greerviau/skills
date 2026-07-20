@@ -9,7 +9,7 @@
       "name": "greerviau-engineering",
       "source": "./",
       "strict": false,
-      "description": "Engineering skills: spec/plan, spec-to-tickets, the GitHub dev workflow, PR descriptions, debugging, review, refactoring, and doc audits.",
+      "description": "Engineering skills: spec/plan, spec-to-tickets, the GitHub dev workflow, pull requests, debugging, review, refactoring, and doc audits.",
       "category": "engineering",
       "keywords": [
         "engineering",
