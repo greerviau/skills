@@ -29,13 +29,13 @@ Install only the categories you want:
 Inside Claude Code:
 ```bash
 /plugin marketplace add greerviau/skills
-/plugin install <skill>@greerviau
+/plugin install <plugin>@greerviau
 ```
 
 Or from your shell:
 ```bash
 claude plugin marketplace add greerviau/skills
-claude plugin install <skill>@greerviau
+claude plugin install <plugin>@greerviau
 ```
 
 Two ways to install, two philosophies:
