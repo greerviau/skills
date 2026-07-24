@@ -31,5 +31,5 @@ This **complements** the built-in `/code-review` (which hunts correctness bugs) 
 
 ## Boundaries
 
-- Reviews and reports only. To apply findings, hand off to `dev-workflow`.
+- Reviews and reports only. Applying findings is a separate step (the `dev-workflow` skill, if you use it).
 - Incidental defects get flagged, not fixed in place.

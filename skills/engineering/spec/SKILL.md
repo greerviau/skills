@@ -86,4 +86,4 @@ Tell the user the plan is written and where, then ask how to proceed:
 
 Ask as a genuine choice and stop for the answer.
 
-**Interaction mode** (see `standards`): running autonomously, don't block on the interview or the review gate — resolve what exploration can, take the most defensible call on the rest, record every such assumption in "Risks & open questions", then write the plan and hand off to `dev-workflow` to execute.
+**Interaction mode** (see `standards`): running autonomously, don't block on the interview or the review gate — resolve what exploration can, take the most defensible call on the rest, record every such assumption in "Risks & open questions", then write the plan and proceed to execute it (via the `dev-workflow` skill, if you use it).

@@ -10,6 +10,7 @@ Write for a capable reader who will act on instruction, not one who needs convin
 - **Say it once.** Don't restate in a "Boundaries" or "Principles" section what the intro or procedure already said. Shared rules live in `standards`; reference them, never re-explain them.
 - **Match weight to the task.** A simple, single-shot skill is a few plain sentences with no headers (see `handoff`). A stateful multi-step workflow earns structure. Don't pad a small skill into a big one, or force a genuinely complex one to be terse.
 - **Reference detail earns its length.** Command examples, flag docs, and API mechanics (as in `lit-research`, `standards`, the `gh` calls in `spec-to-tickets`) are load-bearing — keep them. The target is rationale prose, not substance.
+- **Each skill stands alone.** A skill does its own job to completion and must be usable without any sibling skill installed. Name another skill only as an *option* for a step that lives outside this skill's job (e.g. "land the change — the `dev-workflow` skill, if you use it"), never as a required handoff the skill depends on. Cross-references position siblings; they don't create dependencies.
 - **Prose style.** Present tense describing current behavior. Semantic line breaks in prose markdown (one sentence per line). Normal dashes or semicolons, never em dashes.
 
 ## The test
