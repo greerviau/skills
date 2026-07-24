@@ -59,6 +59,8 @@ Two ways to install, two philosophies:
 - **[refactor](skills/engineering/refactor/SKILL.md)** — improves code structure without changing behavior, guarded by an unchanged test suite; adds characterization tests first when coverage is thin.
 - **[doc-audit](skills/engineering/doc-audit/SKILL.md)** — after any code change, audits the documentation surface it touched (docstrings, comments, READMEs, docs, examples) and rewrites stale passages in present tense describing current state.
 
+How these skills fit together — entry points, components, and hand-offs — is mapped in [docs/engineering-skill-composition.md](docs/engineering-skill-composition.md).
+
 ### Research 
 
 `/plugin install greerviau-research@greerviau`
