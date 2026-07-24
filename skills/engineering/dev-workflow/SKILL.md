@@ -9,7 +9,7 @@ The development workflow for work inside a GitHub project repo.
 
 ## 1. Set up an isolated workspace
 
-Use a git worktree so this work is isolated. If the user's instructions specify worktree tooling (e.g. a CLI like `treehouse`), use that; otherwise create a worktree and a `feat/`- or `fix/`-named branch, and work from inside it:
+Use a git worktree so this work is isolated. If the user's instructions specify worktree tooling, use that; otherwise create a worktree and a `feat/`- or `fix/`-named branch, and work from inside it:
 
 ```bash
 git worktree add ../<short-description> -b <feat|fix>/<short-description>
