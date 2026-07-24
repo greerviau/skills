@@ -5,19 +5,15 @@ description: Use after finishing any code change, and whenever writing or editin
 
 # doc-audit
 
-Documentation and comments should describe the current state of the code, in present tense — never framed as a change narrative (how it used to work, what changed, what ticket motivated it).
-
-## Style rules
-
-The documentation and comment style rules — present tense, the decision-history exception, no repo layouts, semantic line breaks, mermaid over ASCII — live in the `standards` skill under "Documentation and comments". Apply them when auditing.
+Documentation and comments describe the current state of the code, in present tense — never a change narrative (how it used to work, what changed, what ticket motivated it). The full style rules — present tense, the decision-history exception, no repo layouts, semantic line breaks, mermaid over ASCII — live in the `standards` skill under "Documentation and comments." Apply them when auditing.
 
 ## Procedure: auditing after a code change
 
 Before treating any non-trivial code change as done:
 
 1. Identify what you touched: which functions, modules, or behaviors changed.
-2. Check the documentation that covers that surface: docstrings on the changed functions, comments in the surrounding code, the nearest directory README, any `docs/` files describing the feature, and any examples that demonstrate it.
-3. For each piece of documentation found, check whether it still matches the code as it now stands. Update anything that's gone stale — rewritten to reflect current reality, not appended with a change note (see the exception above for decision-history documents).
-4. Briefly note what you checked or updated, so the user can see the audit happened rather than being skipped.
+2. Check the documentation covering that surface: docstrings on the changed functions, surrounding comments, the nearest directory README, any `docs/` files describing the feature, and any examples demonstrating it.
+3. For each, check whether it still matches the code — update anything stale by rewriting to current reality, not appending a change note (see the decision-history exception in `standards`).
+4. Briefly note what you checked or updated, so the audit is visible.
 
-Skip this procedure for changes with no documentation surface (pure test-only changes, formatting-only diffs) — there's nothing to audit.
+Skip changes with no documentation surface (test-only, formatting-only diffs).
