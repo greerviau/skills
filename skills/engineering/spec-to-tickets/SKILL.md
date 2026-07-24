@@ -5,9 +5,9 @@ description: Use when turning a reviewed spec into GitHub Issues — explicitly,
 
 # spec-to-tickets
 
-Turn a reviewed spec (the markdown a `spec` run produces) into GitHub Issues. This skill sits between `spec` and `dev-workflow`: `spec` produces the plan, `spec-to-tickets` breaks it into trackable work items, `dev-workflow` executes them.
+Turn a reviewed spec (the markdown a `spec` run produces) into GitHub Issues. Sits between `spec` (produces the plan) and `dev-workflow` (executes the work items).
 
-**This skill is explicit.** It creates external, hard-to-reverse artifacts that other people see, so it never fires on its own and never creates anything before the user confirms the proposed breakdown.
+**This skill is explicit** — it creates external, hard-to-reverse artifacts other people see. Never fire on your own; never create anything before the user confirms the proposed breakdown.
 
 ## Preflight (do this first, every time)
 
@@ -17,15 +17,13 @@ Turn a reviewed spec (the markdown a `spec` run produces) into GitHub Issues. Th
 
 ## Choosing the ticket shape
 
-The output shape is **driven by the spec's scope**, not a fixed template. Read the whole spec, judge its weight, and pick one:
+The shape is **driven by the spec's scope**, not a fixed template. Read the whole spec, judge its weight, and pick one:
 
-- **Single issue** — a small, self-contained spec (a one-file bug fix, a lone change). One issue captures it; no parent, no children.
-- **A few flat issues** — a handful of independent work items that don't need a coordinating parent. Create them as siblings.
-- **Parent + sub-issues** — a large or multi-part spec (cross-file, cross-repo, staged rollout). A parent/epic issue captures the whole; children capture each work item.
+- **Single issue** — a small, self-contained spec (a one-file bug fix). No parent, no children.
+- **A few flat issues** — a handful of independent work items with no coordinating parent. Create them as siblings.
+- **Parent + sub-issues** — a large or multi-part spec (cross-file, cross-repo, staged rollout). A parent/epic captures the whole; children capture each work item.
 
-**Deciding.** The signal comes from the spec's own structure: the number of distinct work items under "Scope" and "Approach / design", whether it spans multiple repos, and whether the steps have ordering/dependencies a parent would coordinate. Propose the shape with your reasoning.
-
-**Ambiguity → ask.** A clearly-small or clearly-large spec is decided without a question. When the weight genuinely sits on the boundary (e.g. three-to-five loosely related items that could be flat siblings *or* a small epic), present the candidate shapes and let the user choose before creating anything.
+The signal comes from the spec's own structure: the number of distinct work items under "Scope" and "Approach / design", whether it spans multiple repos, and whether the steps have ordering/dependencies a parent would coordinate. Propose the shape with your reasoning. Decide a clearly-small or clearly-large spec without asking; when the weight sits on the boundary (e.g. three-to-five items that could be flat siblings *or* a small epic), present the candidates and let the user choose.
 
 ## Creating the issues
 

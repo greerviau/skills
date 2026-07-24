@@ -5,91 +5,85 @@ description: Use when the user hands you a request to scope and plan before buil
 
 # spec
 
-Turn a raw request into a concrete, reviewed plan of action. The request may be a feature, a bug fix, a new pipeline, or a piece of infrastructure. It may be confined to a single file in a single repo, or span many files across many repos. **This skill plans; it does not build** — the only files it writes are the plan document and the ubiquitous-language glossary, and implementation starts only after the user reviews the plan and chooses to execute.
+Turn a raw request — a feature, a bug fix, a new pipeline, a piece of infrastructure — into a concrete, reviewed plan of action, whether it touches one file or spans many repos. **This skill plans; it does not build.** The only files it writes are the plan document and the ubiquitous-language glossary. Implementation starts only after the user reviews the plan and chooses to execute.
 
 ## Principles
 
-- **Discover before designing.** Never plan against assumed structure. Find the real code, the real call sites, the real conventions first.
-- **Be context-efficient.** Exploration across a multi-repo workspace produces a lot of bytes. Fan discovery out to `Explore` subagents (or the sandbox) and keep only the distilled findings — file paths, symbols, and the shape of the code — in your own context. Don't read whole files into context when a subagent can return the relevant excerpts.
-- **Match the request's weight.** A one-file bug fix gets a short plan; a new cross-repo pipeline gets a thorough one. Don't pad a small request into a big document, and don't under-specify a large one.
-- **The plan is a contract.** Someone (you, later, or a teammate) should be able to execute it without re-deriving the scope. Name specific files, functions, and steps — not vague intentions.
-- **Speak the domain's ubiquitous language.** The spec, the conversation, and the eventual code must use the same words for the same concepts. Terms agreed with the user during specing are recorded in the repo's glossary (see below) so nothing gets lost in translation between planning and development.
+- **Discover before designing.** Find the real code, call sites, and conventions first; never plan against assumed structure.
+- **Be context-efficient.** Fan discovery out to `Explore` subagents and keep only distilled findings — paths, symbols, the shape of the code — in your own context. Don't read whole files in when a subagent can return the relevant excerpts.
+- **Match the request's weight.** A one-file bug fix gets a short plan; a cross-repo pipeline gets a thorough one.
+- **The plan is a contract.** Someone should be able to execute it without re-deriving scope. Name specific files, functions, and steps.
+- **Speak the domain's ubiquitous language.** Spec, conversation, and code use the same words for the same concepts, recorded in the repo's glossary.
 
 ## The ubiquitous-language glossary
 
-The core rule — read the glossary, use its terms verbatim, extend it when a term settles or goes stale — lives in the `standards` skill. This section covers how `spec` maintains that glossary during planning.
+The core rule — read the glossary, use its terms verbatim, extend it when a term settles or goes stale — lives in the `standards` skill. During specing:
 
-Each repo carries a glossary of its domain terms — the shared vocabulary between user, spec, and code. It is scoped to the repo (or, in a large repo, to a bounded context within it), never to an individual spec. It lives in version control so it travels with the code:
+- **Read** the glossaries covering the affected contexts before the interview, and use their terms exactly.
+- **Extend** them as the interview and exploration settle new terms or reveal stale entries, confirming definitions with the user. Glossary updates ship with the plan as part of its deliverable.
 
-- **Default layout:** a single `docs/UBIQUITOUS-LANGUAGE.md` at the repo root, one entry per term: the term, its precise meaning in this domain, and (where useful) the code artifacts that embody it. Honor an existing glossary location or standing convention over the default.
-- **Large repos with distinct bounded contexts** (e.g. a monorepo of several services plus a frontend): each context keeps its own `UBIQUITOUS-LANGUAGE.md` in its subdirectory, scoped to that context's meanings. The root glossary then acts as the global map — it lists each context, links to its glossary, and records cross-context mappings where the same concept goes by different names (or the same name means different things) on either side of a boundary.
-- **Scope entries to the repo, not to the spec.** A glossary entry names a domain concept as it lives in the code and the team's language — it is not tied to the spec that happened to introduce it. Never add a per-spec section, reference the originating plan from an entry, or tag an entry with a planning status like *(planned)*. Group entries only by where in the repo they belong (repo-wide, or a bounded context / subdirectory), and write every definition in present tense describing what the term means — not what a plan intends to build.
-- A term belongs in the glossary when it names a domain concept people could misunderstand — not every variable or utility. Keep entries short and precise; a glossary nobody reads is worse than none.
-
-During specing: **read** the relevant glossaries before the interview and use their terms exactly — never introduce a synonym for a concept that already has a name. **Extend** them as the interview and exploration settle new terms or reveal that an existing entry is stale, confirming definitions with the user as part of the interview rather than inventing them. Glossary updates are written with the plan and are part of the spec's deliverable.
+Layout (honor any existing location or convention over these defaults): one `docs/UBIQUITOUS-LANGUAGE.md` at the repo root, one entry per term (term, precise meaning, and where useful the code artifacts embodying it). In a large repo with distinct bounded contexts, each context keeps its own `UBIQUITOUS-LANGUAGE.md` and the root glossary maps them and records cross-context name mismatches. Scope entries to the repo, not the spec — never a per-spec section or a planning status like *(planned)*; group only by where in the repo the term belongs, and define in present tense. A term belongs in the glossary when it names a domain concept people could misunderstand — not every variable or utility.
 
 ## Procedure
 
 ### 1. Skim the territory
 
-Restate the request in one or two sentences to yourself: what outcome does the user want, and what kind of work is it (feature / bug / pipeline / infra)? Then do a quick first-pass exploration — enough to know which repos and subsystems are in play — so the interview that follows asks informed questions instead of naive ones. Locate and read the glossaries covering the affected contexts as part of this pass.
+Restate the request to yourself: what outcome, and what kind of work (feature / bug / pipeline / infra)? Do a quick first-pass exploration — enough to know which repos and subsystems are in play — so the interview asks informed questions. Read the glossaries for the affected contexts here.
 
 ### 2. Interview the user
 
-Before designing anything, grill the user for the details that most often invalidate a spec. Use `AskUserQuestion` and cover whichever of these the request leaves unclear:
+Before designing, grill the user (via `AskUserQuestion`) for the details that most often invalidate a spec, covering whichever the request leaves unclear:
 
-- **Outcome and success criteria** — what does "done" look like, and for whom (end users, other services, the team)?
+- **Outcome and success criteria** — what does "done" look like, and for whom?
 - **Scope boundaries** — what is explicitly *out* of scope?
 - **Constraints** — backward compatibility, performance, security, deadlines, required tooling.
-- **Design-fork preferences** — where exploration revealed a real fork (two viable architectures, two integration points), ask which way to go rather than guessing.
-- **Terminology** — when the request uses a domain term ambiguously, uses two words for what seems to be one concept, or names a concept the glossary doesn't cover, pin down the definition with the user. These agreed definitions become glossary entries.
+- **Design-fork preferences** — where exploration revealed a real fork, ask which way rather than guessing.
+- **Terminology** — pin down any domain term the request uses ambiguously or the glossary doesn't cover. These become glossary entries.
 
-Keep asking until the answers stop changing the plan. Skip only questions the user plainly cannot answer better than exploration can — those go in the plan's open-questions section instead. Record the answers; they belong in the spec so the reasoning survives review.
-
-**Interaction mode** (see `standards`): the interview assumes an interactive user. Running autonomously with no user to answer, don't block on questions — resolve what exploration can, make the most defensible call on the rest, and record every such assumption in the plan's "Risks & open questions" section so a human can revisit it. Missing answers become recorded open questions, not a stall.
+Keep asking until the answers stop changing the plan. Record them in the spec. Questions the user can't answer better than exploration can go in the open-questions section instead.
 
 ### 3. Explore to discover scope
 
-Map the real code the request touches. The goal is to know, concretely: which repos are involved, which files and symbols are the touch points, what the existing conventions are, and where the seams and risks are.
+Map the real code the request touches: which repos, which files and symbols are the touch points, the existing conventions, and where the seams and risks are.
 
-- Prefer `Explore` subagents for breadth — dispatch them to locate relevant files, entry points, call sites, tests, config, and existing patterns across the workspace. Launch independent searches in parallel. Ask each to return paths + short excerpts, not whole files.
-- The scope may cross repo boundaries. Explicitly check whether the request implies changes in more than one repo (e.g. a shared library plus its consumers, infra plus the service it runs) and discover each side.
-- **For bug fixes specifically:** identify how to reproduce the bug end-to-end, as close to how a user hits it as possible. The plan's first step should be reproduction, so the eventual fix targets the real cause rather than a guess.
-- Note the existing conventions (test framework, lint setup, directory layout, naming) so the plan proposes work that fits the codebase rather than fighting it.
+- Prefer `Explore` subagents for breadth — locate files, entry points, call sites, tests, config, and existing patterns; launch independent searches in parallel; ask each for paths + short excerpts, not whole files.
+- Check explicitly whether the request implies changes in more than one repo (a shared library plus its consumers, infra plus its service) and discover each side.
+- **For bug fixes:** identify how to reproduce end-to-end, as close to how a user hits it as possible. The plan's first step is reproduction.
+- Note existing conventions (test framework, lint setup, layout, naming) so the plan fits the codebase.
 
-Keep a running list of: **primary repo**, other affected repos, key files/symbols, new or corrected glossary terms, and open questions. If exploration surfaces a new fork the interview didn't cover, go back to the user before designing past it.
+Keep a running list: primary repo, other affected repos, key files/symbols, new or corrected glossary terms, open questions. If exploration surfaces a new fork, go back to the user before designing past it.
 
 ### 4. Design and build the plan
 
-Decide on an approach and turn it into a step-by-step plan of action. If there's a real fork in the design the user hasn't already settled, pick the one that best fits quality, correctness, simplicity, robustness, and long-term maintainability, and note the alternative briefly as a rejected option with the reason — don't present a menu.
+Decide on an approach and turn it into a step-by-step plan. Where the user hasn't settled a design fork, pick the option that best fits quality, correctness, simplicity, robustness, and maintainability, and note the alternative as a rejected option with the reason — don't present a menu.
 
-The plan should cover:
+The plan covers:
 
-- **Summary** — what the request is and the chosen approach, in a few sentences.
-- **Requirements** — the outcome, success criteria, scope boundaries, and constraints gathered in the interview.
-- **Scope** — repos and files affected; call out cross-repo coordination if any.
-- **Approach / design** — the key decisions and why. For anything non-trivial, why this over the obvious alternative.
-- **Steps** — an ordered, concrete list of the work. Each step names the file(s)/symbol(s) it touches and what changes. For bugs, step 1 is reproduction.
-- **Testing & verification** — how the change will be proven to work end-to-end, using the repo's existing test/verify setup.
-- **Risks & open questions** — anything that could invalidate the plan or needs a decision from the user. State uncertainty plainly — an open question is more useful than a confident guess that sends the implementation the wrong way.
+- **Summary** — the request and chosen approach, in a few sentences.
+- **Requirements** — outcome, success criteria, scope boundaries, constraints from the interview.
+- **Scope** — repos and files affected; call out cross-repo coordination.
+- **Approach / design** — key decisions and, for anything non-trivial, why this over the obvious alternative.
+- **Steps** — an ordered, concrete list; each step names the file(s)/symbol(s) it touches and what changes. For bugs, step 1 is reproduction.
+- **Testing & verification** — how the change is proven end-to-end, using the repo's existing setup.
+- **Risks & open questions** — anything that could invalidate the plan or needs a user decision. State uncertainty plainly.
 
-Write the plan in the glossary's terms throughout — don't define terms inline in the plan; link or refer to the glossary instead.
+Write the plan in the glossary's terms; refer to the glossary rather than defining terms inline.
 
 ### 5. Save the plan and update the glossary
 
-Write the plan to a `.md` file with the native Write tool. Honor an explicit location from the request or a standing convention (a `CLAUDE.md` directive, a memory, a location the user has set before); otherwise default to `docs/plans/` inside the primary repo, creating the folder if needed. Name the file descriptively in kebab-case, prefixed with the actual current date, e.g. `2026-07-07-fix-xic-shard-lookup.md`.
+Write the plan to a `.md` file with the Write tool. Honor an explicit location or standing convention; otherwise default to `docs/plans/` in the primary repo. Name it in kebab-case, prefixed with the current date, e.g. `2026-07-07-fix-xic-shard-lookup.md`.
 
-Alongside the plan, write any new or corrected glossary entries to the appropriate `UBIQUITOUS-LANGUAGE.md` file(s), creating them (and the root map, for multi-context repos) if they don't exist yet. Place each entry under the repo-wide or bounded-context grouping it belongs to — never a section named for this spec — and define it in present tense without referencing the plan or a planning status. The glossary is the plan's deliverable, but it reads as the repo's standing vocabulary, not as a record of this spec.
+Write any new or corrected glossary entries to the appropriate `UBIQUITOUS-LANGUAGE.md` file(s), creating them (and the root map, for multi-context repos) if needed. Follow the glossary scoping rules above.
 
-After writing, report only the file paths and a one-line description each — don't dump the plan's full contents back into the conversation.
+Report only the file paths and a one-line description each — don't dump the plan back into the conversation.
 
 ### 6. Ask the user to review
 
-Tell the user the plan is written and where. Then ask how they want to proceed:
+Tell the user the plan is written and where, then ask how to proceed:
 
-- **Execute** — start implementing the plan as written.
-- **Iterate** — refine the plan together first (they'll give feedback; update the file and re-present).
+- **Execute** — start implementing as written (follow the plan step by step, keeping the file updated if reality diverges).
+- **Iterate** — refine the plan together first, then re-present.
 
-Ask this as a genuine choice and stop for their answer. If execution is chosen, follow the plan step by step, and keep the plan file updated if reality diverges from it during the build.
+Ask as a genuine choice and stop for the answer.
 
-**Interaction mode** (see `standards`): this review gate assumes an interactive user. Running autonomously, don't stop for a choice that won't come — write the plan, report its path, and hand off to `dev-workflow` to execute it, treating any recorded open questions as assumptions to revisit rather than blockers.
+**Interaction mode** (see `standards`): running autonomously, don't block on the interview or the review gate — resolve what exploration can, take the most defensible call on the rest, record every such assumption in "Risks & open questions", then write the plan and hand off to `dev-workflow` to execute.
