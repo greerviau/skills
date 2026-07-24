@@ -20,17 +20,16 @@ Use a git worktree so this work is isolated from other branches and in-progress 
 
 ## 2. Do the work
 
+The house rules for this step live in the `standards` skill — ubiquitous language (read the glossary, use its terms verbatim, extend it in the same PR), the E2E-weighted testing bias, and branch hygiene (flag unrelated out-of-scope bugs and fix them on a separate branch). Beyond those:
+
 - If a plan is provided, follow it exactly.
-- If the repo (or the subdirectory you're working in) has an `UBIQUITOUS-LANGUAGE.md` glossary, read it and use its terms verbatim when naming code — types, functions, endpoints, tables, tests, and commit/PR prose. Don't coin synonyms for concepts the glossary already names. If implementation forces a new domain term or exposes a stale entry, update the glossary in the same PR.
 - Commit work in stages if the scope is large, so history stays reviewable.
-- Write tests as necessary, opting for E2E tests over small unit tests — test the functionality as closely to how a user would interact with it as possible.
-- If unrelated out-of-scope bugs or improvements surface, don't fix them on the current branch. Flag them, then fix them on a separate worktree/branch/PR, following this same workflow.
 
 ## 3. Validate locally
 
 - Run tests if they're available.
 - Run lints.
-- Audit affected documentation (the `doc-audit` skill) and, for changes with a runtime surface, exercise the change end-to-end (the `verify` skill).
+- Audit affected documentation (the `doc-audit` skill) and, for changes with a runtime surface, exercise the change end-to-end against its real entry point (the `run` skill, where available).
 
 ## 4. Publish
 
@@ -61,6 +60,8 @@ Once the PR is open, the work is not done — it needs to survive review. **Do n
   When it exits, check whether the PR was `MERGED` or `CLOSED` — either way the worktree is safe to clean up, but only a merge means the work landed.
 - While the watcher runs, handle any feedback you receive — in PR review comments or directly in the interactive session — on the still-live worktree: fix, revalidate (steps 3–6), and push. Then let the watcher keep waiting.
 - If the user explicitly tells you to wrap up / abandon the work, stop the watcher and go to cleanup. Otherwise keep the worktree alive until the watcher exits.
+
+**Interaction mode** (see `standards`): the keep-alive-for-feedback loop assumes an interactive user who may return. When running autonomously with no user to return, don't hold the worktree open indefinitely — watch the PR through merge/CI under a bounded timeout, then proceed to cleanup, recording the final PR state instead of waiting on feedback that won't come.
 
 ## 8. Cleanup
 

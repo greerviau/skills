@@ -17,6 +17,8 @@ Turn a raw request into a concrete, reviewed plan of action. The request may be 
 
 ## The ubiquitous-language glossary
 
+The core rule — read the glossary, use its terms verbatim, extend it when a term settles or goes stale — lives in the `standards` skill. This section covers how `spec` maintains that glossary during planning.
+
 Each repo carries a glossary of its domain terms — the shared vocabulary between user, spec, and code. It is scoped to the repo (or, in a large repo, to a bounded context within it), never to an individual spec. It lives in version control so it travels with the code:
 
 - **Default layout:** a single `docs/UBIQUITOUS-LANGUAGE.md` at the repo root, one entry per term: the term, its precise meaning in this domain, and (where useful) the code artifacts that embody it. Honor an existing glossary location or standing convention over the default.
@@ -43,6 +45,8 @@ Before designing anything, grill the user for the details that most often invali
 - **Terminology** — when the request uses a domain term ambiguously, uses two words for what seems to be one concept, or names a concept the glossary doesn't cover, pin down the definition with the user. These agreed definitions become glossary entries.
 
 Keep asking until the answers stop changing the plan. Skip only questions the user plainly cannot answer better than exploration can — those go in the plan's open-questions section instead. Record the answers; they belong in the spec so the reasoning survives review.
+
+**Interaction mode** (see `standards`): the interview assumes an interactive user. Running autonomously with no user to answer, don't block on questions — resolve what exploration can, make the most defensible call on the rest, and record every such assumption in the plan's "Risks & open questions" section so a human can revisit it. Missing answers become recorded open questions, not a stall.
 
 ### 3. Explore to discover scope
 
@@ -87,3 +91,5 @@ Tell the user the plan is written and where. Then ask how they want to proceed:
 - **Iterate** — refine the plan together first (they'll give feedback; update the file and re-present).
 
 Ask this as a genuine choice and stop for their answer. If execution is chosen, follow the plan step by step, and keep the plan file updated if reality diverges from it during the build.
+
+**Interaction mode** (see `standards`): this review gate assumes an interactive user. Running autonomously, don't stop for a choice that won't come — write the plan, report its path, and hand off to `dev-workflow` to execute it, treating any recorded open questions as assumptions to revisit rather than blockers.

@@ -49,8 +49,9 @@ Two ways to install, two philosophies:
 
 `/plugin install greerviau-engineering@greerviau`
 
+- **[standards](skills/engineering/standards/SKILL.md)** — the shared house rules the other engineering skills enforce (documentation style, ubiquitous language, testing bias, branch hygiene, PR/commit hygiene, and the interactive-vs-autonomous interaction contract), kept in one place so a change applies everywhere.
 - **[spec](skills/engineering/spec/SKILL.md)** — turns a raw request into a reviewed plan of action: interviews the user to pin down requirements and terminology, explores the code to discover scope, maintains the repo's ubiquitous-language glossary, and writes the plan to a markdown file for review before any building starts.
-- **[spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md)** — turns a reviewed spec into tickets in your tracker (GitHub Issues, Linear, Trello): requires a configured tracker, judges the spec's scope to pick a single-ticket / flat / parent-with-sub-issues shape, and records the ticket IDs back in the spec so re-runs don't duplicate.
+- **[spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md)** — turns a reviewed spec into GitHub Issues with no configuration: judges the spec's scope to pick a single-issue / flat / parent-with-native-sub-issues shape, and records the issue URLs back in the spec so re-runs don't duplicate.
 - **[dev-workflow](skills/engineering/dev-workflow/SKILL.md)** — the end-to-end development loop for a GitHub repo: isolated worktree, staged commits, local validation, an evergreen PR, watching CI to green, and cleanup.
 - **[open-pr](skills/engineering/open-pr/SKILL.md)** — writes the `feat(...)`/`fix(...)` title and an evergreen body (problem, intent, changes, testing, additional testing, regressions) with no AI attribution or volatile details, then opens the PR; used standalone or as the PR step of dev-workflow.
 - **[debug](skills/engineering/debug/SKILL.md)** — reproduces a bug end-to-end the way a user hits it before forming any fix hypothesis, localizes the root cause, and hands off to dev-workflow to land the fix as a regression-tested change.
