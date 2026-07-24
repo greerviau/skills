@@ -43,7 +43,24 @@ gh issue create --title "<title>" --body "<body linking the spec>"
 
 Pass `--repo <owner/repo>` when filing against a repo other than the working directory's.
 
-For a parent + sub-issues shape, create the parent first, then reference its number from each child (and, where the repo uses task lists, check the children off in the parent body).
+### Parent + sub-issues: use GitHub's native Sub-issues
+
+For a parent + sub-issues shape, wire the children with GitHub's **native Sub-issues relationship**, not a plain markdown checklist. The native link gives the parent a real progress bar and Sub-issues panel, and rolls child completion up to the parent.
+
+1. Create the parent issue, then each child issue.
+2. For each child, resolve its REST database id (this is the `id` field, **not** the issue number):
+
+   ```bash
+   child_id=$(gh api repos/<owner>/<repo>/issues/<child_number> -q .id)
+   ```
+
+3. Link it under the parent via the sub-issues endpoint:
+
+   ```bash
+   gh api --method POST repos/<owner>/<repo>/issues/<parent_number>/sub_issues -F sub_issue_id=$child_id
+   ```
+
+Do not fall back to a `- [ ] #123` task list in the parent body — the markdown checklist does not create the real parent/child relationship and does not close the parent when the children close.
 
 ## Idempotency
 
