@@ -18,7 +18,7 @@ cd ../<short-description>
 
 ## 2. Do the work
 
-The house rules for this step live in the `standards` skill — ubiquitous language, the E2E-weighted testing bias, and branch hygiene (flag unrelated out-of-scope bugs, fix them on a separate branch). Beyond those: follow any provided plan exactly, and commit in stages if the scope is large so history stays reviewable.
+The house rules for this step live in the `standards` skill — ubiquitous language, the E2E-weighted testing bias, and branch hygiene (flag unrelated out-of-scope bugs, fix them on a separate branch). Beyond those: follow any provided plan exactly, and commit in stages if the scope is large so history stays reviewable. When the request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor"), reach for the `tdd` skill, if you use it, to drive this step; a plain build request is done directly, without routing through it.
 
 ## 3. Validate locally
 

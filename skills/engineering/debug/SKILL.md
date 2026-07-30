@@ -21,3 +21,4 @@ This skill finds and proves the cause. Landing the fix is a separate step — do
 - Don't fix a bug you haven't reproduced. A green reproduction after the change is the evidence the fix worked.
 - Don't inline worktree/commit/PR mechanics — landing the fix is a separate step.
 - Flag unrelated bugs found while localizing for their own branch.
+- Against `tdd` (the `tdd` skill, if you use it): a reproduction here is a red test by another name, which raises the question of merging the two skills. Kept separate because the trigger surfaces are disjoint, a report of broken behavior versus a request for new behavior. This skill covers the bug case; `tdd` covers the feature case.
