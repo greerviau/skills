@@ -30,7 +30,7 @@ flowchart TD
 ```
 
 Arrows are runtime hand-offs (one skill invokes or feeds the next).
-`standards` and `design` are missing on purpose: both are policy references, read by nearly every skill above and never invoked as a step, so an edge from each node would repeat the same fact rather than add one.
+`standards` and `design` are missing on purpose: both are policy references, never invoked as a step, so an edge from each node would repeat the same fact rather than add one. `standards` is read by nearly every skill above; `design` currently only by `spec`, `refactor`, and `review`, which will grow as `tdd` and `perf` land.
 `mermaid` is missing too, for a related reason: it's invoked rather than merely read, but by nearly every skill that writes a diagram, so drawing it in would clutter the graph the same way.
 See the role table for who reads or invokes what.
 `handoff` is missing for the opposite reason: it hands off to nothing and nothing hands off to it, so it has no edge to draw.
