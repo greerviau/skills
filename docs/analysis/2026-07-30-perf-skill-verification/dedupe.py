@@ -7,10 +7,8 @@ from __future__ import annotations
 
 
 def dedupe(records: list[dict]) -> list[dict]:
-    seen: list[str] = []
-    out: list[dict] = []
+    seen: dict[str, dict] = {}
     for r in records:
         if r["key"] not in seen:
-            seen.append(r["key"])
-            out.append(r)
-    return out
+            seen[r["key"]] = r
+    return list(seen.values())
