@@ -27,6 +27,7 @@
     "./skills/engineering/handoff",
     "./skills/engineering/mermaid",
     "./skills/engineering/design",
+    "./skills/engineering/tdd",
     "./skills/research/lit-research",
     "./skills/personal/opinions"
   ]

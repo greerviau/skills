@@ -8,6 +8,7 @@ An autonomous runner reads this to route a request to the right entry point with
 ```mermaid
 flowchart TD
     spec[spec]
+    tdd[tdd]
     debug[debug]
     refactor[refactor]
     review[review]
@@ -20,6 +21,7 @@ flowchart TD
     spec -->|reviewed plan| s2t
     spec -->|reviewed plan| devworkflow
     s2t -->|GitHub issues| devworkflow
+    tdd -->|test-first change| devworkflow
     debug -->|confirmed cause| devworkflow
     refactor -->|test-guarded change| devworkflow
     review -->|findings to apply| devworkflow
@@ -30,8 +32,9 @@ flowchart TD
 ```
 
 Arrows are runtime hand-offs (one skill invokes or feeds the next).
-`standards` and `design` are missing on purpose: both are policy references, never invoked as a step, so an edge from each node would repeat the same fact rather than add one. `standards` is read by nearly every skill above; `design` currently only by `spec`, `refactor`, and `review`, which will grow as `tdd` and `perf` land.
+`standards` and `design` are missing on purpose: both are policy references, never invoked as a step, so an edge from each node would repeat the same fact rather than add one. `standards` is read by nearly every skill above; `design` currently by `spec`, `refactor`, `review`, and `tdd`, which will grow further as `perf` lands.
 `mermaid` is missing too, for a related reason: it's invoked rather than merely read, but by nearly every skill that writes a diagram, so drawing it in would clutter the graph the same way.
+`tdd` doubles as a component: it's drawn above as an entry point handing a change to `dev-workflow`, and `dev-workflow` names it in turn as the option for building test-first. The back edge is omitted to keep the graph acyclic.
 See the role table for who reads or invokes what.
 `handoff` is missing for the opposite reason: it hands off to nothing and nothing hands off to it, so it has no edge to draw.
 
@@ -41,6 +44,7 @@ See the role table for who reads or invokes what.
 | --- | --- | --- | --- |
 | `spec` | Entry — planning | A request needs scoping into a reviewed plan before building | `spec-to-tickets` (to file issues) or `dev-workflow` (to execute) |
 | `spec-to-tickets` | Entry — ticketing | A reviewed spec should become GitHub Issues | `dev-workflow` (executes each issue) |
+| `tdd` | Entry — test-first loop | A request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor") | `dev-workflow` (lands the test-driven change) |
 | `debug` | Entry — diagnosis | Something is broken and the cause is unknown | `dev-workflow` (lands the fix as a regression-tested change) |
 | `refactor` | Entry — restructuring | Working code needs its structure improved without behavior change | `dev-workflow` (lands the test-guarded change) |
 | `dev-workflow` | Entry + spine | Any request to write and land code in a GitHub repo | invokes `doc-audit`, `run`, `open-pr` |
@@ -56,6 +60,6 @@ See the role table for who reads or invokes what.
 ## Composition rules
 
 - **`dev-workflow` is the spine.** Every skill that produces a code change hands the landing of it to `dev-workflow` rather than opening worktrees or PRs itself.
-- **Entry points don't invoke each other's mechanics.** `debug` proves a cause but doesn't commit; `review` reports but doesn't apply; `spec` plans but doesn't build. Each stays in its lane and hands off.
+- **Entry points don't invoke each other's mechanics.** `tdd` drives the red-green-refactor loop but doesn't touch worktree/PR mechanics; `debug` proves a cause but doesn't commit; `review` reports but doesn't apply; `spec` plans but doesn't build. Each stays in its lane and hands off.
 - **Components are leaves.** `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and don't hand off further.
 - **`standards` and `design` are policy, not phases.** Each is referenced for its own kind of rule — compliance for `standards`, structural vocabulary for `design` — never inserted as a numbered step.
