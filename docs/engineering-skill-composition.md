@@ -30,7 +30,9 @@ flowchart TD
 ```
 
 Arrows are runtime hand-offs (one skill invokes or feeds the next).
-`standards` and `mermaid` are missing on purpose: both are read or invoked by nearly every skill above, so an edge from each node would repeat the same fact rather than add one. See the role table for who reads or invokes what.
+`standards` and `design` are missing on purpose: both are policy references, read by nearly every skill above and never invoked as a step, so an edge from each node would repeat the same fact rather than add one.
+`mermaid` is missing too, for a related reason: it's invoked rather than merely read, but by nearly every skill that writes a diagram, so drawing it in would clutter the graph the same way.
+See the role table for who reads or invokes what.
 `handoff` is missing for the opposite reason: it hands off to nothing and nothing hands off to it, so it has no edge to draw.
 
 ## Roles
@@ -49,10 +51,11 @@ Arrows are runtime hand-offs (one skill invokes or feeds the next).
 | `run` | Component — harness-provided, not a skill in this repo | `dev-workflow` validates a change with a runtime surface | none |
 | `mermaid` | Component | Any skill drafts, renders, or refines a diagram in a doc, spec, PR, or ADR | none |
 | `standards` | Reference | Any skill applies a house rule | none — read, not invoked |
+| `design` | Reference | Any skill judges or explains a structural decision | none — read, not invoked |
 
 ## Composition rules
 
 - **`dev-workflow` is the spine.** Every skill that produces a code change hands the landing of it to `dev-workflow` rather than opening worktrees or PRs itself.
 - **Entry points don't invoke each other's mechanics.** `debug` proves a cause but doesn't commit; `review` reports but doesn't apply; `spec` plans but doesn't build. Each stays in its lane and hands off.
 - **Components are leaves.** `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and don't hand off further.
-- **`standards` is policy, not a phase.** It's referenced for its rules — never inserted as a numbered step.
+- **`standards` and `design` are policy, not phases.** Each is referenced for its own kind of rule — compliance for `standards`, structural vocabulary for `design` — never inserted as a numbered step.

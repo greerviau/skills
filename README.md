@@ -50,6 +50,7 @@ Two ways to install, two philosophies:
 `/plugin install greerviau-engineering@greerviau`
 
 - **[standards](skills/engineering/standards/SKILL.md)** — the shared house rules the other engineering skills enforce (documentation style, ubiquitous language, testing bias, branch hygiene, PR/commit hygiene, and the interactive-vs-autonomous interaction contract), kept in one place so a change applies everywhere.
+- **[design](skills/engineering/design/SKILL.md)** — the shared vocabulary for structural judgment (module depth, information hiding, seam placement, error-condition elimination, navigability), read rather than invoked, so a structural claim is citable instead of asserted as taste.
 - **[spec](skills/engineering/spec/SKILL.md)** — turns a raw request into a reviewed plan of action: interviews the user to pin down requirements and terminology, explores the code to discover scope, maintains the repo's ubiquitous-language glossary, and writes the plan to a markdown file for review before any building starts.
 - **[spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md)** — turns a reviewed spec into GitHub Issues with no configuration: judges the spec's scope to pick a single-issue / flat / parent-with-native-sub-issues shape, and records the issue URLs back in the spec so re-runs don't duplicate.
 - **[dev-workflow](skills/engineering/dev-workflow/SKILL.md)** — the end-to-end development loop for a GitHub repo: isolated worktree, staged commits, local validation, an evergreen PR, watching CI to green, and cleanup.
