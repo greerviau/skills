@@ -18,11 +18,13 @@
     "./skills/engineering/spec",
     "./skills/engineering/spec-to-tickets",
     "./skills/engineering/dev-workflow",
-    "./skills/engineering/pr-describe",
+    "./skills/engineering/open-pr",
     "./skills/engineering/debug",
     "./skills/engineering/review",
     "./skills/engineering/refactor",
     "./skills/engineering/doc-audit",
+    "./skills/engineering/standards",
+    "./skills/engineering/handoff",
     "./skills/research/lit-research",
     "./skills/personal/opinions"
   ]
