@@ -7,7 +7,6 @@ An autonomous runner reads this to route a request to the right entry point with
 
 ```mermaid
 flowchart TD
-    standards[[standards]]
     spec[spec]
     debug[debug]
     refactor[refactor]
@@ -17,15 +16,6 @@ flowchart TD
     docaudit[doc-audit]
     run[run]
     openpr[open-pr]
-    handoff[handoff]
-
-    standards -.policy.-> spec
-    standards -.policy.-> debug
-    standards -.policy.-> refactor
-    standards -.policy.-> review
-    standards -.policy.-> devworkflow
-    standards -.policy.-> docaudit
-    standards -.policy.-> openpr
 
     spec -->|reviewed plan| s2t
     spec -->|reviewed plan| devworkflow
@@ -39,8 +29,9 @@ flowchart TD
     devworkflow -->|PR step| openpr
 ```
 
-Solid arrows are runtime hand-offs (one skill invokes or feeds the next).
-Dotted arrows are policy references — `standards` is read for its rules, never invoked as a step.
+Arrows are runtime hand-offs (one skill invokes or feeds the next).
+`standards` and `mermaid` are missing on purpose: both are read or invoked by nearly every skill above, so an edge from each node would repeat the same fact rather than add one. See the role table for who reads or invokes what.
+`handoff` is missing for the opposite reason: it hands off to nothing and nothing hands off to it, so it has no edge to draw.
 
 ## Roles
 
@@ -55,7 +46,7 @@ Dotted arrows are policy references — `standards` is read for its rules, never
 | `handoff` | Entry — utility | A conversation needs compacting for another agent to continue | none (produces a document) |
 | `open-pr` | Component | `dev-workflow` reaches its PR step, or a PR is opened standalone | none |
 | `doc-audit` | Component | `dev-workflow` validates, or docs/comments are written standalone | none |
-| `run` | Component | `dev-workflow` validates a change with a runtime surface | none |
+| `run` | Component — harness-provided, not a skill in this repo | `dev-workflow` validates a change with a runtime surface | none |
 | `mermaid` | Component | Any skill drafts, renders, or refines a diagram in a doc, spec, PR, or ADR | none |
 | `standards` | Reference | Any skill applies a house rule | none — read, not invoked |
 
@@ -63,6 +54,5 @@ Dotted arrows are policy references — `standards` is read for its rules, never
 
 - **`dev-workflow` is the spine.** Every skill that produces a code change hands the landing of it to `dev-workflow` rather than opening worktrees or PRs itself.
 - **Entry points don't invoke each other's mechanics.** `debug` proves a cause but doesn't commit; `review` reports but doesn't apply; `spec` plans but doesn't build. Each stays in its lane and hands off.
-- **Components are leaves.** `open-pr`, `doc-audit`, and `run` are invoked by an entry point and don't hand off further.
-- **`standards` is policy, not a phase.** It is referenced for its rules — never inserted as a numbered step.
-- **`mermaid` attaches everywhere, drawn nowhere.** It's a component invoked by any skill that writes a diagram into markdown, so an edge from every node would repeat the same fact rather than add one.
+- **Components are leaves.** `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and don't hand off further.
+- **`standards` is policy, not a phase.** It's referenced for its rules — never inserted as a numbered step.
