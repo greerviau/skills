@@ -1,6 +1,8 @@
 ---
 name: spec-to-tickets
-description: Use when turning a reviewed spec into GitHub Issues — explicitly, never automatically, since it creates work items other people see. Reads the spec, judges its scope to pick a ticket shape (a single issue, a few flat issues, or a parent with sub-issues) using the spec's own vocabulary and asking when the shape is ambiguous, creates them with the `gh` CLI, and records the issue URLs back in the spec so re-runs don't duplicate. Trigger on "/spec-to-tickets", "turn this spec into tickets", "create tickets/issues for this plan", "file issues for this".
+description: Turn a reviewed spec into GitHub Issues, choosing a ticket shape sized to its scope.
+argument-hint: "Path to the spec (optional if inferable from context)"
+disable-model-invocation: true
 ---
 
 # spec-to-tickets

@@ -1,6 +1,6 @@
 ---
 name: review
-description: Use when reviewing changes before they land — a working-tree diff, a branch, or a GitHub PR — against the user's own engineering standards (lint clean, tests present and green, no flakiness, simplicity and correctness over development cost). Complements the built-in code review by adding the standards layer and flagging incidental lint/test/flakiness defects even when unrelated. Trigger on "review this", "review my changes", "look over this PR", "check this before I push", "is this ready to ship".
+description: Use when reviewing changes before they land — a working-tree diff, a branch, or a GitHub PR — against the user's own engineering standards (lint clean, tests present and green, no flakiness, simplicity and correctness over development cost) and, when one can be located, against the originating spec or issue. Complements the built-in code review by adding the standards layer and flagging incidental lint/test/flakiness defects even when unrelated. Trigger on "review this", "review my changes", "look over this PR", "check this before I push", "is this ready to ship".
 ---
 
 # review
@@ -13,7 +13,7 @@ This **complements** the built-in `/code-review` (which hunts correctness bugs) 
 
 1. **Scope the diff.** Identify exactly what changed — working tree, branch vs. base, or a GitHub PR. Review that, not the whole codebase.
 2. **Correctness pass.** Defer to `/code-review` where it helps; summarize its findings rather than re-deriving them.
-3. **Standards pass.** Check against the bar in the `standards` skill. Run the mechanical checks first:
+3. **Standards pass**, run as a subagent in parallel with the spec-conformance pass (step 4). Check against the bar in the `standards` skill. Run the mechanical checks first:
 
    | Standard | Mechanical check |
    | --- | --- |
@@ -24,8 +24,9 @@ This **complements** the built-in `/code-review` (which hunts correctness bugs) 
    | Ubiquitous language | For each glossary term the change touches, grep the diff for coined synonyms. |
 
    Then the judgment calls: simplicity over the cheapest path, whether the tests actually prove the behavior, and that the touched documentation surface is audited (`doc-audit`).
-4. **Incidental-defect rule.** Flag any lint error, test failure, or flakiness spotted — *even if unrelated* — noting it belongs on its own branch, not folded into this one.
-5. **Report.** Findings ranked most-severe first, each concrete and actionable, ending in a clear ship / don't-ship call.
+4. **Spec-conformance pass.** Locate the originating spec or issue first: a `docs/plans/` reference in the PR body, a linked GitHub issue, a plan path named in the branch, or one the user supplies directly. If none of these resolves, report "no originating spec located, conformance not assessed" and stop there — never reconstruct an implied spec from the diff itself and grade against that reconstruction. When a spec resolves, report scope drift, missing requirements, and out-of-scope additions against it.
+5. **Incidental-defect rule.** Flag any lint error, test failure, or flakiness spotted — *even if unrelated* — noting it belongs on its own branch, not folded into this one.
+6. **Report.** Findings ranked most-severe first, each concrete and actionable, ending in a clear ship / don't-ship call. Merge both axes' findings; a stopped spec-conformance pass contributes its one-line note, not a gap.
 
 **Interaction mode** (see `standards`): running autonomously as a gate, emit a machine-consumable verdict plus the ranked findings list rather than a conversational call.
 
