@@ -5,10 +5,12 @@ Part of the perf skill's own verification exercise - see
 """
 from __future__ import annotations
 
+from typing import Hashable
+
 
 def dedupe(records: list[dict]) -> list[dict]:
     """Each record's "key" must be hashable - a dict lookup backs the check."""
-    seen: dict[str, dict] = {}
+    seen: dict[Hashable, dict] = {}
     for r in records:
         if r["key"] not in seen:
             seen[r["key"]] = r

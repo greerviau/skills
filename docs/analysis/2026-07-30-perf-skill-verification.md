@@ -27,6 +27,7 @@ This run yields 2,939 unique keys out of 6,000 records - 51% duplicates.
 ncalls  tottime  percall  cumtime  percall filename:lineno(function)
      1    0.133    0.133    0.134    0.134 dedupe.py:9(dedupe)
   5878    0.001    0.000    0.001    0.000 {method 'append' of 'list' objects}
+     1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
 ```
 
 `cProfile` is function-granular, not line-granular - it attributes 0.133s of the 0.134s to `dedupe()` as a whole, not to any one line inside it.
@@ -45,4 +46,4 @@ Same harness, same workload (6,000 records, 2,939 unique keys): **0.8ms** - abou
 
 ## Location
 
-This is a one-off exercise, not a standing benchmark anything else re-runs, so per the skill's own default the before/after numbers live here rather than only in the originating PR body - this file *is* that durable record, kept alongside the harness that produced it.
+This is a one-off exercise; the skill's own default for a one-off keeps the numbers in the PR body alone. This file goes beyond that default deliberately: the exercise exists to be read on its own, by anyone checking how the skill was verified, not only by whoever reads the original PR.
