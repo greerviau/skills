@@ -14,6 +14,11 @@ One entry per term; keep entries short and precise.
 - **load-bearing leak**: a fact about implementation a caller genuinely needs to know (e.g. a rate limit), as distinct from an **accidental leak** — one that escaped only because nothing hid it.
 - **error-condition elimination**: designing away the precondition that produces an error case, rather than handling or propagating it.
 
+## tech-research (skills/engineering/tech-research)
+
+- **primary source**: the source that directly answers a claim, ranked by the source hierarchy — the installed dependency's own source and tests, then official vendor docs for the pinned version, then specs/RFCs, then release notes and issue trackers. Blog posts and model recall are never primary sources.
+- **confidence level**: the high/moderate/low/unknown rating attached to every claim in a findings file, recording how directly a primary source backs it rather than smoothing uncertainty into an unqualified statement.
+
 ## lit-research (skills/research/lit-research)
 
 - **canonical record**: the normalized paper representation all sources map into, keyed by DOI (source-native id when no DOI exists). Embodied by the record dataclass in `scripts/common.py`.
