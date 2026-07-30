@@ -5,7 +5,7 @@ description: Use when a technical question needs a sourced, version-pinned answe
 
 # tech-research
 
-The engineering counterpart to `lit-research`: investigate a technical question about third-party or external behavior against high-trust primary sources, and capture the answer as a durable, version-pinned findings file.
+Investigate a technical question about third-party or external behavior against high-trust primary sources, and capture the answer as a durable, version-pinned findings file.
 **The hard rule: every claim carries a citation and a confidence level.**
 A claim with neither is model recall, not research, and doesn't belong in the findings file.
 
