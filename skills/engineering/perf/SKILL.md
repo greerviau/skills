@@ -5,9 +5,9 @@ description: Use when a change needs to get faster, cheaper, or higher-throughpu
 
 # perf
 
-Measure-first optimization: state a numeric target, baseline it with a reproducible harness, profile before guessing at a cause, change one thing, re-measure on the same harness. **A before/after measurement from that harness is the hard invariant**, the same way `refactor` is guarded by an unchanged test suite - this skill is guarded by a benchmark, and refusing to declare success without one is the whole point.
+Measure-first optimization: state a numeric target, baseline it with a reproducible harness, profile before guessing at a cause, change one thing, re-measure on the same harness. **A before/after measurement from that harness is the hard invariant**, the same way `refactor` is guarded by an unchanged test suite - this skill is guarded by a benchmark instead.
 
-This is a deliberate, benchmark-guarded pass, distinct from a one-off timing check in a shell. Any change to correctness is out of scope for this skill; a report that something is slow is this skill, a report that something is wrong or crashes is `debug`.
+This is a deliberate, benchmark-guarded pass, distinct from a one-off timing check in a shell.
 
 ## Procedure
 
@@ -24,4 +24,4 @@ This is a deliberate, benchmark-guarded pass, distinct from a one-off timing che
 
 - Against `debug`: this skill owns latency, throughput, and cost; `debug` owns wrong and broken. A report that something is slow is this skill; a report that something is wrong or crashes is `debug`.
 - Don't smuggle a behavior change into a perf pass. If step 4 breaks a test, that's a bug or a feature change, not an optimization - flag it and land it on its own branch.
-- No before/after number from the same harness means no finished pass. "This should be faster" without step 5's measurement isn't a result.
+- A bottleneck that seems obvious from reading the code still gets profiled first. Step 3 exists precisely for the cases where the obvious guess is wrong.
