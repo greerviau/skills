@@ -37,7 +37,10 @@ npx -y -p @mermaid-js/mermaid-cli mmdc -i d.mmd -o d.png -b white -s 2
 ```
 
 The first run downloads Chromium once per machine; treat the wait as normal, not a hang.
-If the browser fails to launch in a sandboxed or containerized environment (a "no usable sandbox" error, or a missing `libnspr4`/`libnss3` shared library), that's the Chromium environment, not the diagram: pass a puppeteer config (`mmdc -p config.json` with `config.json` containing `{"args": ["--no-sandbox"]}`), or install the missing system libraries.
+Two distinct failures show up in a sandboxed or containerized environment; don't treat them as the same problem:
+
+- **"No usable sandbox"**: pass a puppeteer config (`mmdc -p config.json` with `config.json` containing `{"args": ["--no-sandbox"]}`).
+- **A missing shared library** (`chrome-headless-shell: error while loading shared libraries: libnspr4.so`, or similarly for `libnss3.so`): installing the system package needs root, which an agent sandbox usually doesn't have. Without root, download the `.deb` (`apt-get download libnspr4 libnss3`), extract it without installing (`dpkg-deb -x <package>.deb <dir>`), and point `LD_LIBRARY_PATH` at `<dir>/usr/lib/x86_64-linux-gnu` when invoking `mmdc`.
 
 Working `.mmd` and `.png` files live in the scratchpad and are never committed; only the final fenced block lands in the document.
 Hosted renderers such as mermaid.ink are out - they publish the diagram content to a third party.
@@ -45,8 +48,8 @@ Hosted renderers such as mermaid.ink are out - they publish the diagram content 
 ## Delegation
 
 Hand a subagent the intent sentence plus the layout checklist and have it return only the final mermaid source.
-The renders and intermediate images stay in the subagent's context: producing one finished diagram routinely costs several renders and image reads, and that's a cost the subagent should absorb instead of the caller.
-Delegate whenever a subagent is available; run the loop inline otherwise. Either way, nothing lands until it has gone through at least one render-and-look cycle.
+The renders and intermediate images stay in the subagent's context.
+Delegate whenever a subagent is available; run the loop inline otherwise.
 
 ## Boundaries
 
