@@ -21,6 +21,7 @@
 | **Gap (theoretical):** if httpcore raised an exception type absent from httpx's internal `HTTPCORE_EXC_MAP` (e.g. `ConnectionNotAvailable`), it would propagate unwrapped and **not** be an `HTTPError` subclass. Whether this can actually reach the caller in practice (vs. being absorbed by httpcore's own connection-pool scheduling) wasn't traced further. | `httpx/_transports/default.py:77-92,114-115` | moderate |
 
 **Answer:** for this script's actual usage - a single non-streamed GET to a fixed API host - `except httpx.HTTPError` covers all seven transient-failure categories in the question. The exceptions it misses (`InvalidURL`, `CookieConflict`, `StreamError`) are programmer-error/misuse classes, not transient network conditions, so they're out of scope for a retry loop rather than a hole in one.
+Citation: rows above (all `high`, read directly from the pinned source). Confidence: **high** - this answer draws only on the `high`-rated rows; the theoretical unmapped-exception gap (the one `moderate` row) doesn't bear on this script's actual call pattern and isn't load-bearing for the answer.
 
 ## 2. Does the default transport retry on its own?
 
@@ -33,7 +34,11 @@
 | The pool's own internal retry (`ConnectionNotAvailable`) is a scheduling condition, not a network-I/O retry; any other exception propagates immediately with no retry. | `httpcore/_sync/connection_pool.py:233-254` | high |
 | Mid-request read/write failures or timeouts are therefore never retried transparently by the default transport - they surface directly to whatever sits on top. | Inference from the two rows above; no source states the negative explicitly | low |
 
-**Answer:** with `retries=0` (the default `get_json` relies on implicitly), httpx/httpcore contribute zero automatic retries of any kind. `common.py`'s manual backoff loop is doing all of the retrying - there is no risk of a hidden second retry layer compounding its backoff.
+**Answer:** with `retries=0` (the default `get_json` relies on implicitly), the default transport does no retrying before a connection is established, and even a nonzero `retries` would only cover that initial connect/TLS handshake, never a request already in flight - both read directly from source.
+Citation: the four `high` rows above. Confidence: **high** for that much.
+Whether *no* layer beneath what was traced here retries a failure that happens mid-request is a different, weaker claim: no source was found stating that negative outright, only the absence of a retry loop around the one call site traced (`ConnectionPool.handle_request`). Treat "httpx/httpcore never retry a mid-request failure" as an inference, not a confirmed absence.
+Citation: the `low` row above. Confidence: **low** - this half of the answer inherits that row's confidence rather than the section's high-confidence rows, per the synthesis rule in `tech-research`'s own "Per-claim confidence" section.
+What's actually established: `common.py`'s manual backoff is doing all of the retrying this research could verify; whether it's the *only* retry layer for a failure after the connection is already open is not settled here.
 
 ## 3. Does a scalar `timeout=30` apply uniformly?
 
@@ -41,11 +46,13 @@
 | --- | --- | --- |
 | When `connect`/`read`/`write`/`pool` are all left unset, `Timeout.__init__` assigns the single scalar to all four. | `httpx/_config.py:121-130` (fallback branch); docstring example `Timeout(5.0)  # 5s timeout on all operations.` at line 79 | high |
 | `get_json`'s actual call (`httpx.get(url, ..., timeout=30, ...)`) reaches exactly this path: `get()` → `request()` → `Client(timeout=30)` → `self._timeout = Timeout(30)`, a single positional value. | `httpx/_api.py:52,102-108,174-205`; `httpx/_client.py:212` | high |
-| The four phases remain functionally distinct failure modes (connect/read/write/pool each raise their own exception type) even though one scalar budgets all of them identically here. | `httpx/_config.py:76-84`; corroborated by https://www.python-httpx.org/advanced/timeouts/ (Fine tuning the configuration) | high (source) / moderate (docs - no version marker on the page) |
+| The four phases remain functionally distinct failure modes (connect/read/write/pool each raise their own exception type) even though one scalar budgets all of them identically here. Corroborated (not required) by the official docs' "fine tuning the configuration" section, though that page carries no version marker. | `httpx/_config.py:76-84` | high |
 | Background: when `timeout` is omitted entirely, the default is `5.0`s across all four phases (`DEFAULT_TIMEOUT_CONFIG = Timeout(timeout=5.0)`) - not this script's case, since it always passes `timeout=30`. | `httpx/_config.py:246`; `httpx/_api.py:52,184` | high |
 
 **Answer:** yes, `timeout=30` in `get_json` applies the same 30-second budget to connect, read, write, and pool-acquisition uniformly. No per-phase tuning is in effect; a slow-to-free pool slot under connection-limit contention would time out on the same 30s budget as a slow connect or a slow response, which is worth knowing but isn't a bug given the script makes one request at a time.
+Citation: the rows above (all `high`). Confidence: **high**.
 
 ## Net assessment for `common.py`
 
-No change is warranted: the retry loop's `except httpx.HTTPError` catches everything it's meant to catch for this script's usage pattern, httpx adds no hidden retry layer underneath it, and the scalar timeout behaves as the code already assumes.
+The retry loop's `except httpx.HTTPError` catches everything it's meant to for this script's usage pattern, and the scalar timeout behaves as the code already assumes - both confirmed at high confidence in §1 and §3. Whether httpx/httpcore add any retrying beneath `common.py`'s own loop for a mid-request failure is not fully confirmed and stays an inference (§2); it doesn't argue for changing the current retry loop, but it's the one part of this analysis that's a documented guess, not a proven absence.
+Citation: §1's answer, §2's answer, §3's answer. Confidence: **low** - inherited from §2's weaker half, per the synthesis rule in `tech-research`'s own "Per-claim confidence" section: a synthesis carries the lowest confidence of what it rests on.

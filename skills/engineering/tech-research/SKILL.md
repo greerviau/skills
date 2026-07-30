@@ -1,13 +1,13 @@
 ---
 name: tech-research
-description: Use when a technical question needs a sourced, version-pinned answer about third-party or external behavior - what a library's API actually does, what a spec or RFC requires, how a pinned dependency behaves - captured as a durable findings file instead of asserted from memory. Trigger on "how does this library actually handle", "what does the X API do", "check the vendor docs for", "does this version support", "what does the RFC/spec say about", "research how this dependency behaves", "verify this against the docs, not from memory".
+description: Use when a technical question needs a sourced, version-pinned answer about third-party or external behavior - what a library's API actually does, what a standard requires, how a pinned dependency behaves - captured as a durable findings file instead of asserted from memory. Trigger on "how does this library actually handle", "what does the X API do", "check the vendor docs for", "does this version support", "what does the RFC say about", "what does the standard require", "research how this dependency behaves", "verify this against the docs, not from memory".
 ---
 
 # tech-research
 
 Investigate a technical question about third-party or external behavior against high-trust primary sources, and capture the answer as a durable, version-pinned findings file.
 **The hard rule: every claim carries a citation and a confidence level.**
-A claim with neither is model recall, not research, and doesn't belong in the findings file.
+A claim missing either is model recall, not research, and doesn't belong in the findings file.
 
 ## Source hierarchy
 
@@ -29,6 +29,8 @@ Every claim in the findings file gets a citation (file and line, doc URL and sec
 - **moderate** - vendor docs without version confirmation, or a spec the implementation hasn't been checked against directly.
 - **low** - release notes, issue discussion, or inference from adjacent behavior.
 - **unknown** - nothing in the hierarchy answered it. State the open question plainly rather than filling the gap with a guess.
+
+A synthesized answer that combines several claims is itself a claim: it carries its own citation (back to the claims it draws on) and inherits the lowest confidence among them, never a confident-sounding average.
 
 ## Version pinning
 
