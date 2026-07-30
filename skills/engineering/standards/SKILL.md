@@ -6,7 +6,7 @@ description: The shared engineering standards the other engineering skills enfor
 # standards
 
 The single source of truth for the house rules the engineering skills share.
-Other skills (`spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-pr`) reference this document instead of restating these rules, so a change here changes them everywhere.
+Other skills (`spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-pr`, `mermaid`) reference this document instead of restating these rules, so a change here changes them everywhere.
 Each rule is policy; the referencing skill supplies the procedure that applies it at the right moment.
 
 ## Documentation and comments
@@ -15,7 +15,7 @@ Each rule is policy; the referencing skill supplies the procedure that applies i
 - **Exception:** records whose purpose is to capture a decision or history may describe before/after and motivation — ADRs, decision logs, design proposals, CHANGELOGs, release notes, migration guides, commit messages, and PR descriptions. This exception does not extend to code comments or documentation living alongside the code.
 - Don't add repo layouts to documentation.
 - In prose markdown (docs, READMEs, plans, design docs), use **semantic line breaks**: one sentence per line, no hard-wrapping to a fixed column width. This keeps diffs and blame scoped to the sentence that changed. Does not apply to code, tables, or code blocks.
-- Favor mermaid diagrams over ASCII diagrams, unless mermaid can't express the diagram or the user asks otherwise. Don't one-shot a mermaid diagram — refine it until it reads well, using subagents if needed.
+- Favor mermaid diagrams over ASCII diagrams, unless mermaid can't express the diagram or the user asks otherwise. Don't one-shot a mermaid diagram — the `mermaid` skill supplies the render-and-refine procedure.
 
 ## Ubiquitous language
 

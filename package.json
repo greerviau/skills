@@ -25,6 +25,7 @@
     "./skills/engineering/doc-audit",
     "./skills/engineering/standards",
     "./skills/engineering/handoff",
+    "./skills/engineering/mermaid",
     "./skills/research/lit-research",
     "./skills/personal/opinions"
   ]
