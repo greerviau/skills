@@ -1,10 +1,13 @@
-"""Harness for the perf skill's own verification exercise (see the PR that added
-skills/engineering/perf/SKILL.md for the full before/after write-up).
+"""Harness for the perf skill's own verification exercise - see
+2026-07-30-perf-skill-verification.md (one directory up) for the
+before/after write-up.
 
-Workload: dedupe N synthetic paper-like records by key, ~40% of them exact
-duplicates, in randomized order. Target: hold dedupe() under 20ms at N=6000.
-Kept here, and re-runnable, so a future regression in this pattern is
-detectable against the same baseline.
+Workload: dedupe N synthetic paper-like records by key. Each record's key is
+drawn with replacement from a pool sized to 60% of N, so keys collide and the
+draw order is already random; at N=6000 this yields 2,939 unique keys (~51%
+duplicates - see the findings file for how that number was checked). Target:
+hold dedupe() under 20ms at N=6000. Kept here, and re-runnable, so a future
+regression in this pattern is detectable against the same baseline.
 """
 from __future__ import annotations
 
@@ -18,9 +21,7 @@ def generate_records(n: int, seed: int = 42) -> list[dict]:
     rng = random.Random(seed)
     unique_n = max(1, int(n * 0.6))
     keys = [f"rec-{i:08d}" for i in range(unique_n)]
-    records = [{"key": rng.choice(keys), "title": "paper"} for _ in range(n)]
-    rng.shuffle(records)
-    return records
+    return [{"key": rng.choice(keys), "title": "paper"} for _ in range(n)]
 
 
 def time_dedupe(records: list[dict], repeats: int = 5) -> tuple[float, list[dict]]:
