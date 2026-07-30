@@ -48,7 +48,5 @@ A concept should have one place it lives, findable by the name recorded in the r
 
 ## Boundaries
 
-Read while judging or explaining a structural question, never a numbered step in another skill's procedure, and produces no artifact of its own.
-
 - Against `refactor`: a request framed as "is this well-structured" or "how should this be organized" reads `design`; a request framed as "clean this up" or "reduce duplication" invokes `refactor`, which then reads `design` for the vocabulary it judges by.
 - Against `tdd` (the `tdd` skill, if you use it): a request to explain or judge a seam reads `design`; a request to drive the test-first loop invokes `tdd`, which reads `design` for the harder calls.
