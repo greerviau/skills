@@ -7,6 +7,13 @@ One entry per term; keep entries short and precise.
 
 - **skill**: a self-contained, plain-markdown procedure doc (`SKILL.md` with YAML frontmatter) in a folder under `skills/`, auto-discovered by the plugin loader. May carry supporting scripts in a `scripts/` subfolder.
 
+## design (skills/engineering/design)
+
+- **deep module**: a module whose interface is narrow relative to the functionality it hides behind it; the target shape for anything with callers. The opposite is a **shallow module**, whose interface is about as complex as what it does — a pass-through wrapper is the shallow extreme.
+- **seam**: the point where a public boundary is crossed and behavior can be substituted without editing the code on the other side of it; also the point where a test attaches.
+- **load-bearing leak**: a fact about implementation a caller genuinely needs to know (e.g. a rate limit), as distinct from an **accidental leak** — one that escaped only because nothing hid it.
+- **error-condition elimination**: designing away the precondition that produces an error case, rather than handling or propagating it.
+
 ## lit-research (skills/research/lit-research)
 
 - **canonical record**: the normalized paper representation all sources map into, keyed by DOI (source-native id when no DOI exists). Embodied by the record dataclass in `scripts/common.py`.

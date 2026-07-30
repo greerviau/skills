@@ -5,8 +5,8 @@ description: The shared engineering standards the other engineering skills enfor
 
 # standards
 
-The single source of truth for the house rules the engineering skills share.
-Other skills (`spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-pr`, `mermaid`) reference this document instead of restating these rules, so a change here changes them everywhere.
+The single source of truth for the **compliance** rules the engineering skills share: house policy, not structural judgment (`design` is the peer reference for that).
+Other skills (`spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-pr`, `mermaid`, `design`) reference this document instead of restating these rules, so a change here changes them everywhere.
 Each rule is policy; the referencing skill supplies the procedure that applies it at the right moment.
 
 ## Documentation and comments
