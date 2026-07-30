@@ -9,7 +9,7 @@
       "name": "greerviau-engineering",
       "source": "./",
       "strict": false,
-      "description": "Engineering skills: shared standards and design vocabulary, spec/plan, spec-to-tickets, the GitHub dev workflow, pull requests, test-driven development, technical research, debugging, review, refactoring, doc audits, mermaid diagrams, and conversation handoffs.",
+      "description": "Engineering skills: shared standards and design vocabulary, spec/plan, spec-to-tickets, the GitHub dev workflow, pull requests, test-driven development, technical research, debugging, review, refactoring, performance optimization, doc audits, mermaid diagrams, and conversation handoffs.",
       "category": "engineering",
       "keywords": [
         "engineering",
@@ -25,6 +25,7 @@
         "debug",
         "review",
         "refactor",
+        "perf",
         "doc-audit",
         "mermaid",
         "handoff"
