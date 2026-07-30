@@ -19,6 +19,11 @@ One entry per term; keep entries short and precise.
 - **primary source**: the source that directly answers a claim, ranked by the source hierarchy — the installed dependency's own source and tests, then official vendor docs for the pinned version, then specs/RFCs, then release notes and issue trackers. Blog posts and model recall are never primary sources.
 - **confidence level**: the high/moderate/low/unknown rating attached to every claim in a findings file, recording how directly a primary source backs it rather than smoothing uncertainty into an unqualified statement.
 
+## perf (skills/engineering/perf)
+
+- **baseline**: the first measurement taken on a harness, before any change; every later re-measurement is compared against it. A one-off shell timing that can't be re-run unchanged doesn't qualify.
+- **harness**: the reproducible, committed way of driving a workload under measurement or test, cheap enough to re-run on demand. `perf` builds one to benchmark a workload; `tdd` builds one to drive a seam under test - same concept, a different guard.
+
 ## lit-research (skills/research/lit-research)
 
 - **canonical record**: the normalized paper representation all sources map into, keyed by DOI (source-native id when no DOI exists). Embodied by the record dataclass in `scripts/common.py`.
