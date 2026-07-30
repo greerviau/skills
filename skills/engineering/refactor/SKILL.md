@@ -5,7 +5,7 @@ description: Use when improving the structure of working code without changing i
 
 # refactor
 
-Improve the structure of working code without changing its behavior — reduce duplication, clarify naming, simplify control flow, align with conventions. **Behavior preservation is the hard invariant**, and an unchanged, passing test suite is the proof.
+Improve the structure of working code without changing its behavior — reduce duplication, clarify naming, simplify control flow, align with conventions. **Behavior preservation is the hard invariant**, and an unchanged, passing test suite is the proof. What counts as better structure is the vocabulary in `design` (module depth, information hiding, seam placement), not taste.
 
 This is a deliberate, test-guarded pass you can point at any code, distinct from the one-shot `/simplify` on the current diff. Any change to observable behavior is out of scope — that's feature work or a fix (`debug`).
 

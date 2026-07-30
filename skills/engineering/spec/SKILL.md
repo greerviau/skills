@@ -55,7 +55,7 @@ Keep a running list: primary repo, other affected repos, key files/symbols, new 
 
 ### 4. Design and build the plan
 
-Decide on an approach and turn it into a step-by-step plan. Where the user hasn't settled a design fork, pick the option that best fits quality, correctness, simplicity, robustness, and maintainability, and note the alternative as a rejected option with the reason — don't present a menu.
+Decide on an approach and turn it into a step-by-step plan. Where the user hasn't settled a design fork, pick the option that best fits quality, correctness, and the structural bar in `design` (module depth, information hiding, seam placement), and note the alternative as a rejected option with the reason — don't present a menu.
 
 The plan covers:
 
