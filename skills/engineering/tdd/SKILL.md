@@ -21,6 +21,6 @@ Policy (E2E bias, regression tests, flakiness is a defect) lives in `standards`;
 
 ## Boundaries
 
-- Never write the implementation before the test. This includes retroactively: if the implementation already exists, writing a test for it afterward and calling it test-driven is the same reporting failure.
+- Applies retroactively too: if the implementation already exists, writing a test for it afterward and calling it test-driven is the same reporting failure.
 - Against `debug`: a report of broken behavior is `debug`, which produces a failing reproduction - a red test by another name - and hands off to `dev-workflow` to land the fix; a request for new behavior is this skill. Each references the other rather than absorbing it.
 - Against `dev-workflow`: `dev-workflow`'s own trigger surface ("any request to write and land code in a repo") is broad enough to also catch a test-first request, so this skill's own triggers stay narrow and explicit and never compete with that catch-all. A plain "implement this feature" lands on `dev-workflow` directly, which does the work itself without routing through this skill.
