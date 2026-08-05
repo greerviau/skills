@@ -1,6 +1,6 @@
 ---
 name: standards
-description: The shared engineering standards the other engineering skills enforce — documentation style, ubiquitous language, testing bias, branch hygiene, PR and commit hygiene, and the interactive-vs-autonomous interaction contract. Read it when a skill references "the standards skill", or directly when writing code, docs, commits, or PRs so the same house rules apply everywhere. Trigger on "what are the house standards", "engineering standards", "house style".
+description: The shared engineering standards the other engineering skills enforce — documentation and plain-language style, naming and ubiquitous language, testing bias, branch hygiene, PR and commit hygiene, and the interactive-vs-autonomous interaction contract. Read it when a skill references "the standards skill", or directly when writing code, docs, commits, or PRs so the same house rules apply everywhere. Trigger on "what are the house standards", "engineering standards", "house style", "write this in plain language".
 ---
 
 # standards
@@ -16,9 +16,21 @@ Each rule is policy; the referencing skill supplies the procedure that applies i
 - Don't add repo layouts to documentation.
 - In prose markdown (docs, READMEs, plans, design docs), use **semantic line breaks**: one sentence per line, no hard-wrapping to a fixed column width. This keeps diffs and blame scoped to the sentence that changed. Does not apply to code, tables, or code blocks.
 - Favor mermaid diagrams over ASCII diagrams, unless mermaid can't express the diagram or the user asks otherwise. Don't one-shot a mermaid diagram — the `mermaid` skill supplies the render-and-refine procedure.
+- Keep inline comments to **two lines or less**, and never clarify one with an example. An inline comment that needs an example or a third line means the code is not clean enough; fix the code instead of explaining it.
+- Docstrings and module-level documentation are exempt from the length cap; present tense and the no-narrative rule still apply.
 
-## Ubiquitous language
+### Plain language
 
+- Prefer the short common word: start (not begin/commence/initiate), use (not utilize/leverage), help (not facilitate), before (not prior to), after (not subsequent to), about (not regarding/concerning), get (not obtain/acquire), show (not demonstrate), also (not additionally/furthermore/moreover).
+- No marketing adjectives: seamless, robust, powerful, cutting-edge, effortless, world-class, next-generation, revolutionary.
+- Active voice with the actor named, and a verb for an action: "the parser reads the file" and "analyze the log", not "the file is read by the parser" or "perform an analysis of the log".
+- No stacked auxiliaries. Not "it is important to note that this may help to improve"; write "this improves X".
+- One word for one thing, and one meaning per word. Reuse a term verbatim rather than varying it for style; a second word for the same thing reads as a second thing.
+- Every "this", "it", and "that" has one clear antecedent in the same sentence or the one before it. Where it does not, name the thing.
+
+## Naming and ubiquitous language
+
+- Name identifiers with **fully expressed words**, never abbreviations or truncations: `configuration` not `cfg`, `index` not `idx`, `sample_count` not `n_samps`. Domain acronyms the glossary records (`mz`, `xic`, `ms2`) are the real names, not abbreviations, and stay verbatim.
 - Each repo (or bounded context within it) carries a glossary of its domain terms, by default `docs/UBIQUITOUS-LANGUAGE.md`, version-controlled so it travels with the code.
 - **Read** the relevant glossary before naming anything, and use its terms **verbatim** — in code (types, functions, endpoints, tables, tests) and in prose (commits, PRs, docs). Never coin a synonym for a concept the glossary already names.
 - **Extend** the glossary in the same change when implementation forces a new domain term or exposes a stale entry.
