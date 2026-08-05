@@ -49,7 +49,7 @@ Two ways to install, two philosophies:
 
 `/plugin install greerviau-engineering@greerviau`
 
-- **[standards](skills/engineering/standards/SKILL.md)** — the shared house rules the other engineering skills enforce (documentation style, ubiquitous language, testing bias, branch hygiene, PR/commit hygiene, and the interactive-vs-autonomous interaction contract), kept in one place so a change applies everywhere.
+- **[standards](skills/engineering/standards/SKILL.md)** — the shared house rules the other engineering skills enforce (documentation and plain-language style, naming and ubiquitous language, testing bias, branch hygiene, PR/commit hygiene, and the interactive-vs-autonomous interaction contract), kept in one place so a change applies everywhere.
 - **[design](skills/engineering/design/SKILL.md)** — the shared vocabulary for structural judgment (module depth, information hiding, seam placement, error-condition elimination, navigability), read rather than invoked, so a structural claim is citable instead of asserted as taste.
 - **[spec](skills/engineering/spec/SKILL.md)** — turns a raw request into a reviewed plan of action: interviews the user to pin down requirements and terminology, explores the code to discover scope, maintains the repo's ubiquitous-language glossary, and writes the plan to a markdown file for review before any building starts.
 - **[spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md)** — turns a reviewed spec into GitHub Issues with no configuration: judges the spec's scope to pick a single-issue / flat / parent-with-native-sub-issues shape, and records the issue URLs back in the spec so re-runs don't duplicate.
@@ -61,7 +61,7 @@ Two ways to install, two philosophies:
 - **[review](skills/engineering/review/SKILL.md)** — reviews a diff, branch, or PR against your engineering standards (lint clean, tests present and green, no flakiness, correctness and structure over dev cost) and, when one can be located, against the originating spec or issue, flagging incidental defects even when unrelated.
 - **[refactor](skills/engineering/refactor/SKILL.md)** — improves code structure without changing behavior, guarded by an unchanged test suite; adds characterization tests first when coverage is thin.
 - **[perf](skills/engineering/perf/SKILL.md)** — measure-first optimization: state a numeric target, baseline and profile with a reproducible harness, change one thing with the test suite staying green, then re-measure on the same harness and report the before/after delta.
-- **[doc-audit](skills/engineering/doc-audit/SKILL.md)** — after any code change, audits the documentation surface it touched (docstrings, comments, READMEs, docs, examples) and rewrites stale passages in present tense describing current state.
+- **[doc-audit](skills/engineering/doc-audit/SKILL.md)** — after any code change, audits the documentation surface it touched (docstrings, comments, READMEs, docs, examples) and rewrites stale passages in present tense describing current state, then delegates a plain-language check of the prose to a subagent.
 - **[mermaid](skills/engineering/mermaid/SKILL.md)** — the draft/render/look/critique/refine loop for mermaid diagrams, checked against a layout checklist (subgraph boxes, edge crossings, aspect ratio, theme-neutral styling) and rendered locally, never via a hosted service.
 
 How these skills fit together — entry points, components, and hand-offs — is mapped in [docs/engineering-skill-composition.md](docs/engineering-skill-composition.md).
