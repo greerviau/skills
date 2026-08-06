@@ -26,7 +26,7 @@ This is the single source of truth for issue conventions — invoked standalone,
 **Title** — a plain descriptive sentence naming the observed problem or the requested change: `Worktree is removed while the PR is still open`.
 No `feat(...)` prefix and no `[Bug]` tag: the type lives in the label, and conventional-commit form belongs on the commit and PR.
 
-**Body** — one screen, roughly 200 words:
+**Body** — human-facing, so held to the budget and the cuts in *Artifact audience* (`standards`):
 
 - **Problem / request** — what is wrong or what is wanted, and who it affects.
 - **Reproduction** (bugs) — the smallest steps that trigger it, expected versus actual behavior, and the environment it shows up in.
@@ -34,7 +34,7 @@ No `feat(...)` prefix and no `[Bug]` tag: the type lives in the label, and conve
 - **Acceptance criteria** — a numbered list of what has to be true to close this. Concrete and checkable, not "works correctly". Numbered rather than checkboxes: nothing in the workflow ticks a box, and the numbers give `review`'s conformance pass a handle ("criterion 3 unmet").
 - **Links** — the spec doc, related issues, the failing CI run, a log excerpt.
 
-Cut background essays, alternatives considered, and speculation about the cause.
+Cut speculation about the cause.
 Use the terms the repo's glossary already names, verbatim (`standards`).
 
 ## Label from the repo's real labels
@@ -55,6 +55,9 @@ gh label create <name> --color <hex> --description "<description>"
 ```
 
 ## Create it
+
+Run the concision pass (`standards`) over the drafted body first unless it's already well inside the budget, and apply what it returns.
+The acceptance criteria are facts; the pass leaves them alone.
 
 ```bash
 gh issue create --title "<title>" --body "<body>" --label "<label>,<label>"

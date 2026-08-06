@@ -42,6 +42,7 @@ An API fact is a fact about a version, not the library in general. Record the ch
 2. **Decompose and delegate.** When the question splits into independent sub-questions (several APIs, several libraries, a question plus its edge cases), fan them out to subagents, one per sub-question, each returning sourced findings for its own slice. Run it directly when the question doesn't decompose.
 3. **Work the hierarchy.** For each sub-question, start at the top of the source hierarchy and stop at the first rank that answers it with confidence.
 4. **Write the findings file.** Default location `docs/analysis/`, filename kebab-case and date-prefixed (e.g. `2026-07-30-websocket-reconnect-backoff.md`), the same convention `spec` uses for `docs/plans/`. State the checked version up top; one claim per line or bullet, each with its citation and confidence.
+   It's a reference, not an essay: claims, citations, confidence. No narrative of how the search went, and no restating a claim in a conclusions section.
 5. **Report the path**, not the content - point at the file instead of restating findings in conversation.
 
 **Interaction mode** (see `standards`): running autonomously, don't block on an ambiguous question (which library, which version, which of several plausible readings) - research the most likely reading, record the assumption in the findings file, and proceed.

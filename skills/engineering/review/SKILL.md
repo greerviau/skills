@@ -30,6 +30,8 @@ This **complements** the built-in `/code-review` (which hunts correctness bugs) 
 4. **Spec-conformance pass.** Locate the originating spec or issue first: a `docs/plans/` reference in the PR body, a linked GitHub issue, a plan path named in the branch, or one the user supplies directly. If none of these resolves, report "no originating spec located, conformance not assessed" and stop there — never reconstruct an implied spec from the diff itself and grade against that reconstruction. When a spec resolves, report scope drift, missing requirements, and out-of-scope additions against it.
 5. **Incidental-defect rule.** Flag any lint error, test failure, or flakiness spotted — *even if unrelated* — noting it belongs on its own branch, not folded into this one.
 6. **Report.** Findings ranked most-severe first, each concrete and actionable, ending in a clear ship / don't-ship call. Merge both axes' findings; a stopped spec-conformance pass contributes its one-line note, not a gap.
+   A review a person reads is human-facing (`standards`, *Artifact audience*): one or two sentences per finding, naming the location and the fix. No preamble, no summary of the diff, no restating a finding in a closing section. Findings only — a review that lists what was checked and found clean is padding.
+   When the report gets posted rather than spoken — PR comments, a review body — run the concision pass (`standards`) over it first.
 
 **Interaction mode** (see `standards`): running autonomously as a gate, emit a machine-consumable verdict plus the ranked findings list rather than a conversational call.
 
