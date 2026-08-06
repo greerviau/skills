@@ -25,10 +25,10 @@ Open a pull request: write its title and body, then create it. This is the singl
    - **Regressions** — known or potential regressions to watch for.
 
    Follow the repo's PR template where one exists, adding anything else valuable.
-5. **Keep it short.** One screen: roughly 200 words, rarely over 400.
+5. **Keep it short.** A PR body is human-facing: hold it to the budget and the cuts in *Artifact audience* (`standards`). Applied here:
    - One or two sentences per section. **Changes** may be a bullet list, one line per meaningful change, grouped rather than file-by-file.
    - Cut what the diff already says: file walkthroughs, function signatures, line counts, quoted code.
-   - Cut what the reader can't act on: background essays, alternatives considered, self-congratulation ("comprehensive", "robust").
-   - "None known" is a complete section. Where a design decision or migration needs real depth, link to the spec or issue instead of inlining it.
+   - Where a design decision or migration needs real depth, link to the spec or issue instead of inlining it.
 6. **Keep it evergreen.** Per the PR and commit hygiene rules in `standards`: written once and kept accurate as the branch evolves, no AI attribution of any kind, no volatile details (version bumps and the like) that go stale.
-7. **Open the PR** with the title and body (e.g. `gh pr create`).
+7. **Run the concision pass** (`standards`) over the drafted body unless it's already well inside the budget, and apply what it returns.
+8. **Open the PR** with the title and body (e.g. `gh pr create`).
