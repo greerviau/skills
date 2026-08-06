@@ -31,7 +31,7 @@ No `feat(...)` prefix and no `[Bug]` tag: the type lives in the label, and conve
 - **Problem / request** — what is wrong or what is wanted, and who it affects.
 - **Reproduction** (bugs) — the smallest steps that trigger it, expected versus actual behavior, and the environment it shows up in.
 - **Proposed approach** (optional) — one or two sentences, only where a direction is already known. Leave it out rather than guess; the issue states the problem, the spec or PR decides the solution.
-- **Acceptance criteria** — a short checklist of what has to be true to close this. Concrete and checkable, not "works correctly".
+- **Acceptance criteria** — a numbered list of what has to be true to close this. Concrete and checkable, not "works correctly". Numbered rather than checkboxes: nothing in the workflow ticks a box, and the numbers give `review`'s conformance pass a handle ("criterion 3 unmet").
 - **Links** — the spec doc, related issues, the failing CI run, a log excerpt.
 
 Cut background essays, alternatives considered, and speculation about the cause.
