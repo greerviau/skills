@@ -8,6 +8,7 @@ disable-model-invocation: true
 # spec-to-tickets
 
 Turn a reviewed spec (the markdown a `spec` run produces) into GitHub Issues. Sits between `spec` (produces the plan) and `dev-workflow` (executes the work items).
+Judges the ticket shape and the breakdown; each individual issue is written and filed per `open-issue`.
 
 **This skill is explicit** — it creates external, hard-to-reverse artifacts other people see. Never fire on your own; never create anything before the user confirms the proposed breakdown.
 
@@ -29,16 +30,18 @@ The signal comes from the spec's own structure: the number of distinct work item
 
 ## Creating the issues
 
+Write and create each issue per the `open-issue` skill, which owns the title, body, and label conventions — a plain descriptive title, a short problem/acceptance-criteria body, labels picked from the repo's real labels. This skill owns only the shape and the breakdown.
+
 Regardless of shape:
 
 - **Titles and bodies use the spec's ubiquitous-language terms, verbatim** — no coined synonyms.
 - **Every issue links back to the spec document.**
 - **Nothing is created until the user confirms** the proposed shape and breakdown.
 
-Create with the `gh` CLI. For each issue:
+Without `open-issue`, create each with the `gh` CLI directly:
 
 ```bash
-gh issue create --title "<title>" --body "<body linking the spec>"
+gh issue create --title "<title>" --body "<body linking the spec>" --label "<label>"
 ```
 
 Pass `--repo <owner/repo>` when filing against a repo other than the working directory's.
@@ -70,4 +73,5 @@ After creating issues, write a **"Tickets" section back into the spec doc** list
 
 - Explicit only — never auto-fire, never create before the user confirms.
 - Missing auth → stop and instruct (`gh auth login`). Never guess a destination.
+- Owns shape and breakdown, not issue conventions — those live in `open-issue`.
 - Creates issues; does not execute them — that's `dev-workflow`, which references each issue in its commits and PR.

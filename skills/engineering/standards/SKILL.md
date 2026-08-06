@@ -1,12 +1,12 @@
 ---
 name: standards
-description: The shared engineering standards the other engineering skills enforce — documentation and plain-language style, naming and ubiquitous language, testing bias, branch hygiene, PR and commit hygiene, and the interactive-vs-autonomous interaction contract. Read it when a skill references "the standards skill", or directly when writing code, docs, commits, or PRs so the same house rules apply everywhere. Trigger on "what are the house standards", "engineering standards", "house style", "write this in plain language".
+description: The shared engineering standards the other engineering skills enforce — documentation and plain-language style, naming and ubiquitous language, testing bias, branch hygiene, issue hygiene, PR and commit hygiene, and the interactive-vs-autonomous interaction contract. Read it when a skill references "the standards skill", or directly when writing code, docs, commits, or PRs so the same house rules apply everywhere. Trigger on "what are the house standards", "engineering standards", "house style", "write this in plain language".
 ---
 
 # standards
 
 The single source of truth for the **compliance** rules the engineering skills share: house policy, not structural judgment (`design` is the peer reference for that).
-Other skills (`spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-pr`, `mermaid`, `design`, `tdd`) reference this document instead of restating these rules, so a change here changes them everywhere.
+Other skills (`spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-issue`, `open-pr`, `mermaid`, `design`, `tdd`) reference this document instead of restating these rules, so a change here changes them everywhere.
 Each rule is policy; the referencing skill supplies the procedure that applies it at the right moment.
 
 ## Documentation and comments
@@ -44,6 +44,12 @@ Each rule is policy; the referencing skill supplies the procedure that applies i
 ## Branch hygiene
 
 - Unrelated out-of-scope bugs or improvements that surface mid-work don't get fixed on the current branch. **Flag them, then fix them on a separate worktree/branch/PR** following the normal workflow. A behavior change smuggled into a refactor, or an incidental fix folded into an unrelated PR, is exactly what this rule prevents.
+
+## Issue hygiene
+
+- **Work starts from an issue.** A code change gets an issue before the branch, so the PR's closing reference attaches the work to it and closes it on merge. The exceptions: an issue already covers the work, or the change is trivial (a typo, a one-line fix).
+- Issue titles are plain descriptive sentences naming the problem or the request, not conventional-commit form. The type belongs in the label; `feat(...)` / `fix(...)` belongs on the commit and PR.
+- Label from the repo's existing labels, read rather than guessed at. Propose a new label only when nothing in the set fits.
 
 ## PR and commit hygiene
 
