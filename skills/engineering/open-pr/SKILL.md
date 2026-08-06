@@ -11,7 +11,7 @@ Open a pull request: write its title and body, then create it. This is the singl
 
 1. **Scope the branch.** Diff against the base to see what actually changed. The title and body describe the branch as it stands, not how it got there.
 2. **Write the title.** `feat(...)` / `fix(...)` conventional-commit form with a concise scope and summary (e.g. `fix(worktree): keep worktree alive until PR merges`).
-3. **Link a provided issue.** If the request or branch context provides a GitHub issue, add a closing reference such as `Fixes #123` to the PR body.
+3. **Link a provided issue.** If the request or branch context provides a GitHub issue — the issue-first step of the development workflow supplies one — add a closing reference such as `Fixes #123` to the PR body.
    For a same-repository issue, this puts the PR in the issue's **Development** section and closes the issue when the PR merges into the default branch.
    The branch itself does not close the issue; the closing reference on the PR does.
    Use `Fixes owner/repo#123` for an issue in another repository.
