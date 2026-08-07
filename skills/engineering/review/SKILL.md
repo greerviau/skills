@@ -24,8 +24,15 @@ This **complements** the built-in `/code-review` (which hunts correctness bugs) 
    | Ubiquitous language | For each glossary term the change touches, grep the diff for coined synonyms. |
    | Full-word naming | Grep added identifiers for abbreviations and truncations the glossary doesn't record (`cfg`, `idx`, `n_samps`). |
    | Comment form | Grep added inline comments for a third line or an example (`e.g.`, `for example`). |
-   | Comment density | Enumerate every comment line the diff adds (`git diff <base>..HEAD -U0 \| grep -E '^\+\s*(#\|//\|/\*\|\*)'`), then settle each against the earns-its-place check in `standards`. Every restatement is a finding. |
+   | Comment density | Enumerate every comment the diff adds with the command below, then settle each against the earns-its-place check in `standards`. A comment stating a fact the code already states is a finding. |
    | Plain language | Grep added prose for banned words (`utilize`, `leverage`, `facilitate`, `prior to`, `subsequent to`) and marketing adjectives (`seamless`, `robust`, `powerful`, `effortless`). |
+
+   ```bash
+   git diff <base>..HEAD | grep -E -C2 '^\+.*(#|//|/\*|--|<!--)'
+   ```
+
+   The pattern over-collects (shebangs, `#` inside strings) because a comment the pattern misses escapes the check entirely, while a false positive costs one settle.
+   The surrounding lines are what the settle step compares each comment against, so keep the context.
 
    Then the judgment calls: structure judged against `design`'s vocabulary rather than the cheapest path, whether the tests actually prove the behavior, and that the touched documentation surface is audited (`doc-audit`).
 4. **Spec-conformance pass.** Locate the originating spec or issue first: a `docs/plans/` reference in the PR body, a linked GitHub issue, a plan path named in the branch, or one the user supplies directly. If none of these resolves, report "no originating spec located, conformance not assessed" and stop there — never reconstruct an implied spec from the diff itself and grade against that reconstruction. When a spec resolves, report scope drift, missing requirements, and out-of-scope additions against it.
