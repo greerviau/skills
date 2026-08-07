@@ -50,10 +50,9 @@ Pass `--repo <owner/repo>` when filing against a repo other than the working dir
 
 An issue carries a spec reference only as a URL every reader of that issue can open. Link the human-facing spec, never the implementation plan: the plan lives at a scratch or git-ignored path by design, so it has no URL to link.
 
-Verify the URL exists rather than assuming it. From the repo holding the spec:
+Verify the URL exists rather than assuming it, against the repo holding the spec:
 
 ```bash
-git fetch origin
 gh api "repos/<owner>/<repo>/contents/<path-from-repo-root>?ref=<default-branch>" -q .html_url
 ```
 
@@ -61,7 +60,7 @@ A returned `html_url` is the link, as long as the issue's readers can read that 
 
 Never stand a path in for the URL. A filesystem path, a workspace-relative path, a repo-relative path with no URL, or the spec's bare filename resolves on one machine and says nothing to any other reader. These are not weaker links; they are not links.
 
-When the spec is unreachable, omit the reference entirely. **That is the correct output, not a degraded one.** An implementer works from the issue's own Problem and Acceptance criteria, which `open-issue` requires to be concrete and checkable whether or not a spec exists; the link is a convenience some runs have and others don't. A linkless issue is finished, so there is nothing here for a local path to satisfy. Say which issues carry a link when you propose the breakdown, so the user sees the reference was decided rather than forgotten.
+When the spec is unreachable, omit the reference entirely. **That is the correct output, not a degraded one.** An implementer works from the issue's own Problem and Acceptance criteria, which `open-issue` already makes stand alone; the link is a convenience some runs have and others don't. A linkless issue is finished, so there is nothing here for a local path to satisfy. Say which issues carry a link when you propose the breakdown, so the user sees the reference was decided rather than forgotten.
 
 ### Parent + sub-issues: use GitHub's native Sub-issues
 
