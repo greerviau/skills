@@ -1,6 +1,6 @@
 ---
 name: spec
-description: Use when the user hands you a request to scope and plan before building — a feature they want, a bug to fix, a new pipeline, or a piece of infrastructure — and wants a reviewed plan of action rather than immediate code. Interviews the user to sharpen the requirements, explores the relevant code across one or many repos to discover scope, designs an approach, maintains the repo's ubiquitous-language glossary, writes a short human-facing spec to a markdown file, and asks whether to execute or iterate — expanding it into a detailed agent-facing implementation plan only once the spec is approved. Trigger on "/spec", "spec this out", "plan this", "scope this out", "how should we approach", "figure out what it'll take to", "before we build", "write a spec/plan for ...".
+description: Use when the user hands you a request to scope and plan before building — a feature they want, a bug to fix, a new pipeline, or a piece of infrastructure — and wants a reviewed plan of action rather than immediate code. Interviews the user to sharpen the requirements, explores the relevant code across one or many repos to discover scope, settles the approach with the rejected alternatives recorded, maintains the repo's ubiquitous-language glossary, writes the detailed agent-facing implementation plan against the real code, derives a short human-facing spec from that plan, and asks whether to execute or iterate. Trigger on "/spec", "spec this out", "plan this", "scope this out", "how should we approach", "figure out what it'll take to", "before we build", "write a spec/plan for ...".
 ---
 
 # spec
@@ -11,8 +11,8 @@ Turn a raw request — a feature, a bug fix, a new pipeline, a piece of infrastr
 
 The spec and the implementation plan have different readers, so they're separate files (see *Artifact audience* in `standards`):
 
-- **The spec** is human-facing. It answers what, why, what "done" means, and what's out of scope, in one to two screens. It carries the review gate.
-- **The implementation plan** is agent-facing. It answers exactly what to change and in what order, naming files, symbols, and commands, at whatever length precision requires. It's written only after the spec is approved, so iteration doesn't throw away detailed steps.
+- **The implementation plan** is agent-facing. It answers exactly what to change and in what order, naming files, symbols, and commands, at whatever length precision requires. It is written first: writing the per-symbol steps against the real code is what exposes the cases the code won't support, and those cases change what the spec has to say.
+- **The spec** is human-facing. It answers what, why, what "done" means, and what's out of scope, in one to two screens, linking into the plan for the detail it leaves out. It is derived from the plan, so both rest on the same investigation, and it alone carries the review gate — the plan exists but is not what the reviewer reads.
 
 ## Principles
 
@@ -20,6 +20,7 @@ The spec and the implementation plan have different readers, so they're separate
 - **Be context-efficient.** Fan discovery out to `Explore` subagents and keep only distilled findings — paths, symbols, the shape of the code — in your own context. Don't read whole files in when a subagent can return the relevant excerpts.
 - **Match the request's weight.** A one-file bug fix gets a short spec; a cross-repo pipeline gets a thorough one. Weight is scope, not word count — a spec grows because it covers more decisions, never because each one is explained at more length.
 - **The implementation plan is a contract.** Someone should be able to execute it without re-deriving scope. Name specific files, functions, and steps.
+- **Revise the spec and the plan together.** Writing them in one pass makes drift between them possible for the first time; feedback that changes the approach changes the plan too, and a spec revised on its own leaves the executor working from steps the review never covered.
 - **Speak the domain's ubiquitous language.** Spec, conversation, and code use the same words for the same concepts, recorded in the repo's glossary.
 
 ## The ubiquitous-language glossary
@@ -60,22 +61,43 @@ Map the real code the request touches: which repos, which files and symbols are 
 
 Keep a running list: primary repo, other affected repos, key files/symbols, new or corrected glossary terms, open questions. If exploration surfaces a new fork, go back to the user before designing past it.
 
-### 4. Design and write the spec
+### 4. Choose the approach
 
-Decide on an approach. Where the user hasn't settled a design fork, pick the option that best fits quality, correctness, and the structural bar in `design`, and note the alternative as a rejected option with the reason — don't present a menu.
+Decide on an approach. Where the user hasn't settled a design fork, pick the option that best fits quality, correctness, and the structural bar in `design`, and record each rejected option with the reason it lost — don't present a menu.
 
-The spec covers, at the density a reviewer needs and no more:
+Settle this before any detailed writing. Once a long ordered plan exists against one architecture, the spec derived from it rationalizes that architecture rather than choosing it, and reopening an alternative means rewriting the plan.
+
+### 5. Write the implementation plan
+
+Turn the approach into the agent-facing plan the executor works from, grounded in the real code — exhaustive about facts, terse about prose, per *Artifact audience* in `standards`:
+
+- An ordered list of steps, each naming the exact file(s) and symbol(s) it touches and what changes there. For bugs, step 1 is reproduction.
+- Per step, the command that verifies it (the repo's real test, lint, or run command, not a description of one).
+- The conventions exploration found that the executor would otherwise have to rediscover: test framework and layout, fixture patterns, config locations, call sites to update.
+- Anything exploration left unverified, marked as such.
+
+Writing the steps is a second, sharper discovery pass: it surfaces what discovery couldn't — a function that can't take the argument the approach assumed, a component that raises on an input the new flow produces. Treat each as a finding, not an obstacle to route around: fold it into the plan as a prerequisite phase or a changed step, and carry it into the spec's requirements and risks. Where it contradicts something the user settled in the interview, go back to them before deriving the spec.
+
+Run the concision pass (`standards`) over the plan. Its floor — never cut a fact — is what keeps the pass from thinning the detail an executor needs; expect it to return little.
+
+Write it beside the run rather than in the repo's docs: a scratch or git-ignored path, named for the request in kebab-case and date-prefixed, with an `-implementation` suffix, e.g. `<scratch>/2026-07-07-fix-xic-shard-lookup-implementation.md`. It's an input to one execution, not a document to maintain — the spec is what survives.
+
+### 6. Derive the spec from the plan
+
+Write the spec from the plan. It covers, at the density a reviewer needs and no more:
 
 - **Summary** — the request and chosen approach, in a few sentences.
 - **Requirements** — outcome, success criteria, scope boundaries, constraints from the interview.
 - **Scope** — repos and subsystems affected; call out cross-repo coordination.
 - **Approach / design** — the key decisions, and for each real fork, why this over the alternative. Skip the ones that were never close.
 - **Testing strategy** — how the change gets proven end-to-end, in a sentence or two. The commands belong in the implementation plan.
-- **Risks & open questions** — anything that could invalidate the approach or needs a user decision. State uncertainty plainly.
+- **Risks & open questions** — anything that could invalidate the approach or needs a user decision, including what writing the plan surfaced. State uncertainty plainly.
 
-Hold it to one to two screens. The file-by-file detail is not missing from the spec; it's deferred to the implementation plan, which step 7 writes. Write the spec in the glossary's terms; refer to the glossary rather than defining terms inline.
+Hold it to one to two screens, and use links to the plan to get there: link the plan as a whole, and anchor individual spec sections to the plan headings they summarize — scope to the step list, a risk to the step it threatens. The links are what keep the spec short rather than vague; the file-by-file detail is one link away, not missing.
 
-### 5. Save the spec and update the glossary
+Write the spec in the glossary's terms; refer to the glossary rather than defining terms inline.
+
+### 7. Save the spec and update the glossary
 
 Run the concision pass (`standards`) over the drafted spec before writing it, then apply what it returns.
 
@@ -83,28 +105,15 @@ Write the spec to a `.md` file with the Write tool. Honor an explicit location o
 
 Write any new or corrected glossary entries to the appropriate `UBIQUITOUS-LANGUAGE.md` file(s), creating them (and the root map, for multi-context repos) if needed. Follow the glossary scoping rules above.
 
-Report only the file paths and a one-line description each — don't dump the spec back into the conversation.
+Report only the file paths — the spec, the plan, and any glossary file — and a one-line description each; don't dump their contents back into the conversation.
 
-### 6. Ask the user to review
+### 8. Ask the user to review the spec
 
 Tell the user the spec is written and where, then ask how to proceed:
 
-- **Execute** — write the implementation plan (step 7) and start implementing.
-- **Iterate** — refine the spec together first, then re-present.
+- **Execute** — start implementing from the plan written in step 5.
+- **Iterate** — refine the spec together and revise the plan wherever the change reaches it, then re-present.
 
 Ask as a genuine choice and stop for the answer.
-
-### 7. Write the implementation plan
-
-Once the spec is approved, turn it into the agent-facing plan the executor works from — exhaustive about facts, terse about prose, per *Artifact audience* in `standards`:
-
-- An ordered list of steps, each naming the exact file(s) and symbol(s) it touches and what changes there. For bugs, step 1 is reproduction.
-- Per step, the command that verifies it (the repo's real test, lint, or run command, not a description of one).
-- The conventions exploration found that the executor would otherwise have to rediscover: test framework and layout, fixture patterns, config locations, call sites to update.
-- Anything exploration left unverified, marked as such.
-
-Run the concision pass over this one too. Its floor — never cut a fact — is what keeps the pass from thinning the detail an executor needs; expect it to return little.
-
-Write it beside the run rather than in the repo's docs: a scratch or git-ignored path, named after the spec, e.g. `<scratch>/2026-07-07-fix-xic-shard-lookup-implementation.md`. Link it from the spec. It's an input to one execution, not a document to maintain — the spec is what survives.
 
 **Interaction mode** (see `standards`): running autonomously, don't block on the interview or the review gate — resolve what exploration can, take the most defensible call on the rest, record every such assumption in the spec's "Risks & open questions", then write both artifacts and proceed to execute (via the `dev-workflow` skill, if you use it).
