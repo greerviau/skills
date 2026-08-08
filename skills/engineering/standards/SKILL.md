@@ -64,6 +64,8 @@ Run it whenever the draft is over budget or too long to hold in one screen.
 - Don't add repo layouts to documentation.
 - In prose markdown (docs, READMEs, plans, design docs), use **semantic line breaks**: one sentence per line, no hard-wrapping to a fixed column width. This keeps diffs and blame scoped to the sentence that changed. Does not apply to code, tables, or code blocks.
 - Favor mermaid diagrams over ASCII diagrams, unless mermaid can't express the diagram or the user asks otherwise. Don't one-shot a mermaid diagram — the `mermaid` skill supplies the render-and-refine procedure.
+- A comment earns its place by carrying a fact the code cannot state: a non-obvious constraint, a why, a subtlety a reader would otherwise miss, an external contract the code has to match. Narrating what the code plainly does is noise to delete.
+- Settle each comment rather than deciding by feel. Name the fact the comment carries, then look for code on the lines it describes that already states it. Delete the comment when the fact is unnamed, the code already states it, or you can't settle the call.
 - Keep inline comments to **two lines or less**, and never clarify one with an example. An inline comment that needs an example or a third line means the code is not clean enough; fix the code instead of explaining it.
 - Docstrings and module-level documentation are exempt from the length cap; present tense and the no-narrative rule still apply.
 

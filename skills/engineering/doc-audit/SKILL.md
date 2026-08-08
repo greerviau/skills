@@ -5,7 +5,7 @@ description: Use after finishing any code change, and whenever writing or editin
 
 # doc-audit
 
-Documentation and comments describe the current state of the code, in present tense — never a change narrative (how it used to work, what changed, what ticket motivated it). The full style rules — present tense, the decision-history exception, no repo layouts, semantic line breaks, inline comments of two lines or less with no examples, plain language, mermaid over ASCII — live in the `standards` skill under "Documentation and comments." Apply them when auditing.
+Documentation and comments describe the current state of the code, in present tense — never a change narrative (how it used to work, what changed, what ticket motivated it). The full style rules — present tense, the decision-history exception, no repo layouts, semantic line breaks, comments that earn their place, inline comments of two lines or less with no examples, plain language, mermaid over ASCII — live in the `standards` skill under "Documentation and comments." Apply them when auditing.
 
 ## Procedure: auditing after a code change
 
