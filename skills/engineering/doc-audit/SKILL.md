@@ -11,7 +11,7 @@ Documentation and comments describe the current state of the code, in present te
 
 Before treating any non-trivial code change as done:
 
-1. Identify what you touched: which functions, modules, or behaviors changed.
+1. Identify what you touched: which functions, modules, or behaviors changed, and which comment lines the change adds. Enumerate the comments from the diff rather than from memory.
 2. Check the documentation covering that surface: docstrings on the changed functions, surrounding comments, the nearest directory README, any `docs/` files describing the feature, and any examples demonstrating it.
 3. For each, check whether it still matches the code — update anything stale by rewriting to current reality, not appending a change note (see the decision-history exception in `standards`).
 4. Briefly note what you checked or updated, so the audit is visible.

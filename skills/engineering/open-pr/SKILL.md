@@ -30,5 +30,5 @@ Open a pull request: write its title and body, then create it. This is the singl
    - Cut what the diff already says: file walkthroughs, function signatures, line counts, quoted code.
    - Where a design decision or migration needs real depth, link to the spec or issue instead of inlining it.
 6. **Keep it evergreen.** Per the PR and commit hygiene rules in `standards`: written once and kept accurate as the branch evolves, no AI attribution of any kind, no volatile details (version bumps and the like) that go stale.
-7. **Run the concision pass** (`standards`) over the drafted body unless it's already well inside the budget, and apply what it returns.
+7. **Measure the draft, then run the concision pass.** Word-count the body (`wc -w`) and compare it to the budget in *Artifact audience* (`standards`) rather than judging the length yourself; an author reads their own draft as already short. Inside the budget, go to step 8. Over it, run the concision pass (`standards`) and apply what it returns. Still over the ceiling afterwards means cutting again, or moving the depth into the linked issue or spec and linking to it.
 8. **Open the PR** with the title and body (e.g. `gh pr create`).
