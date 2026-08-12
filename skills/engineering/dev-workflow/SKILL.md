@@ -59,7 +59,7 @@ Added comments that clarify with an example:
 git diff <base>..HEAD | grep -nE '^\+.*(#|//|--|\*).*([Ee]\.g\.|[Ff]or example|[Ii]\.e\.)'
 ```
 
-Both over-collect, hitting docstrings, module-level documentation, and license headers that the cap exempts. Resolve each line either way: dismiss a hit by naming the exemption, and fix a hit on an inline comment by fixing the code the comment was explaining.
+Both over-collect, hitting anything comment-shaped the cap exempts: docstrings, module-level documentation, license headers, markdown headings. Resolve each line either way. Dismiss a hit by naming the exemption; fix a hit on an inline comment by fixing the code the comment was explaining.
 
 Then audit the rest of the surface the change touched: docstrings, the nearest README, `docs/` files, examples. The `doc-audit` skill, if you use it, carries that procedure and the plain-language check.
 
