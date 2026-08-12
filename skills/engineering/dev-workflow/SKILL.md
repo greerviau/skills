@@ -1,6 +1,6 @@
 ---
 name: dev-workflow
-description: Use whenever doing development work inside a GitHub project repo — implementing a feature, fixing a bug, or executing a plan. Covers opening an issue for the work before any code, acquiring an isolated git worktree, committing in reviewable stages, validating locally, enumerating every comment the change adds before publishing, publishing, opening an evergreen PR that closes the issue, watching CI to green, keeping the worktree alive while the PR is open and watching it to merge, and cleaning up the worktree only once the PR is merged. Trigger on "let's build this", "implement the plan", "start working on this feature/fix", "go ahead and make that change", "ship it", "ship the fix", "land this", "open a PR for this", or any request to write and land code in a repo.
+description: Use whenever doing development work inside a GitHub project repo — implementing a feature, fixing a bug, or executing a plan. Covers opening an issue for the work before any code, acquiring an isolated git worktree, committing in reviewable stages, validating locally, auditing the comments and documentation before publishing, opening an evergreen PR that closes the issue, watching CI to green, keeping the worktree alive while the PR is open and watching it to merge, and cleaning up the worktree only once the PR is merged. Trigger on "let's build this", "implement the plan", "start working on this feature/fix", "go ahead and make that change", "ship it", "ship the fix", "land this", "open a PR for this", or any request to write and land code in a repo.
 ---
 
 # dev-workflow
@@ -36,34 +36,9 @@ The house rules for this step live in the `standards` skill — ubiquitous langu
 
 ## 5. Audit the comments and documentation
 
-The comment form rules in `standards` apply to every comment line the change adds, so this step enumerates them rather than eyeballing the diff. Run both commands and resolve every line they print.
+Audit every comment line the change adds and every documentation surface it touches, before publishing anything. The `doc-audit` skill, if you use it, carries the procedure and reads the rules it applies from `standards`.
 
-Runs of three or more consecutive added comment lines:
-
-```bash
-git diff <base>..HEAD -U0 | awk '
-  /^\+\+\+ /  { file = substr($0, 7); n = 0; next }
-  /^@@/       { n = 0; next }
-  /^\+[[:space:]]*(#|\/\/|--|\*|<!--)/ {
-      run[++n] = $0
-      if (n == 3) { print "\n" file; for (i = 1; i <= n; i++) print run[i] }
-      else if (n > 3) print $0
-      next }
-              { n = 0 }
-'
-```
-
-Added comments that clarify with an example:
-
-```bash
-git diff <base>..HEAD | grep -nE '^\+.*(#|//|--|\*).*([Ee]\.g\.|[Ff]or example|[Ii]\.e\.)'
-```
-
-Both over-collect, hitting anything comment-shaped the cap exempts: docstrings, module-level documentation, license headers, markdown headings. Resolve each line either way. Dismiss a hit by naming the exemption; fix a hit on an inline comment by fixing the code the comment was explaining.
-
-Then audit the rest of the surface the change touched: docstrings, the nearest README, `docs/` files, examples. The `doc-audit` skill, if you use it, carries that procedure and the plain-language check.
-
-Close the step by reporting one line: how many lines the commands printed and how each was resolved. Empty output is a result; no output because the commands never ran is not.
+This step is a precondition for publishing rather than one validation task among several, so it closes with a stated result: what the audit covered, and what it settled or updated. A step with no stated result has not been run.
 
 ## 6. Publish
 
