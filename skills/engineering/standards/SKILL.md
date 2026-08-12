@@ -38,6 +38,10 @@ When one artifact has both readers, split it rather than compromise: the short o
 **The test.** Before keeping a sentence in a human-facing artifact, ask whether a reviewer would decide differently without it.
 Before cutting one from an agent-facing artifact, ask whether an executor could get it wrong without it.
 
+**Justification answers the person who asked, not the artifact.**
+Asked to explain or defend a decision, answer in the reply.
+The explanation becomes a comment, a PR section, or a docstring only where that artifact's purpose is to record decisions (the exception under *Documentation and comments*), never because someone asked for it.
+
 ### The concision pass
 
 Before an artifact is created, published, or handed to a review gate, give the draft to a subagent that didn't write it.
