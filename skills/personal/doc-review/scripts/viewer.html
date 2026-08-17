@@ -153,7 +153,9 @@
   let composing = null;   // {anchor} while a new comment is being written; anchor null means whole-document
   let editingId = null;   // id of the comment whose body is open for editing
   let activeId = null;
-  let finished = false;   // the verdict is in; stop pinging and stop warning about unsent work
+  let finished = false;   // the verdict is in; stop reporting liveness and stop warning about unsent work
+
+  const stream = new EventSource('/api/events');   // open for as long as this page is
 
   /* ---------- anchoring: (block line range, char offsets) survives re-render ---------- */
 
@@ -464,6 +466,7 @@
       return;
     }
     finished = true;
+    stream.close();
     localStorage.removeItem(storeKey);
     comments = [];
     document.getElementById('app').style.display = 'none';
@@ -486,30 +489,23 @@
 
   /* ---------- tell the agent the page is still here ---------- */
 
-  // The heartbeat is what tells the agent the reviewer is still here; a gap ends the review.
-  // The pagehide beacon is only a fast path, and browsers often drop unload-time requests.
-  let beatTimer = null;
-  let stale = false;
+  // An open connection, not a timer: a background tab throttles timers, but this stays up,
+  // and closing the tab drops it at once. Losing it for good means the review has ended.
+  let downSince = null;
 
-  function wentStale() {
-    if (stale || finished) return;
-    stale = true;
-    clearInterval(beatTimer);
+  stream.onopen = () => {
+    downSince = null;
+    document.getElementById('stale')?.remove();
+  };
+  stream.onerror = () => {
+    if (finished) return;
+    downSince = downSince || Date.now();
+    if (Date.now() - downSince < 10000 || document.getElementById('stale')) return;
     const bar = document.createElement('div');
     bar.id = 'stale';
     bar.textContent = 'This review session has ended. Your comments are saved here; ask the agent to open the document again to send them.';
     document.body.prepend(bar);
-  }
-
-  const beat = () => {
-    if (finished) return;
-    fetch('/api/ping', { method: 'POST' }).catch(wentStale);
   };
-  beatTimer = setInterval(beat, 5000);
-  beat();
-  window.addEventListener('pagehide', () => {
-    if (!finished) navigator.sendBeacon('/api/left');   // a reload cancels this when the page returns
-  });
 
   /* ---------- mermaid ---------- */
 

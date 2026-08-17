@@ -80,8 +80,10 @@ class Session:
         self.out = out
         self.done = threading.Event()
         self.result: dict | None = None
-        self.seen_at: float | None = None    # last sign of life from the page; None until it first loads
-        self.closing_at: float | None = None  # deadline set when the tab reports it is going away
+        self.lock = threading.Lock()
+        self.clients = 0                   # open event streams, one per review page
+        self.arrived = False               # a page has connected at least once
+        self.left_at: float | None = None  # when the last page disconnected
         text = doc.read_text(encoding="utf-8")
         self.page = (
             VIEWER.read_text(encoding="utf-8")
@@ -99,17 +101,28 @@ class Session:
             )
         )
 
-    def touch(self) -> None:
-        self.seen_at = time.monotonic()
-        self.closing_at = None   # a live page cancels a pending close, so a reload is not a departure
+    def joined(self) -> None:
+        with self.lock:
+            self.clients += 1
+            self.arrived = True
+            self.left_at = None
+
+    def parted(self) -> None:
+        with self.lock:
+            self.clients -= 1
+            if self.clients <= 0:
+                self.left_at = time.monotonic()
 
     def watch(self, grace: float) -> None:
-        """End the review when the page goes away, so a closed tab does not strand the agent."""
-        while not self.done.wait(2):
-            now = time.monotonic()
-            if self.closing_at and now >= self.closing_at:
-                self.finish("abandoned", [])
-            elif self.seen_at and now - self.seen_at > grace:
+        """End the review once every page is gone, so a closed tab does not strand the agent.
+
+        Liveness is a held connection rather than a timer the browser may throttle in a
+        background tab. The grace covers a reload, where the stream drops and comes back.
+        """
+        while not self.done.wait(1):
+            with self.lock:
+                left = self.left_at if (self.arrived and self.clients <= 0) else None
+            if left and time.monotonic() - left > grace:
                 self.finish("abandoned", [])
 
     def finish(self, status: str, comments: list) -> None:
@@ -138,23 +151,35 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self):
-        if self.path.split("?")[0] in ("/", "/index.html"):
-            self.session.touch()
+        route = self.path.split("?")[0]
+        if route in ("/", "/index.html"):
             self._send(200, self.session.page.encode("utf-8"), "text/html; charset=utf-8")
+        elif route == "/api/events":
+            self._events()
         else:
             self._send(404, b"not found", "text/plain")
 
+    def _events(self):
+        """Hold the connection open for as long as the page is there; dropping it ends the review."""
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream")
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        session = self.session
+        session.joined()
+        try:
+            while not session.done.is_set():
+                self.wfile.write(b": open\n\n")   # the write is what discovers a departed page
+                self.wfile.flush()
+                if session.done.wait(3):
+                    break
+        except OSError:
+            pass
+        finally:
+            session.parted()
+
     def do_POST(self):
         route = self.path.split("?")[0]
-        if route == "/api/ping":
-            self.session.touch()
-            self._send(200, b'{"ok":true}', "application/json")
-            return
-        if route == "/api/left":
-            # a reload fires this too, so give the page a moment to come back before believing it
-            self.session.closing_at = time.monotonic() + 15
-            self._send(200, b'{"ok":true}', "application/json")
-            return
         if route not in ("/api/submit", "/api/cancel"):
             self._send(404, b"not found", "text/plain")
             return
@@ -208,8 +233,8 @@ def main() -> int:
     parser.add_argument("--port", type=int, default=8787, help="port to serve on (default: 8787, falling back to any free port)")
     parser.add_argument("--no-open", action="store_true", help="print the URL instead of opening a browser")
     parser.add_argument("--timeout", type=float, default=0, help="give up after N seconds (default: wait forever)")
-    parser.add_argument("--grace", type=float, default=60,
-                        help="end the review after N seconds with no sign of the page (default: 60)")
+    parser.add_argument("--grace", type=float, default=20,
+                        help="end the review N seconds after the last page disconnects (default: 20)")
     args = parser.parse_args()
 
     doc = args.document.expanduser().resolve()

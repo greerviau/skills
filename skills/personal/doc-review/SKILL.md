@@ -27,7 +27,7 @@ The process exits on its own once they click send, which is what returns control
 
 Flags: `--out PATH` for the comments file (default `<document>.review.json`), `--port N` (default 8787, falling back to any free port), `--no-open` to print the URL instead of opening a browser, `--timeout SECONDS` to give up waiting.
 Keep the default port unless it is taken; the reviewer's saved drafts are scoped to the origin, so a new port loses them.
-`--grace SECONDS` (default 60) is how long the page can go silent before the review ends as `abandoned`; raise it for a reviewer who will read with the laptop asleep.
+`--grace SECONDS` (default 20) is how long after the review page disconnects the review ends as `abandoned`; it covers a reload, where the page's connection drops and comes back.
 
 **2. Tell the reviewer it is open**, in one line: select text to comment, edit or delete comments in the side panel, then "Send to agent" when done.
 Then wait. Do not poll the file, do not start other work on the document, and do not guess what they will say.
