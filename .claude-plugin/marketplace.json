@@ -54,12 +54,13 @@
       "name": "greerviau-personal",
       "source": "./",
       "strict": false,
-      "description": "Personal skills: opinion-aware decisions backed by ~/OPINIONS.md.",
+      "description": "Personal skills: opinion-aware decisions backed by ~/OPINIONS.md, and browser-based document review with inline comments.",
       "category": "personal",
       "keywords": [
         "personal",
         "skills",
-        "opinions"
+        "opinions",
+        "doc-review"
       ],
       "skills": [
         "./skills/personal"

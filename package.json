@@ -32,6 +32,7 @@
     "./skills/engineering/tdd",
     "./skills/engineering/tech-research",
     "./skills/research/lit-research",
-    "./skills/personal/opinions"
+    "./skills/personal/opinions",
+    "./skills/personal/doc-review"
   ]
 }

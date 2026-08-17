@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Document review</title>
+<style>
+  :root {
+    --bg: #ffffff; --panel: #f7f7f5; --ink: #1f1f1f; --muted: #6b6b6b;
+    --line: #e3e3e0; --accent: #2f6fdb; --mark: #ffe9a3; --mark-active: #ffd45e;
+    --danger: #b3261e; --radius: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1b1a; --panel: #232322; --ink: #e9e9e6; --muted: #9d9d97;
+      --line: #35352f; --accent: #7aa5f0; --mark: #6b5a1c; --mark-active: #9a8221;
+      --danger: #f2a29c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.65 ui-sans-serif, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  #app { display: grid; grid-template-columns: minmax(0, 1fr) 380px; min-height: 100vh; }
+  @media (max-width: 900px) { #app { grid-template-columns: 1fr; } #panel { border-left: 0; border-top: 1px solid var(--line); } }
+
+  /* Document */
+  main { padding: 40px 48px 200px; min-width: 0; }
+  .page { max-width: 46rem; margin: 0 auto; }   /* centered in the space left of the panel */
+  #meta { color: var(--muted); font-size: 13px; margin-bottom: 28px; word-break: break-all; }
+  article h1, article h2, article h3, article h4 { line-height: 1.3; margin: 1.8em 0 .6em; }
+  article h1 { font-size: 2em; margin-top: 0; }
+  article h2 { font-size: 1.5em; border-bottom: 1px solid var(--line); padding-bottom: .2em; }
+  article h3 { font-size: 1.2em; }
+  article p, article ul, article ol, article blockquote, article table { margin: 0 0 1em; }
+  article li { margin: .25em 0; }
+  article blockquote { border-left: 3px solid var(--line); margin-left: 0; padding-left: 1em; color: var(--muted); }
+  article code { font: .88em ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--panel); padding: .15em .35em; border-radius: 4px; }
+  article pre { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; overflow-x: auto; }
+  article pre code { background: none; padding: 0; }
+  article table { border-collapse: collapse; display: block; overflow-x: auto; }
+  article th, article td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+  article img { max-width: 100%; }
+  article hr { border: 0; border-top: 1px solid var(--line); margin: 2em 0; }
+  article a { color: var(--accent); }
+
+  .hl { background: var(--mark); border-radius: 2px; cursor: pointer; }
+  .hl.active { background: var(--mark-active); }
+
+  /* Selection button */
+  #tip {
+    position: absolute; z-index: 20; display: none; align-items: center; gap: 6px;
+    padding: 6px 12px 6px 10px; border: 0; border-radius: 999px; background: var(--accent);
+    color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.25);
+  }
+  #tip.show { display: inline-flex; }
+  #tip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+  /* Rendered mermaid diagrams */
+  .diagram {
+    position: relative; margin: 0 0 1em; padding: 16px; border: 1px solid var(--line);
+    border-radius: var(--radius); background: var(--panel); overflow-x: auto; text-align: center;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram.marked { box-shadow: inset 0 0 0 2px var(--mark-active); }
+  .fig-comment {
+    position: absolute; top: 8px; right: 8px; display: none; align-items: center; gap: 5px;
+    padding: 4px 10px; border: 0; border-radius: 999px; background: var(--accent); color: #fff;
+    font: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
+  }
+  .fig-comment svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
+  .diagram:hover .fig-comment { display: inline-flex; }
+
+  /* Panel */
+  #panel { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column;
+           background: var(--panel); border-left: 1px solid var(--line); }
+  #panel header { padding: 16px 18px; border-bottom: 1px solid var(--line); display: flex;
+                  align-items: baseline; justify-content: space-between; gap: 8px; }
+  #panel header h2 { margin: 0; font-size: 15px; }
+  #cards { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .card { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
+  .card.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .card .where { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 6px; }
+  .card blockquote { margin: 0 0 8px; padding-left: 8px; border-left: 3px solid var(--mark-active);
+                     font-size: 13px; color: var(--muted); max-height: 5.4em; overflow: hidden; }
+  .card .body { font-size: 14px; white-space: pre-wrap; word-wrap: break-word; }
+  .card .row { display: flex; gap: 10px; margin-top: 10px; }
+  .card button { background: none; border: 0; padding: 0; font-size: 12px; color: var(--muted); cursor: pointer; }
+  .card button:hover { color: var(--ink); text-decoration: underline; }
+  .card button.del:hover { color: var(--danger); }
+  textarea { width: 100%; min-height: 80px; resize: vertical; font: inherit; font-size: 14px;
+             color: var(--ink); background: var(--bg); border: 1px solid var(--line);
+             border-radius: 6px; padding: 8px; }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  #panel footer { padding: 14px 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+  .primary { width: 100%; padding: 10px; border: 0; border-radius: var(--radius); background: var(--accent);
+             color: #fff; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; }
+  .primary:disabled { opacity: .45; cursor: not-allowed; }
+  .link { background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
+  .link:hover { color: var(--ink); text-decoration: underline; }
+  #stale { position: fixed; inset: 0 0 auto 0; z-index: 50; padding: 10px 16px; text-align: center;
+           background: #b3261e; color: #fff; font-size: 13px; }
+  #done { display: none; place-content: center; text-align: center; min-height: 100vh; padding: 40px; }
+  #done h1 { font-size: 1.4em; }
+</style>
+</head>
+<body>
+<script id="state" type="application/json">__STATE_JSON__</script>
+
+<div id="app">
+  <main>
+    <div class="page">
+      <div id="meta"></div>
+      <article id="content">__DOC_HTML__</article>
+    </div>
+  </main>
+
+  <aside id="panel">
+    <header>
+      <h2>Comments (<span id="count">0</span>)</h2>
+      <button class="link" id="add-general">+ general</button>
+    </header>
+    <div id="cards"></div>
+    <footer>
+      <button class="primary" id="send" disabled>Send to agent</button>
+      <button class="link" id="cancel">Finish without comments</button>
+    </footer>
+  </aside>
+</div>
+
+<button id="tip">
+  <svg viewBox="0 0 24 24" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-7.5A8 8 0 0 1 11 4h2a8 8 0 0 1 8 8z"/></svg>
+  Comment
+</button>
+
+<div id="done"><div><h1 id="done-title"></h1><p id="done-note"></p></div></div>
+
+<script>
+(() => {
+  const state = JSON.parse(document.getElementById('state').textContent);
+  const content = document.getElementById('content');
+  const cards = document.getElementById('cards');
+  const tip = document.getElementById('tip');
+  const sendBtn = document.getElementById('send');
+  const storeKey = `doc-review:${state.path}:${state.mtime}`;
+
+  document.title = `Review — ${state.title}`;
+  document.getElementById('meta').textContent = `${state.path} · ${state.lines} lines`;
+
+  let comments = [];
+  let nextId = 1;
+  let composing = null;   // {anchor} while a new comment is being written; anchor null means whole-document
+  let editingId = null;   // id of the comment whose body is open for editing
+  let activeId = null;
+  let finished = false;   // the verdict is in; stop reporting liveness and stop warning about unsent work
+
+  const stream = new EventSource('/api/events');   // open for as long as this page is
+
+  /* ---------- anchoring: (block line range, char offsets) survives re-render ---------- */
+
+  const textNodes = (el) => {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const out = [];
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) out.push(n);
+    return out;
+  };
+
+  // Where does `range` start and end inside this block, measured in characters?
+  function clip(block, range) {
+    let pos = 0, start = null, end = null, quote = '';
+    for (const node of textNodes(block)) {
+      const len = node.nodeValue.length;
+      if (range.intersectsNode(node) && len) {
+        const nodeRange = document.createRange();
+        nodeRange.selectNodeContents(node);
+        const from = range.compareBoundaryPoints(Range.START_TO_START, nodeRange) <= 0 ? 0 : range.startOffset;
+        const to = range.compareBoundaryPoints(Range.END_TO_END, nodeRange) >= 0 ? len : range.endOffset;
+        if (to > from) {
+          if (start === null) start = pos + from;
+          end = pos + to;
+          quote += node.nodeValue.slice(from, to);
+        }
+      }
+      pos += len;
+    }
+    return start === null ? null : { start, end, quote };
+  }
+
+  const isDiagram = (el) => el.classList.contains('diagram');
+
+  function anchorFor(range) {
+    const parts = [];
+    let quote = '', first = null;
+    for (const block of content.querySelectorAll('[data-line]')) {
+      if (!range.intersectsNode(block)) continue;
+      const [from, to] = block.dataset.line.split(':').map(Number);
+      if (isDiagram(block)) {      // an SVG has no text to anchor into; take the whole figure
+        first = first || block;
+        parts.push({ line: block.dataset.line, from, to, diagram: true });
+        quote += (quote ? ' … ' : '') + `diagram: ${block.dataset.source}`;
+        continue;
+      }
+      const hit = clip(block, range);
+      if (!hit) continue;
+      first = first || block;
+      parts.push({ line: block.dataset.line, from, to, start: hit.start, end: hit.end });
+      quote += (quote ? ' … ' : '') + hit.quote;
+    }
+    if (!parts.length) return null;
+    return {
+      parts,
+      quote: quote.replace(/\s+/g, ' ').trim(),
+      lines: [Math.min(...parts.map(p => p.from)), Math.max(...parts.map(p => p.to))],
+      section: sectionOf(first),
+    };
+  }
+
+  function sectionOf(el) {
+    let top = el;                                  // climb to the direct child of the article,
+    while (top && top.parentElement !== content) top = top.parentElement;   // e.g. <code> inside <pre>
+    for (let n = top; n; n = n.previousElementSibling) {
+      if (/^H[1-6]$/.test(n.tagName)) return n.textContent.trim();
+    }
+    return null;
+  }
+
+  function paint(anchor, id) {
+    for (const part of anchor.parts) {
+      const block = content.querySelector(`[data-line="${CSS.escape(part.line)}"]`);
+      if (!block) continue;
+      if (part.diagram || isDiagram(block)) {
+        block.classList.add('marked');
+        block.dataset.ids = [...(block.dataset.ids || '').split(' ').filter(Boolean), id].join(' ');
+        continue;
+      }
+      let pos = 0;
+      const hits = [];
+      for (const node of textNodes(block)) {
+        const len = node.nodeValue.length;
+        const from = Math.max(part.start - pos, 0);
+        const to = Math.min(part.end - pos, len);
+        if (to > from) hits.push({ node, from, to });
+        pos += len;
+      }
+      // back to front, so splitting a node never invalidates an earlier offset
+      for (const hit of hits.reverse()) {
+        let node = hit.node;
+        if (hit.to < node.nodeValue.length) node.splitText(hit.to);
+        if (hit.from > 0) node = node.splitText(hit.from);
+        const span = document.createElement('span');
+        span.className = 'hl';
+        span.dataset.id = id;
+        node.replaceWith(span);
+        span.appendChild(node);
+      }
+    }
+  }
+
+  function unpaint(id) {
+    for (const span of content.querySelectorAll(`.hl[data-id="${id}"]`)) {
+      span.replaceWith(...span.childNodes);
+    }
+    for (const fig of content.querySelectorAll('.diagram[data-ids]')) {
+      const ids = fig.dataset.ids.split(' ').filter(x => x && x != id);
+      fig.dataset.ids = ids.join(' ');
+      fig.classList.toggle('marked', ids.length > 0);
+    }
+    content.normalize();
+  }
+
+  /* ---------- comments ---------- */
+
+  const save = () => localStorage.setItem(storeKey, JSON.stringify({ comments, nextId }));
+
+  function add(body, anchor) {
+    const now = new Date().toISOString();
+    const comment = {
+      id: nextId++, body,
+      quote: anchor ? anchor.quote : null,
+      lines: anchor ? anchor.lines : null,
+      section: anchor ? anchor.section : null,
+      anchor, created_at: now, updated_at: now,
+    };
+    comments.push(comment);
+    if (anchor) paint(anchor, comment.id);
+    save();
+    render();
+    return comment;
+  }
+
+  function remove(id) {
+    comments = comments.filter(c => c.id !== id);
+    unpaint(id);
+    save();
+    render();
+  }
+
+  function focus(id) {
+    activeId = id;
+    for (const span of content.querySelectorAll('.hl')) span.classList.toggle('active', span.dataset.id == id);
+    render();
+  }
+
+  function composer(comment) {
+    const box = document.createElement('div');
+    box.className = 'card active';
+    const where = document.createElement('div');
+    where.className = 'where';
+    const anchor = comment ? comment.anchor : composing.anchor;
+    where.textContent = anchor ? `Lines ${anchor.lines[0]}–${anchor.lines[1]}` : 'Whole document';
+    box.append(where);
+    if (anchor && anchor.quote) {
+      const quote = document.createElement('blockquote');
+      quote.textContent = anchor.quote;
+      box.append(quote);
+    }
+    const area = document.createElement('textarea');
+    area.placeholder = 'Your comment… (⏎ to save, ⇧⏎ for a new line)';
+    area.value = comment ? comment.body : '';
+    const row = document.createElement('div');
+    row.className = 'row';
+    const ok = document.createElement('button');
+    ok.textContent = comment ? 'Save' : 'Comment';
+    const no = document.createElement('button');
+    no.textContent = 'Cancel';
+    row.append(ok, no);
+    box.append(area, row);
+
+    const commit = () => {
+      const body = area.value.trim();
+      if (!body) return;
+      if (comment) {
+        comment.body = body;
+        comment.updated_at = new Date().toISOString();
+        save();
+      } else {
+        add(body, composing.anchor);
+      }
+      composing = null;
+      editingId = null;
+      render();
+    };
+    const abort = () => { composing = null; editingId = null; render(); };
+
+    ok.onclick = commit;
+    no.onclick = abort;
+    area.onkeydown = (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }   // shift+enter newlines
+      if (e.key === 'Escape') { e.preventDefault(); abort(); }
+    };
+    setTimeout(() => area.focus(), 0);
+    return box;
+  }
+
+  function card(comment) {
+    if (editingId === comment.id) return composer(comment);
+    const box = document.createElement('div');
+    box.className = 'card' + (activeId === comment.id ? ' active' : '');
+    const where = document.createElement('div');
+    where.className = 'where';
+    where.textContent = comment.lines
+      ? `Lines ${comment.lines[0]}–${comment.lines[1]}` + (comment.section ? ` · ${comment.section}` : '')
+      : 'Whole document';
+    box.append(where);
+    if (comment.quote) {
+      const quote = document.createElement('blockquote');
+      quote.textContent = comment.quote;
+      box.append(quote);
+    }
+    const body = document.createElement('div');
+    body.className = 'body';
+    body.textContent = comment.body;
+    const row = document.createElement('div');
+    row.className = 'row';
+    const edit = document.createElement('button');
+    edit.textContent = 'Edit';
+    edit.onclick = (e) => { e.stopPropagation(); editingId = comment.id; render(); };
+    const del = document.createElement('button');
+    del.className = 'del';
+    del.textContent = 'Delete';
+    del.onclick = (e) => { e.stopPropagation(); remove(comment.id); };
+    row.append(edit, del);
+    box.append(body, row);
+    box.onclick = () => {
+      focus(comment.id);
+      const mark = content.querySelector(`.hl[data-id="${comment.id}"], .diagram[data-ids~="${comment.id}"]`);
+      if (mark) mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+    return box;
+  }
+
+  function render() {
+    cards.replaceChildren();
+    if (composing) cards.append(composer(null));
+    for (const comment of comments) cards.append(card(comment));
+    document.getElementById('count').textContent = comments.length;
+    sendBtn.disabled = !comments.length;
+    sendBtn.textContent = comments.length ? `Send ${comments.length} comment${comments.length > 1 ? 's' : ''} to agent` : 'Send to agent';
+  }
+
+  /* ---------- selection ---------- */
+
+  document.addEventListener('mouseup', (e) => {
+    if (e.target.closest('#panel') || e.target.closest('#tip') || e.target.closest('.fig-comment')) return;
+    setTimeout(() => {
+      const sel = window.getSelection();
+      if (!sel || sel.isCollapsed || !sel.rangeCount) return hideTip();
+      const range = sel.getRangeAt(0);
+      if (!content.contains(range.commonAncestorContainer)) return hideTip();
+      const rect = range.getBoundingClientRect();
+      if (!rect.width && !rect.height) return hideTip();
+      tip.classList.add('show');
+      const rects = range.getClientRects();
+      const end = rects.length ? rects[rects.length - 1] : rect;   // where the selection finishes
+      const edge = document.querySelector('main').getBoundingClientRect().right - tip.offsetWidth - 8;
+      tip.style.top = `${window.scrollY + end.bottom + 8}px`;
+      tip.style.left = `${window.scrollX + Math.max(8, Math.min(end.right + 8, edge))}px`;
+      tip.onclick = () => {
+        composing = { anchor: anchorFor(range) };
+        editingId = null;
+        sel.removeAllRanges();
+        hideTip();
+        render();
+      };
+    }, 0);
+  });
+
+  const hideTip = () => tip.classList.remove('show');
+  document.addEventListener('scroll', hideTip, true);
+
+  content.addEventListener('click', (e) => {
+    if (e.target.closest('.fig-comment')) {
+      composing = { anchor: diagramAnchor(e.target.closest('.diagram')) };
+      editingId = null;
+      render();
+      return;
+    }
+    const mark = e.target.closest('.hl') || e.target.closest('.diagram[data-ids]');
+    if (!mark) return;
+    focus(Number(mark.dataset.id || mark.dataset.ids.split(' ')[0]));
+    const target = cards.querySelector('.card.active');
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  document.getElementById('add-general').onclick = () => {
+    composing = { anchor: null }; editingId = null; render();
+  };
+
+  /* ---------- send back ---------- */
+
+  async function finish(route) {
+    const payload = {
+      comments: comments.map(({ anchor, ...rest }) => rest),
+    };
+    sendBtn.disabled = true;
+    try {
+      await fetch(route, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    } catch (err) {
+      alert('Could not reach the review server. Is the agent still running the review?');
+      sendBtn.disabled = false;
+      return;
+    }
+    finished = true;
+    stream.close();
+    localStorage.removeItem(storeKey);
+    comments = [];
+    document.getElementById('app').style.display = 'none';
+    tip.remove();
+    const done = document.getElementById('done');
+    done.style.display = 'grid';
+    document.getElementById('done-title').textContent =
+      route === '/api/submit' ? 'Comments sent back to the agent.' : 'Review closed.';
+    document.getElementById('done-note').textContent = 'You can close this tab.';
+  }
+
+  sendBtn.onclick = () => finish('/api/submit');
+  document.getElementById('cancel').onclick = () => {
+    if (comments.length && !confirm('Discard your comments and close the review?')) return;
+    finish('/api/cancel');
+  };
+  window.addEventListener('beforeunload', (e) => {
+    if (comments.length && !finished) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  /* ---------- tell the agent the page is still here ---------- */
+
+  // An open connection, not a timer: a background tab throttles timers, but this stays up,
+  // and closing the tab drops it at once. Losing it for good means the review has ended.
+  let downSince = null;
+
+  stream.onopen = () => {
+    downSince = null;
+    document.getElementById('stale')?.remove();
+  };
+  stream.onerror = () => {
+    if (finished) return;
+    downSince = downSince || Date.now();
+    if (Date.now() - downSince < 10000 || document.getElementById('stale')) return;
+    const bar = document.createElement('div');
+    bar.id = 'stale';
+    bar.textContent = 'This review session has ended. Your comments are saved here; ask the agent to open the document again to send them.';
+    document.body.prepend(bar);
+  };
+
+  /* ---------- mermaid ---------- */
+
+  const ICON = `<svg viewBox="0 0 24 24" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-7.5A8 8 0 0 1 11 4h2a8 8 0 0 1 8 8z"/></svg>`;
+
+  function diagramAnchor(fig) {
+    const [from, to] = fig.dataset.line.split(':').map(Number);
+    return {
+      parts: [{ line: fig.dataset.line, from, to, diagram: true }],
+      quote: `diagram: ${fig.dataset.source}`,
+      lines: [from, to],
+      section: sectionOf(fig),
+    };
+  }
+
+  // Draw every ```mermaid block. Without network the source block stays put, still commentable.
+  async function drawDiagrams() {
+    const blocks = [...content.querySelectorAll('pre > code.language-mermaid')];
+    if (!blocks.length) return;
+    let mermaid;
+    try {
+      ({ default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'));
+    } catch (err) {
+      return;
+    }
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'strict',
+      theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+    });
+    for (const [index, code] of blocks.entries()) {
+      const source = code.textContent;
+      let svg;
+      try {
+        ({ svg } = await mermaid.render(`mermaid-${index}`, source));
+      } catch (err) {
+        continue;   // a diagram that doesn't parse stays as source, which is what the reviewer needs to see
+      }
+      const figure = document.createElement('figure');
+      figure.className = 'diagram';
+      figure.dataset.line = code.dataset.line || '';
+      figure.dataset.source = source.trim().split('\n')[0];
+      figure.innerHTML = svg;
+      const button = document.createElement('button');
+      button.className = 'fig-comment';
+      button.innerHTML = `${ICON} Comment`;
+      figure.append(button);
+      code.parentElement.replaceWith(figure);
+    }
+  }
+
+  /* ---------- restore an interrupted session ---------- */
+
+  function restore() {
+    try {
+      const draft = JSON.parse(localStorage.getItem(storeKey) || 'null');
+      if (draft && draft.comments.length) {
+        comments = draft.comments;
+        nextId = draft.nextId;
+        for (const comment of comments) if (comment.anchor) paint(comment.anchor, comment.id);
+      }
+    } catch (err) { /* a corrupt draft is not worth failing the page over */ }
+  }
+
+  drawDiagrams().finally(() => { restore(); render(); });
+})();
+</script>
+</body>
+</html>
