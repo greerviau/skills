@@ -90,10 +90,17 @@
   .card button { background: none; border: 0; padding: 0; font-size: 12px; color: var(--muted); cursor: pointer; }
   .card button:hover { color: var(--ink); text-decoration: underline; }
   .card button.del:hover { color: var(--danger); }
-  textarea { width: 100%; min-height: 80px; max-height: 40vh; resize: none; overflow-y: auto; font: inherit; font-size: 14px;
-             color: var(--ink); background: var(--bg); border: 1px solid var(--line);
-             border-radius: 6px; padding: 8px; }
-  textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .composer { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px; }
+  .composer:focus-within { outline: 2px solid var(--accent); outline-offset: -1px; }
+  textarea { display: block; width: 100%; min-height: 56px; max-height: 40vh; resize: none; overflow-y: auto;
+             font: inherit; font-size: 14px; color: var(--ink); background: none; border: 0; padding: 0; }
+  textarea:focus { outline: 0; }
+  .card .send-row { align-items: center; justify-content: flex-end; margin-top: 6px; }
+  .card button.submit { display: grid; place-items: center; width: 26px; height: 26px;
+                        border-radius: 999px; background: var(--accent); color: #fff; }
+  .card button.submit:hover { color: #fff; text-decoration: none; }
+  .card button.submit:disabled { opacity: .4; cursor: not-allowed; }
+  .card button.submit svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.4; }
   #panel footer { padding: 14px 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
   .primary { width: 100%; padding: 10px; border: 0; border-radius: var(--radius); background: var(--accent);
              color: #fff; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; }
@@ -313,9 +320,11 @@
     render();
   }
 
+  const ARROW = `<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg>`;
+
   function composer(comment) {
     const box = document.createElement('div');
-    box.className = 'card active';
+    box.className = 'card';   // the composer's own focus ring marks it; a second blue border would double up
     const where = document.createElement('div');
     where.className = 'where';
     const anchor = comment ? comment.anchor : composing.anchor;
@@ -326,6 +335,8 @@
       quote.textContent = anchor.quote;
       box.append(quote);
     }
+    const wrap = document.createElement('div');
+    wrap.className = 'composer';
     const area = document.createElement('textarea');
     area.placeholder = 'Your comment… (⏎ to save, ⇧⏎ for a new line)';
     area.value = comment ? comment.body : '';
@@ -333,16 +344,21 @@
     const grow = () => {
       area.style.height = 'auto';
       area.style.height = `${area.scrollHeight + area.offsetHeight - area.clientHeight}px`;
+      ok.disabled = !area.value.trim();
     };
     area.addEventListener('input', grow);
     const row = document.createElement('div');
-    row.className = 'row';
+    row.className = 'row send-row';
     const ok = document.createElement('button');
-    ok.textContent = comment ? 'Save' : 'Comment';
+    ok.className = 'submit';
+    ok.title = comment ? 'Save' : 'Comment';
+    ok.setAttribute('aria-label', ok.title);
+    ok.innerHTML = ARROW;
     const no = document.createElement('button');
     no.textContent = 'Cancel';
-    row.append(ok, no);
-    box.append(area, row);
+    row.append(no, ok);
+    wrap.append(area, row);
+    box.append(wrap);
 
     const commit = () => {
       const body = area.value.trim();
