@@ -357,11 +357,17 @@ article a:hover { text-decoration: none; }
     const area = document.createElement('textarea');
     area.placeholder = 'Your comment… (⏎ to save, ⇧⏎ for a new line)';
     area.value = comment ? comment.body : '';
-    // Grow to fit, so the last line keeps the same padding below it as the first has above.
+    // Grow to fit, so the last line keeps the same padding below it as the first has above,
+    // and keep the whole box above the footer as it grows.
     const grow = () => {
       area.style.height = 'auto';
       area.style.height = `${area.scrollHeight + area.offsetHeight - area.clientHeight}px`;
       ok.disabled = !area.value.trim();
+      // scrollIntoView stops at the card's border box, leaving its bottom padding under the
+      // fold, so scroll the list by the overshoot itself.
+      const pad = parseFloat(getComputedStyle(cards).paddingBottom) || 0;
+      const under = box.getBoundingClientRect().bottom + pad - cards.getBoundingClientRect().bottom;
+      if (under > 0) cards.scrollTop += under;
     };
     area.addEventListener('input', grow);
     const row = document.createElement('div');
@@ -404,7 +410,7 @@ article a:hover { text-decoration: none; }
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }   // shift+enter newlines
       if (e.key === 'Escape') { e.preventDefault(); abort(); }
     };
-    setTimeout(() => { box.scrollIntoView({ block: 'nearest' }); area.focus(); grow(); }, 0);
+    setTimeout(() => { grow(); box.scrollIntoView({ block: 'nearest' }); area.focus(); }, 0);   // sized first, so the open lands on the card's top edge
     return box;
   }
 
