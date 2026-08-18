@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Document review</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='1.5' y='2.5' width='21' height='15.5' rx='3.5' fill='%232f6fdb'/><path d='M6.5 16.5v6l6.5-6z' fill='%232f6fdb'/><rect x='5' y='6.6' width='14' height='2.6' rx='1.3' fill='%23ffd45e'/><rect x='5' y='11.4' width='9' height='2.6' rx='1.3' fill='%23ffffff' opacity='.9'/></svg>">
 <style>
   :root {
     --bg: #ffffff; --panel: #f7f7f5; --ink: #1f1f1f; --muted: #6b6b6b;
@@ -18,15 +19,21 @@
     }
   }
   * { box-sizing: border-box; }
+  html { height: 100%; overflow: hidden; }   /* the viewport never scrolls; main and the panel do */
   body {
-    margin: 0; background: var(--bg); color: var(--ink);
+    margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink);
     font: 16px/1.65 ui-sans-serif, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
   }
-  #app { display: grid; grid-template-columns: minmax(0, 1fr) 380px; min-height: 100vh; }
-  @media (max-width: 900px) { #app { grid-template-columns: 1fr; } #panel { border-left: 0; border-top: 1px solid var(--line); } }
+  #app { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: 100vh; }
+  @media (max-width: 900px) {          /* stacked: the page scrolls again, since the two no longer sit side by side */
+    html, body { height: auto; overflow: auto; }
+    #app { grid-template-columns: 1fr; height: auto; }
+    main { overflow: visible; }
+    #panel { border-left: 0; border-top: 1px solid var(--line); }
+  }
 
   /* Document */
-  main { padding: 40px 48px 200px; min-width: 0; }
+  main { padding: 40px 48px 200px; min-width: 0; overflow-y: auto; }
   .page { max-width: 46rem; margin: 0 auto; }   /* centered in the space left of the panel */
   #meta { color: var(--muted); font-size: 13px; margin-bottom: 28px; word-break: break-all; }
   article h1, article h2, article h3, article h4 { line-height: 1.3; margin: 1.8em 0 .6em; }
@@ -49,9 +56,9 @@
   .hl.active { background: var(--mark-active); }
   .hl.pending { background: var(--pending); }   /* selection held while its comment is being written */
 
-  /* Selection button */
+  /* Selection button, placed from the selection's viewport rect */
   #tip {
-    position: absolute; z-index: 20; display: none; align-items: center; gap: 6px;
+    position: fixed; z-index: 20; display: none; align-items: center; gap: 6px;
     padding: 6px 12px 6px 10px; border: 0; border-radius: 999px; background: var(--accent);
     color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.25);
   }
@@ -85,7 +92,7 @@
                  line-height: 1; cursor: pointer; }   /* line-height 1: the label's box centres on the icon's */
   #add-general:hover { color: var(--accent); border-color: var(--accent); }
   #add-general svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.4; }
-  #cards { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+  #cards { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
   .card { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
   .card.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
   .card .where { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 6px; }
@@ -457,8 +464,8 @@
       const rects = range.getClientRects();
       const end = rects.length ? rects[rects.length - 1] : rect;   // where the selection finishes
       const edge = document.querySelector('main').getBoundingClientRect().right - tip.offsetWidth - 8;
-      tip.style.top = `${window.scrollY + end.bottom + 8}px`;
-      tip.style.left = `${window.scrollX + Math.max(8, Math.min(end.right + 8, edge))}px`;
+      tip.style.top = `${end.bottom + 8}px`;
+      tip.style.left = `${Math.max(8, Math.min(end.right + 8, edge))}px`;
       tip.onclick = () => {
         const anchor = anchorFor(range);
         sel.removeAllRanges();
