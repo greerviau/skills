@@ -8,13 +8,13 @@
   :root {
     --bg: #ffffff; --panel: #f7f7f5; --ink: #1f1f1f; --muted: #6b6b6b;
     --line: #e3e3e0; --accent: #2f6fdb; --mark: #ffe9a3; --mark-active: #ffd45e;
-    --danger: #b3261e; --radius: 8px;
+    --pending: #ffdb75; --danger: #b3261e; --radius: 8px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #1b1b1a; --panel: #232322; --ink: #e9e9e6; --muted: #9d9d97;
       --line: #35352f; --accent: #7aa5f0; --mark: #6b5a1c; --mark-active: #9a8221;
-      --danger: #f2a29c;
+      --pending: rgba(255, 212, 94, .45); --danger: #f2a29c;
     }
   }
   * { box-sizing: border-box; }
@@ -47,6 +47,7 @@
 
   .hl { background: var(--mark); border-radius: 2px; cursor: pointer; }
   .hl.active { background: var(--mark-active); }
+  .hl.pending { background: var(--pending); }   /* selection held while its comment is being written */
 
   /* Selection button */
   #tip {
@@ -89,7 +90,7 @@
   .card button { background: none; border: 0; padding: 0; font-size: 12px; color: var(--muted); cursor: pointer; }
   .card button:hover { color: var(--ink); text-decoration: underline; }
   .card button.del:hover { color: var(--danger); }
-  textarea { width: 100%; min-height: 80px; resize: vertical; font: inherit; font-size: 14px;
+  textarea { width: 100%; min-height: 80px; max-height: 40vh; resize: none; overflow-y: auto; font: inherit; font-size: 14px;
              color: var(--ink); background: var(--bg); border: 1px solid var(--line);
              border-radius: 6px; padding: 8px; }
   textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
@@ -225,6 +226,8 @@
     return null;
   }
 
+  const PENDING = 'pending';   // the id a selection is painted under until its comment is saved
+
   function paint(anchor, id) {
     for (const part of anchor.parts) {
       const block = content.querySelector(`[data-line="${CSS.escape(part.line)}"]`);
@@ -249,7 +252,7 @@
         if (hit.to < node.nodeValue.length) node.splitText(hit.to);
         if (hit.from > 0) node = node.splitText(hit.from);
         const span = document.createElement('span');
-        span.className = 'hl';
+        span.className = id === PENDING ? 'hl pending' : 'hl';
         span.dataset.id = id;
         node.replaceWith(span);
         span.appendChild(node);
@@ -302,6 +305,14 @@
     render();
   }
 
+  function startComposing(anchor) {
+    unpaint(PENDING);                          // a previous draft's highlight, if one was open
+    composing = { anchor };
+    editingId = null;
+    if (anchor) paint(anchor, PENDING);
+    render();
+  }
+
   function composer(comment) {
     const box = document.createElement('div');
     box.className = 'card active';
@@ -318,6 +329,12 @@
     const area = document.createElement('textarea');
     area.placeholder = 'Your comment… (⏎ to save, ⇧⏎ for a new line)';
     area.value = comment ? comment.body : '';
+    // Grow to fit, so the last line keeps the same padding below it as the first has above.
+    const grow = () => {
+      area.style.height = 'auto';
+      area.style.height = `${area.scrollHeight + area.offsetHeight - area.clientHeight}px`;
+    };
+    area.addEventListener('input', grow);
     const row = document.createElement('div');
     row.className = 'row';
     const ok = document.createElement('button');
@@ -335,13 +352,14 @@
         comment.updated_at = new Date().toISOString();
         save();
       } else {
+        unpaint(PENDING);                      // repainted under the new comment's own id
         add(body, composing.anchor);
       }
       composing = null;
       editingId = null;
       render();
     };
-    const abort = () => { composing = null; editingId = null; render(); };
+    const abort = () => { unpaint(PENDING); composing = null; editingId = null; render(); };
 
     ok.onclick = commit;
     no.onclick = abort;
@@ -349,7 +367,7 @@
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }   // shift+enter newlines
       if (e.key === 'Escape') { e.preventDefault(); abort(); }
     };
-    setTimeout(() => area.focus(), 0);
+    setTimeout(() => { area.focus(); grow(); }, 0);
     return box;
   }
 
@@ -393,7 +411,7 @@
   function render() {
     cards.replaceChildren();
     if (composing) cards.append(composer(null));
-    for (const comment of comments) cards.append(card(comment));
+    for (const comment of [...comments].reverse()) cards.append(card(comment));
     document.getElementById('count').textContent = comments.length;
     sendBtn.disabled = !comments.length;
     sendBtn.textContent = comments.length ? `Send ${comments.length} comment${comments.length > 1 ? 's' : ''} to agent` : 'Send to agent';
@@ -417,11 +435,10 @@
       tip.style.top = `${window.scrollY + end.bottom + 8}px`;
       tip.style.left = `${window.scrollX + Math.max(8, Math.min(end.right + 8, edge))}px`;
       tip.onclick = () => {
-        composing = { anchor: anchorFor(range) };
-        editingId = null;
+        const anchor = anchorFor(range);
         sel.removeAllRanges();
         hideTip();
-        render();
+        startComposing(anchor);
       };
     }, 0);
   });
@@ -431,21 +448,26 @@
 
   content.addEventListener('click', (e) => {
     if (e.target.closest('.fig-comment')) {
-      composing = { anchor: diagramAnchor(e.target.closest('.diagram')) };
-      editingId = null;
-      render();
+      startComposing(diagramAnchor(e.target.closest('.diagram')));
       return;
     }
-    const mark = e.target.closest('.hl') || e.target.closest('.diagram[data-ids]');
+    const mark = e.target.closest('.hl:not(.pending)') || e.target.closest('.diagram[data-ids]');
     if (!mark) return;
-    focus(Number(mark.dataset.id || mark.dataset.ids.split(' ')[0]));
+    const id = Number(mark.dataset.id || mark.dataset.ids.split(' ').find(x => x !== PENDING));
+    if (Number.isNaN(id)) return;
+    focus(id);
     const target = cards.querySelector('.card.active');
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 
-  document.getElementById('add-general').onclick = () => {
-    composing = { anchor: null }; editingId = null; render();
-  };
+  document.getElementById('add-general').onclick = () => startComposing(null);
+
+  // Clicking away from a comment and its highlight drops the selection.
+  document.addEventListener('click', (e) => {
+    if (activeId === null) return;
+    if (e.target.closest('.card, .hl, .diagram[data-ids], #tip')) return;
+    focus(null);
+  });
 
   /* ---------- send back ---------- */
 
