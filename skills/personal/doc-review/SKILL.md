@@ -46,7 +46,7 @@ Comments arrive in the order the reviewer saw them: document order, with whole-d
 `lines` is an inclusive 1-based range into the source file, `quote` is the exact text they highlighted, and `section` is the enclosing heading.
 `lines` is null for a comment on the document as a whole.
 `status` is one of `submitted`, `no-comments`, or `abandoned`; all three exit 0.
-`no-comments` means the reviewer finished and had nothing to change.
+`no-comments` means the reviewer sent nothing back: they had nothing to change, or they discarded the comments they had drafted.
 `abandoned` means the review page went away without sending: the reviewer's drafted comments are still saved in their browser and come back if the same document is served again, so ask whether they want it reopened rather than treating it as approval.
 Exit codes: 0 review finished, 3 timed out, 4 aborted.
 
