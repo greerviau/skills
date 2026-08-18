@@ -189,8 +189,9 @@ class Handler(BaseHTTPRequestHandler):
         except json.JSONDecodeError:
             self._send(400, b'{"ok":false}', "application/json")
             return
-        comments = payload.get("comments") or []
-        status = "submitted" if route == "/api/submit" and comments else "no-comments"
+        # A cancel discards the review, so its body never reaches the agent.
+        comments = (payload.get("comments") or []) if route == "/api/submit" else []
+        status = "submitted" if comments else "no-comments"
         self._send(200, json.dumps({"ok": True}).encode(), "application/json")
         self.session.finish(status, comments)
 

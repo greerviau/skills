@@ -525,12 +525,14 @@ article a:hover { text-decoration: none; }
 
   async function finish(route) {
     // Comments go back in the order the panel showed them, so the reviewer's first
-    // comment is the agent's first.
+    // comment is the agent's first. A cancel discards them instead of sending them.
     const payload = {
-      comments: comments
-        .map((comment, index) => ({ comment, key: orderKey(comment, index) }))
-        .sort(byDocument)
-        .map(({ comment: { anchor, ...rest } }) => rest),
+      comments: route === '/api/submit'
+        ? comments
+            .map((comment, index) => ({ comment, key: orderKey(comment, index) }))
+            .sort(byDocument)
+            .map(({ comment: { anchor, ...rest } }) => rest)
+        : [],
     };
     sendBtn.disabled = true;
     try {
