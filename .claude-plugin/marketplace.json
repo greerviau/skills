@@ -54,14 +54,16 @@
       "name": "greerviau-personal",
       "source": "./",
       "strict": false,
-      "description": "Personal skills: opinion-aware decisions backed by ~/OPINIONS.md, browser-based document review with inline comments, and rewriting a finished document in your own writing voice.",
+      "description": "Personal skills: opinion-aware decisions backed by ~/OPINIONS.md, browser-based document review with inline comments, rewriting a finished document in your own writing voice, and auditing what an agent has remembered about you.",
       "category": "personal",
       "keywords": [
         "personal",
         "skills",
         "opinions",
         "doc-review",
-        "my-voice"
+        "my-voice",
+        "memory-audit",
+        "memory"
       ],
       "skills": [
         "./skills/personal"
