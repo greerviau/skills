@@ -383,13 +383,17 @@
         comment.body = body;
         comment.updated_at = new Date().toISOString();
         save();
-      } else {
-        unpaint(PENDING);                      // repainted under the new comment's own id
-        add(body, composing.anchor);
+        composing = null;
+        editingId = null;
+        render();
+        return;
       }
+      unpaint(PENDING);                        // repainted under the new comment's own id
+      const created = add(body, composing.anchor);
       composing = null;
       editingId = null;
-      render();
+      focus(created.id);                       // renders too, and shows where the card landed
+      cards.querySelector('.card.active')?.scrollIntoView({ block: 'nearest' });
     };
     const abort = () => { unpaint(PENDING); composing = null; editingId = null; render(); };
 
@@ -399,7 +403,7 @@
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }   // shift+enter newlines
       if (e.key === 'Escape') { e.preventDefault(); abort(); }
     };
-    setTimeout(() => { area.focus(); grow(); }, 0);
+    setTimeout(() => { box.scrollIntoView({ block: 'nearest' }); area.focus(); grow(); }, 0);
     return box;
   }
 
@@ -440,10 +444,25 @@
     return box;
   }
 
+  // Cards sit where their text sits, so reading down the panel tracks reading down the page.
+  // Whole-document comments lead: they cover everything below them.
+  const orderKey = (comment, seq) => comment.anchor
+    ? [comment.anchor.lines[0], comment.anchor.parts[0].start ?? -1, seq]
+    : [-1, -1, seq];
+  const byDocument = (a, b) => a.key[0] - b.key[0] || a.key[1] - b.key[1] || a.key[2] - b.key[2];
+
   function render() {
-    cards.replaceChildren();
-    if (composing) cards.append(composer(null));
-    for (const comment of [...comments].reverse()) cards.append(card(comment));
+    const entries = comments.map((comment, index) => ({
+      key: orderKey(comment, index),
+      draw: () => card(comment),
+    }));
+    if (composing) entries.push({
+      // A draft sorts to where its text is, below any comment already anchored there.
+      key: orderKey({ anchor: composing.anchor }, Infinity),
+      draw: () => composer(null),
+    });
+    entries.sort(byDocument);
+    cards.replaceChildren(...entries.map(entry => entry.draw()));
     document.getElementById('count').textContent = comments.length;
     sendBtn.disabled = !comments.length;
     sendBtn.textContent = comments.length ? `Send ${comments.length} comment${comments.length > 1 ? 's' : ''} to agent` : 'Send to agent';
@@ -504,8 +523,13 @@
   /* ---------- send back ---------- */
 
   async function finish(route) {
+    // Comments go back in the order the panel showed them, so the reviewer's first
+    // comment is the agent's first.
     const payload = {
-      comments: comments.map(({ anchor, ...rest }) => rest),
+      comments: comments
+        .map((comment, index) => ({ comment, key: orderKey(comment, index) }))
+        .sort(byDocument)
+        .map(({ comment: { anchor, ...rest } }) => rest),
     };
     sendBtn.disabled = true;
     try {
