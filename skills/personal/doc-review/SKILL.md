@@ -42,6 +42,7 @@ Then wait. Do not poll the file, do not start other work on the document, and do
                "lines": [3, 3], "section": "Sample spec"}]}
 ```
 
+Comments arrive in the order the reviewer saw them: document order, with whole-document comments first.
 `lines` is an inclusive 1-based range into the source file, `quote` is the exact text they highlighted, and `section` is the enclosing heading.
 `lines` is null for a comment on the document as a whole.
 `status` is one of `submitted`, `no-comments`, or `abandoned`; all three exit 0.
