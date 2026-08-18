@@ -79,6 +79,7 @@ How these skills fit together — entry points, components, and hand-offs — is
 
 - **[opinions](skills/personal/opinions/SKILL.md)** — consults `~/OPINIONS.md` before making subjective calls the user has likely already formed a view on, and offers to record new opinions the user states mid-task.
 - **[doc-review](skills/personal/doc-review/SKILL.md)** — on request, renders a document in the browser for Notion-style inline commenting, then hands every comment back with its source line range and quoted text so the document can be revised against them.
+- **[my-voice](skills/personal/my-voice/SKILL.md)** — captures how you write into `~/VOICE.md` from samples you supply, then rewrites a finished draft against it in a subagent pass bounded to wording only, so a spec or README goes out sounding like you without a fact or a section moving.
 
 ## Contributing
 
