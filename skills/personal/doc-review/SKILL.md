@@ -1,6 +1,6 @@
 ---
 name: doc-review
-description: Use only when the user explicitly asks to mark up a document in the browser (a spec, plan, draft, report, README, or any markdown or text file). Renders the document on the user's own machine, where they highlight passages and leave Notion-style comments, then hands every comment back with its source line range and quoted text so the document can be revised against them. It needs a browser on the same machine as the session, so it is a tool the user reaches for, not the default way to hand a document back: never invoke it on your own after producing a document, and never offer it as the review step unless the user has asked for it before. Trigger on "/doc-review", "let me mark this up in the browser", "open the doc for inline comments", "send me the draft to comment on".
+description: Use only when the user explicitly asks to mark up a document in the browser (a spec, plan, draft, report, README, or any markdown or text file). Renders the document, where the user highlights passages and leaves Notion-style comments, then hands every comment back with its source line range and quoted text so the document can be revised against them. Never invoke it on your own after producing a document. Trigger on "/doc-review", "let me mark this up in the browser", "open the doc for inline comments", "send me the draft to comment on".
 ---
 
 # doc-review
@@ -8,9 +8,7 @@ description: Use only when the user explicitly asks to mark up a document in the
 Collect a human's comments on a document in the browser, then revise the document against them.
 A reviewer marking up passages in place gives comments anchored to exact lines, which chat feedback does not.
 
-The script opens a browser on the machine the session runs on, so it works only in a local session and does nothing useful in a remote one.
-Run it when the user asks for it.
-Handing a document back and asking for feedback in chat stays the default; this does not replace it, and asking whether the user wants a browser review every time is its own kind of noise.
+Run it when the user asks for it; handing a document back in chat stays the default.
 
 The mechanism is `scripts/doc_review.py`. Never rebuild any part of it (renderer, comment UI, transport) inline.
 
