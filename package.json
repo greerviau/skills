@@ -33,6 +33,7 @@
     "./skills/engineering/tech-research",
     "./skills/research/lit-research",
     "./skills/personal/opinions",
-    "./skills/personal/doc-review"
+    "./skills/personal/doc-review",
+    "./skills/personal/my-voice"
   ]
 }
