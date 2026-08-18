@@ -1,12 +1,16 @@
 ---
 name: doc-review
-description: Use to collect a human's inline comments on a document — a spec, plan, draft, report, README, or any markdown or text file — instead of asking for feedback in chat. Renders the document in the browser, where the user highlights passages and leaves Notion-style comments, then hands every comment back with its source line range and quoted text so the document can be revised against them. Trigger on "let me review this", "I want to comment on the doc", "send me the draft to mark up", "get my feedback on this document", or after producing any document a human is expected to review.
+description: Use only when the user explicitly asks to mark up a document in the browser (a spec, plan, draft, report, README, or any markdown or text file). Renders the document on the user's own machine, where they highlight passages and leave Notion-style comments, then hands every comment back with its source line range and quoted text so the document can be revised against them. It needs a browser on the same machine as the session, so it is a tool the user reaches for, not the default way to hand a document back: never invoke it on your own after producing a document, and never offer it as the review step unless the user has asked for it before. Trigger on "/doc-review", "let me mark this up in the browser", "open the doc for inline comments", "send me the draft to comment on".
 ---
 
 # doc-review
 
 Collect a human's comments on a document in the browser, then revise the document against them.
-Use this instead of pasting a document into chat and asking "any feedback?" — a reviewer marking up passages in place gives comments anchored to exact lines, which chat feedback does not.
+A reviewer marking up passages in place gives comments anchored to exact lines, which chat feedback does not.
+
+The script opens a browser on the machine the session runs on, so it works only in a local session and does nothing useful in a remote one.
+Run it when the user asks for it.
+Handing a document back and asking for feedback in chat stays the default; this does not replace it, and asking whether the user wants a browser review every time is its own kind of noise.
 
 The mechanism is `scripts/doc_review.py`. Never rebuild any part of it (renderer, comment UI, transport) inline.
 
@@ -51,7 +55,7 @@ Exit codes: 0 review finished, 3 timed out, 4 aborted.
 Where a comment asks for something you believe is wrong, do the rest, and say which one you pushed back on and why — do not silently drop it.
 
 **5. Report back**: the revised document, and one line per comment saying what you changed for it.
-Offer another round; re-running the script on the revised document is a fresh review.
+If the user wants another round, re-running the script on the revised document is a fresh review.
 
 ## Notes
 

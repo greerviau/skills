@@ -78,7 +78,7 @@ How these skills fit together — entry points, components, and hand-offs — is
 `/plugin install greerviau-personal@greerviau`
 
 - **[opinions](skills/personal/opinions/SKILL.md)** — consults `~/OPINIONS.md` before making subjective calls the user has likely already formed a view on, and offers to record new opinions the user states mid-task.
-- **[doc-review](skills/personal/doc-review/SKILL.md)** — renders a document in the browser for Notion-style inline commenting, then hands every comment back with its source line range and quoted text so the document can be revised against real review feedback rather than chat paraphrase.
+- **[doc-review](skills/personal/doc-review/SKILL.md)** — on request, renders a document in the browser for Notion-style inline commenting, then hands every comment back with its source line range and quoted text so the document can be revised against them. Needs a browser on the machine the session runs on, so invoke it by asking for it rather than expecting it as the default review step.
 
 ## Contributing
 
