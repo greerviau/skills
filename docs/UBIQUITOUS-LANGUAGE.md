@@ -14,6 +14,12 @@ One entry per term; keep entries short and precise.
 - **load-bearing leak**: a fact about implementation a caller genuinely needs to know (e.g. a rate limit), as distinct from an **accidental leak** — one that escaped only because nothing hid it.
 - **error-condition elimination**: designing away the precondition that produces an error case, rather than handling or propagating it.
 
+## dep-upgrade (skills/engineering/dep-upgrade)
+
+- **downstream project**: the project that declares or consumes the dependency being upgraded; its suite verifies compatibility.
+- **lockstep tag bump**: updating every intended git-sourced package from one internal repository to the same release tag before resolving.
+- **lockfile discipline**: changing dependency declarations with uv and reviewing the resulting `uv.lock`; never editing the lockfile by hand.
+
 ## flake-hunt (skills/engineering/flake-hunt)
 
 - **flake**: a test that produces different outcomes under equivalent inputs and environment.
