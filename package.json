@@ -22,6 +22,7 @@
     "./skills/engineering/open-pr",
     "./skills/engineering/debug",
     "./skills/engineering/flake-hunt",
+    "./skills/engineering/merge-conflict",
     "./skills/engineering/review",
     "./skills/engineering/refactor",
     "./skills/engineering/perf",
