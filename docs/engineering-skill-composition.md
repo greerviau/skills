@@ -6,11 +6,13 @@ An autonomous runner reads this to route a request to the right entry point with
 ## The graph
 
 ```mermaid
-flowchart TD
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart LR
     spec[spec]
     tdd[tdd]
     debug[debug]
     flakehunt[flake-hunt]
+    mergeconflict[merge-conflict]
     refactor[refactor]
     perf[perf]
     review[review]
@@ -30,6 +32,7 @@ flowchart TD
     tdd -->|test-first change| devworkflow
     debug -->|confirmed cause| devworkflow
     flakehunt -->|confirmed flake| devworkflow
+    mergeconflict -->|resolved integration| devworkflow
     refactor -->|test-guarded change| devworkflow
     perf -->|measured change| devworkflow
     review -->|findings to apply| devworkflow
@@ -58,6 +61,7 @@ See the role table for who reads or invokes what.
 | `tdd` | Entry — test-first loop | A request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor") | `dev-workflow` (lands the test-driven change) |
 | `debug` | Entry — diagnosis | Something is broken and the cause is unknown | `dev-workflow` (lands the fix as a regression-tested change) |
 | `flake-hunt` | Entry - flake diagnosis | A test failure may be intermittent, order-dependent, seed-dependent, or limited to CI | `dev-workflow` (lands the fix or bounded quarantine) |
+| `merge-conflict` | Entry - integration recovery | A Git merge or rebase has conflicts that require semantic resolution | `dev-workflow` (resumes validation and the remaining integration workflow) |
 | `refactor` | Entry — restructuring | Working code needs its structure improved without behavior change | `dev-workflow` (lands the test-guarded change) |
 | `perf` | Entry — optimization | A change needs to get faster, cheaper, or higher-throughput, and the improvement must be proven with a before/after measurement | `dev-workflow` (lands the measured change) |
 | `dev-workflow` | Entry + spine | Any request to write and land code in a GitHub repo | invokes `open-issue`, `doc-audit`, `run`, `open-pr`, and `tdd` for an explicitly test-first request |
@@ -78,3 +82,4 @@ See the role table for who reads or invokes what.
 - **Components are leaves, except `tdd`.** `open-issue`, `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and don't hand off further. `tdd` is invoked by `dev-workflow`'s own step the same way, but as an entry point in its own right it hands back to `dev-workflow` rather than terminating there; see the dual-role note under "The graph".
 - **Delegation isn't hand-off.** `doc-audit` (its language check) and `mermaid` (its render loop) hand work to a subagent rather than to another skill; both stay leaves.
 - **`standards` and `design` are policy, not phases.** Each is referenced for its own kind of rule — compliance for `standards`, structural vocabulary for `design` — never inserted as a numbered step.
+- **`merge-conflict` completes the active merge or rebase.** It returns to `dev-workflow` for any remaining validation, publication, or PR lifecycle work.
