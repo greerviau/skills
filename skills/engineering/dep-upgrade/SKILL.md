@@ -77,9 +77,6 @@ Use `uv` for dependency, environment, and test commands; do not use `pip`, `pip-
 
 - This skill owns dependency declaration changes, uv resolution, lockfile review, and downstream verification; it does not own application fixes caused by an incompatible upgrade.
 - Keep upgrades targeted unless a broad refresh is explicitly requested.
-- Do not claim success from `uv lock` alone; a resolver result without the downstream suite is incomplete.
-- Do not use the upgraded package's own suite in place of the downstream suite.
-- Do not use plain `pip` or manually edit `uv.lock`.
 - Flag unrelated dependency or application defects for their own issue and branch.
 
 **Interaction mode** (see `standards`): when running autonomously and the target version, tag, or scope is missing, choose the narrowest compatible interpretation, record the assumption in the report, and proceed when the repository can verify it. Stop when no defensible target exists or when the baseline is not green.

@@ -1,6 +1,6 @@
 ---
 name: design
-description: The shared vocabulary for judging and explaining structure - module depth, information hiding, seam placement, error-condition elimination, navigability - that `spec`, `refactor`, and `review` reason in instead of asserting "simplicity" or "maintainability" with no operational meaning. Read it when a skill references "the design skill", or directly when judging whether code is well-structured. Trigger on "is this well-structured", "how should this be organized", "is this a deep module", "what's a good seam here", "define information hiding".
+description: Shared vocabulary for judging code structure through module depth, information hiding, seam placement, error-condition elimination, and navigability. Use when asking whether code is well-structured, how to organize it, whether a module is deep, or where a seam belongs.
 ---
 
 # design

@@ -1,6 +1,6 @@
 ---
 name: triage
-description: Use when an inbound GitHub issue or external pull request needs a category, disposition, and agent-ready brief. Reads the source item, repository context, and pull request diff when present, then separates evidence from assumptions before routing the work. Trigger on "triage this issue", "triage this PR", "classify this ticket", "prepare a brief from this issue".
+description: Classify one inbound GitHub issue or pull request and produce an agent-ready brief.
 argument-hint: "GitHub issue or pull request URL or number"
 disable-model-invocation: true
 ---

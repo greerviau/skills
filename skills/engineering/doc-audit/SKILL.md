@@ -1,6 +1,6 @@
 ---
 name: doc-audit
-description: Use after finishing any code change, and whenever writing or editing documentation or code comments. Reviews and updates docstrings, nearby comments, directory READMEs, docs files, and examples so they match the current code, written in present tense describing current state rather than a change narrative, then dispatches a subagent to check the prose against the house plain-language rules. Trigger on "before you're done, check the docs", "update the docs", "write a comment/docstring", "check this for clarity", or as a final step before treating any code change as complete.
+description: Use after code changes or when writing documentation or comments. Audits the touched documentation surface, updates stale prose, and checks it against the plain-language rules.
 ---
 
 # doc-audit

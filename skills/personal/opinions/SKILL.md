@@ -1,6 +1,6 @@
 ---
 name: opinions
-description: Use whenever a task involves a subjective or stylistic call the user has likely already formed a view on — UI/UX conventions, tooling choices, code style, workflow preferences — before deciding on your own default. Reads ~/OPINIONS.md for standing guidance, and offers to record any new opinion the user states mid-task so the document keeps growing. Trigger before making a judgment call in an area covered by ~/OPINIONS.md, and whenever the user gives feedback that reads as a general opinion rather than a one-off instruction.
+description: Use before making a subjective call the user may have a standing preference about. Reads ~/OPINIONS.md and offers to record new durable preferences.
 ---
 
 # opinions

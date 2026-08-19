@@ -1,6 +1,6 @@
 ---
 name: dev-workflow
-description: Use whenever doing development work inside a GitHub project repo — implementing a feature, fixing a bug, or executing a plan. Covers opening an issue for the work before any code, acquiring an isolated git worktree, committing in reviewable stages, validating locally, auditing the comments and documentation before publishing, opening an evergreen PR that closes the issue, watching CI to green, keeping the worktree alive while the PR is open and watching it to merge, and cleaning up the worktree only once the PR is merged. Trigger on "let's build this", "implement the plan", "start working on this feature/fix", "go ahead and make that change", "ship it", "ship the fix", "land this", "open a PR for this", or any request to write and land code in a repo.
+description: Use for development work in a GitHub project repo, including implementing features or fixes, executing plans, and requests to start, ship, land, or open a pull request. Covers issue-first work, isolated worktrees, validation, review, CI, and cleanup.
 ---
 
 # dev-workflow

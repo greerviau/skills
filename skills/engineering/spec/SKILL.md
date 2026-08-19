@@ -1,6 +1,6 @@
 ---
 name: spec
-description: Use when the user hands you a request to scope and plan before building — a feature they want, a bug to fix, a new pipeline, or a piece of infrastructure — and wants a reviewed plan of action rather than immediate code. Interviews the user to sharpen the requirements, explores the relevant code across one or many repos to discover scope, settles the approach with the rejected alternatives recorded, maintains the repo's ubiquitous-language glossary, writes the detailed agent-facing implementation plan against the real code, derives a short human-facing spec from that plan, and asks whether to execute or iterate. Trigger on "/spec", "spec this out", "plan this", "scope this out", "how should we approach", "figure out what it'll take to", "before we build", "write a spec/plan for ...".
+description: Turn a raw request into a reviewed implementation plan and human-facing spec.
 disable-model-invocation: true
 ---
 

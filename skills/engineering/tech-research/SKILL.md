@@ -1,6 +1,6 @@
 ---
 name: tech-research
-description: Use when a technical question needs a sourced, version-pinned answer about third-party or external behavior - what a library's API actually does, what a standard requires, how a pinned dependency behaves - captured as a durable findings file instead of asserted from memory. Trigger on "how does this library actually handle", "what does the X API do", "check the vendor docs for", "does this version support", "what does the RFC say about", "what does the standard require", "research how this dependency behaves", "verify this against the docs, not from memory".
+description: Use when a technical question needs a sourced, version-pinned answer about third-party behavior, standards, or pinned dependencies - what a library API does, what a standard requires, or how a pinned dependency behaves. Captures findings with citations and confidence levels.
 ---
 
 # tech-research

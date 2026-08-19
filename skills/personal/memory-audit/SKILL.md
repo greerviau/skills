@@ -1,6 +1,6 @@
 ---
 name: memory-audit
-description: Use only when the user explicitly asks to audit, review, prune, or clean up their agent memory - the facts an agent has saved about them and their projects. Scans every memory directory for duplicates, contradictions, stale claims, and index drift, interviews the user over each memory with a case against it, then applies their keep/edit/delete/move verdicts. Trigger on "/memory-audit", "audit my memory", "review what you've remembered about me", "clean up your memory", "what have you saved about me".
+description: Audit agent memory for duplicates, contradictions, stale claims, and index drift, then apply the user's verdicts.
 disable-model-invocation: true
 ---
 

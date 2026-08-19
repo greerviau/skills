@@ -1,6 +1,6 @@
 ---
 name: lit-research
-description: Use for any scientific-literature task — finding papers on a topic, expanding from a seed paper through its citation graph, verifying a bibliography, or running a literature review. Backed by scripts that query OpenAlex, Semantic Scholar, PubMed, and Crossref so every citation comes from a real API record. Trigger on "find papers about", "what's the literature on", "who cites this", "check these references", "do a lit review", or any request that would otherwise tempt you to cite papers from memory.
+description: Use for scientific-literature searches, citation-graph expansion, bibliography verification, and literature reviews. Grounds every citation in script output from OpenAlex, Semantic Scholar, PubMed, or Crossref.
 ---
 
 # lit-research

@@ -1,6 +1,6 @@
 ---
 name: my-voice
-description: Use only when the user explicitly asks to rewrite a document in their own voice, or to capture that voice from writing samples; the document is a spec, README, report, announcement, PR body, or any prose a person reads. Reads ~/VOICE.md and hands the draft to a subagent that rewrites the wording without touching a fact or a section. Never invoke it on your own after producing a document. Trigger on "/my-voice", "make this sound like me", "rewrite this in my voice", "learn my writing style".
+description: Capture the user's writing voice or rewrite a finished human-facing document in it.
 disable-model-invocation: true
 ---
 
@@ -25,7 +25,7 @@ Never draft a document in the user's voice from the start; write the document no
 
 The pass runs on prose a person reads: specs, READMEs, reports, announcements, emails, issue and PR bodies.
 
-It does not run on artifacts an agent executes - implementation plans, task briefs, handoff documents, structured findings, `CLAUDE.md`, code comments, or docstrings.
+It does not run on artifacts an agent executes - implementation plans, task briefs, handoff documents, structured findings, `AGENTS.md` or `CLAUDE.md`, code comments, or docstrings.
 Those are written for precision under a house style, and a voice pass over them trades precision for personality.
 Decline such a target and say which rule excluded it.
 

@@ -1,6 +1,6 @@
 ---
 name: improve-codebase-architecture
-description: Use when a codebase needs structural opportunities identified and ranked before implementation, with a visual HTML report. Trigger on "/improve-codebase-architecture", "scan the architecture", "find structural opportunities", "review the codebase architecture", "where should we deepen this codebase".
+description: Scan a codebase for evidence-backed structural opportunities and rank them before implementation.
 disable-model-invocation: true
 ---
 
