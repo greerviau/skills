@@ -10,6 +10,7 @@ flowchart TD
     spec[spec]
     tdd[tdd]
     debug[debug]
+    flakehunt[flake-hunt]
     refactor[refactor]
     perf[perf]
     review[review]
@@ -28,6 +29,7 @@ flowchart TD
     s2t -->|per-issue authoring| openissue
     tdd -->|test-first change| devworkflow
     debug -->|confirmed cause| devworkflow
+    flakehunt -->|confirmed flake| devworkflow
     refactor -->|test-guarded change| devworkflow
     perf -->|measured change| devworkflow
     review -->|findings to apply| devworkflow
@@ -55,6 +57,7 @@ See the role table for who reads or invokes what.
 | `tech-research` | Entry — research | A technical question needs a sourced, version-pinned answer about third-party or external behavior | none (produces a findings file); `spec` cites it instead of re-deriving |
 | `tdd` | Entry — test-first loop | A request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor") | `dev-workflow` (lands the test-driven change) |
 | `debug` | Entry — diagnosis | Something is broken and the cause is unknown | `dev-workflow` (lands the fix as a regression-tested change) |
+| `flake-hunt` | Entry - flake diagnosis | A test failure may be intermittent, order-dependent, seed-dependent, or limited to CI | `dev-workflow` (lands the fix or bounded quarantine) |
 | `refactor` | Entry — restructuring | Working code needs its structure improved without behavior change | `dev-workflow` (lands the test-guarded change) |
 | `perf` | Entry — optimization | A change needs to get faster, cheaper, or higher-throughput, and the improvement must be proven with a before/after measurement | `dev-workflow` (lands the measured change) |
 | `dev-workflow` | Entry + spine | Any request to write and land code in a GitHub repo | invokes `open-issue`, `doc-audit`, `run`, `open-pr`, and `tdd` for an explicitly test-first request |
