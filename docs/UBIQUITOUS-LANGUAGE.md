@@ -50,6 +50,10 @@ One entry per term; keep entries short and precise.
 - **fog of war**: in-scope work that is known to be ahead but cannot yet be stated as a precise ticket.
 - **ticket type**: the `research`, `prototype`, `grilling`, or `task` label that identifies how a decision ticket is resolved.
 
+## prototype (skills/engineering/prototype)
+
+- **throwaway spike**: a disposable implementation used to answer one design question; its source is discarded and never merged into production.
+
 ## lit-research (skills/research/lit-research)
 
 - **canonical record**: the normalized paper representation all sources map into, keyed by DOI (source-native id when no DOI exists). Embodied by the record dataclass in `scripts/common.py`.

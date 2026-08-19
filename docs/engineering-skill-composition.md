@@ -54,6 +54,7 @@ Arrows are runtime hand-offs (one skill invokes or feeds the next).
 `tech-research` has the same shape in miniature: drawn as an entry point `spec` reaches at an open question, but its findings file exists so `spec` can cite it back instead of re-deriving the answer, which would be a `spec`-to-`tech-research`-to-`spec` loop. The back edge is omitted for the same reason as `tdd`'s.
 See the role table for who reads or invokes what.
 `handoff` is missing for the opposite reason: it hands off to nothing and nothing hands off to it, so it has no edge to draw.
+`prototype` is missing for the same reason: it produces design evidence, discards its source, and hands no code to another skill.
 
 ## Roles
 
@@ -70,6 +71,7 @@ See the role table for who reads or invokes what.
 | `merge-conflict` | Entry - integration recovery | A Git merge or rebase has conflicts that require semantic resolution | `dev-workflow` (resumes validation and the remaining integration workflow) |
 | `refactor` | Entry — restructuring | Working code needs its structure improved without behavior change | `dev-workflow` (lands the test-guarded change) |
 | `perf` | Entry — optimization | A change needs to get faster, cheaper, or higher-throughput, and the improvement must be proven with a before/after measurement | `dev-workflow` (lands the measured change) |
+| `prototype` | Entry — design spike | A design question needs evidence from a disposable implementation | none (produces a decision record and discards the spike) |
 | `dev-workflow` | Entry + spine | Any request to write and land code in a GitHub repo | invokes `open-issue`, `doc-audit`, `run`, `open-pr`, and `tdd` for an explicitly test-first request |
 | `review` | Entry — gate | Changes need checking before they land | reports only; findings go to `dev-workflow` to apply |
 | `handoff` | Entry — utility | A conversation needs compacting for another agent to continue | none (produces a document) |
