@@ -33,6 +33,7 @@
     "./skills/engineering/handoff",
     "./skills/engineering/mermaid",
     "./skills/engineering/design",
+    "./skills/engineering/improve-codebase-architecture",
     "./skills/engineering/tdd",
     "./skills/engineering/tech-research",
     "./skills/engineering/dep-upgrade",
