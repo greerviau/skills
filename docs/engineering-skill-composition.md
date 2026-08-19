@@ -8,6 +8,7 @@ An autonomous runner reads this to route a request to the right entry point with
 ```mermaid
 %%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
 flowchart LR
+    wayfinder[wayfinder]
     spec[spec]
     tdd[tdd]
     debug[debug]
@@ -25,6 +26,7 @@ flowchart LR
     openissue[open-issue]
     openpr[open-pr]
 
+    wayfinder -->|cleared map| spec
     spec -->|reviewed plan| s2t
     spec -->|reviewed plan| devworkflow
     spec -->|open question| techresearch
@@ -57,6 +59,7 @@ See the role table for who reads or invokes what.
 
 | Skill | Role | Lands on it when | Hands off to |
 | --- | --- | --- | --- |
+| `wayfinder` | Entry — multi-session planning | An effort spans sessions and its destination is clear but its route is not | `spec` (to collapse the cleared map into a reviewed plan) |
 | `spec` | Entry — planning | A request needs scoping into a reviewed plan before building | `spec-to-tickets` (to file issues) or `dev-workflow` (to execute) |
 | `spec-to-tickets` | Entry — ticketing | A reviewed spec should become GitHub Issues | `open-issue` (writes and files each one), then `dev-workflow` (executes each issue) |
 | `tech-research` | Entry — research | A technical question needs a sourced, version-pinned answer about third-party or external behavior | none (produces a findings file); `spec` cites it instead of re-deriving |
@@ -80,6 +83,7 @@ See the role table for who reads or invokes what.
 
 ## Composition rules
 
+- **`wayfinder` owns multi-session decision mapping.** It advances decision tickets and hands a cleared map to `spec`; it does not turn decisions into implementation work.
 - **`dev-workflow` is the spine.** Every skill that produces a code change hands the landing of it to `dev-workflow` rather than opening worktrees or PRs itself.
 - **Entry points don't invoke each other's mechanics.** `tdd` drives the red-green-refactor loop but doesn't touch worktree/PR mechanics; `debug` proves a cause but doesn't commit; `refactor` and `perf` each prove their own guarantee (an unchanged test suite, a before/after measurement) but don't commit either; `dep-upgrade` proves a lockfile and downstream-suite result but doesn't commit; `review` reports but doesn't apply; `tech-research` answers a question but doesn't build; `spec` plans but doesn't build. Each stays in its lane and hands off.
 - **Components are leaves, except `tdd`.** `open-issue`, `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and don't hand off further. `tdd` is invoked by `dev-workflow`'s own step the same way, but as an entry point in its own right it hands back to `dev-workflow` rather than terminating there; see the dual-role note under "The graph".
