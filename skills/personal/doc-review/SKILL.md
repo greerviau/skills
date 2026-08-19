@@ -1,13 +1,14 @@
 ---
 name: doc-review
-description: Render a document for browser-based inline comments and return the comments with source ranges.
+description: Render Markdown, text, HTML, PDF, or DOCX documents for browser-based inline comments and return the comments with source locations.
 disable-model-invocation: true
 ---
 
 # doc-review
 
 Run `/doc-review` explicitly to collect a human's comments on a document in the browser, then revise the document against them.
-A reviewer marking up passages in place gives comments anchored to exact lines, which chat feedback does not.
+The review page renders the original document without converting or writing it back to disk.
+A reviewer marking up passages in place gives comments anchored to source locations, which chat feedback does not.
 
 Run it when the user asks for it; handing a document back in chat stays the default.
 
@@ -21,6 +22,11 @@ Run the script in the background; it opens the reviewer's browser and blocks unt
 ```bash
 uv run doc_review.py <document>
 ```
+
+The document can be Markdown, plain text, HTML (`.html` or `.htm`), PDF (`.pdf`), or DOCX (`.docx`).
+HTML renders directly in the review page.
+PDF uses PDF.js in the browser, and DOCX uses docx-preview in the browser; neither format is converted or written back to disk.
+PDF and DOCX rendering loads pinned renderers from jsDelivr, so those formats need network access when the review page opens.
 
 Run it from the `scripts/` directory next to this file so `viewer.html` resolves.
 The only prerequisite is [uv](https://docs.astral.sh/uv/); if it is missing, install it with `curl -LsSf https://astral.sh/uv/install.sh | sh`.
@@ -44,8 +50,9 @@ Then wait. Do not poll the file, do not start other work on the document, and do
 ```
 
 Comments arrive in the order the reviewer saw them: document order, with whole-document comments first.
-`lines` is an inclusive 1-based range into the source file, `quote` is the exact text they highlighted, and `section` is the enclosing heading.
-`lines` is null for a comment on the document as a whole.
+`lines` is an inclusive 1-based range into the source file for Markdown, text, and HTML passage comments; it is null for whole-document, PDF, and DOCX comments.
+PDF anchors carry page numbers and text offsets, while DOCX anchors carry rendered paragraph numbers and text offsets.
+`quote` is the exact text they highlighted, and `section` is the enclosing heading when one exists.
 `status` is one of `submitted`, `no-comments`, or `abandoned`; all three exit 0.
 `no-comments` means the reviewer sent nothing back: they had nothing to change, or they discarded the comments they had drafted.
 `abandoned` means the review page went away without sending: the reviewer's drafted comments are still saved in their browser and come back if the same document is served again, so ask whether they want it reopened rather than treating it as approval.

@@ -11,6 +11,8 @@ Serves a local review page, blocks until the reviewer clicks "Send to agent" (or
 Usage:
   uv run doc_review.py <document> [--out PATH] [--port N] [--no-open] [--timeout SECONDS]
 
+The document can be Markdown, plain text, HTML, PDF, or DOCX.
+
 A finished review exits 0 whether or not it produced comments; `status` in the JSON says which.
 Exit codes: 0 review finished, 3 timed out, 4 aborted.
 """
@@ -18,7 +20,9 @@ Exit codes: 0 review finished, 3 timed out, 4 aborted.
 from __future__ import annotations
 
 import argparse
+import html.parser
 import json
+import mimetypes
 import os
 import socket
 import sys
@@ -72,6 +76,95 @@ def render(text: str) -> str:
     return md.renderer.render(tokens, md.options, {})
 
 
+HTML_BLOCK_TAGS = frozenset({
+    "address", "article", "aside", "blockquote", "div", "dl", "fieldset", "figcaption",
+    "figure", "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "header", "hr",
+    "main", "nav", "ol", "p", "pre", "section", "table", "ul",
+})
+
+
+class _HtmlAnnotator(html.parser.HTMLParser):
+    """Adds source ranges to the outermost block elements in an HTML fragment."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=False)
+        self.parts: list[str] = []
+        self.blocks: list[tuple[str, int, int]] = []
+
+    def _start(self, tag: str, raw: str, line: int, self_closing: bool = False) -> None:
+        if tag.lower() in HTML_BLOCK_TAGS and not self.blocks:
+            end = line if self_closing or tag.lower() == "hr" else "__end__"
+            marker = f' data-line="{line}:{end}"'
+            insert_at = raw.rfind("/>") if raw.rstrip().endswith("/>") else raw.rfind(">")
+            self.parts.append(raw[:insert_at] + marker + raw[insert_at:])
+            if end == "__end__":
+                self.blocks.append((tag.lower(), len(self.parts) - 1, line))
+            return
+        self.parts.append(raw)
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self._start(tag, self.get_starttag_text(), self.getpos()[0])
+
+    def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self._start(tag, self.get_starttag_text(), self.getpos()[0], self_closing=True)
+
+    def handle_endtag(self, tag: str) -> None:
+        self.parts.append(f"</{tag}>")
+        if self.blocks and self.blocks[-1][0] == tag.lower():
+            _, index, _ = self.blocks.pop()
+            self.parts[index] = self.parts[index].replace("__end__", str(self.getpos()[0]))
+
+    def handle_data(self, data: str) -> None:
+        self.parts.append(data)
+
+    def handle_entityref(self, name: str) -> None:
+        self.parts.append(f"&{name};")
+
+    def handle_charref(self, name: str) -> None:
+        self.parts.append(f"&#{name};")
+
+    def handle_comment(self, data: str) -> None:
+        self.parts.append(f"<!--{data}-->")
+
+    def handle_decl(self, decl: str) -> None:
+        self.parts.append(f"<!{decl}>")
+
+    def unknown_decl(self, data: str) -> None:
+        self.parts.append(f"<![{data}]>")
+
+    def handle_pi(self, data: str) -> None:
+        self.parts.append(f"<?{data}>")
+
+
+def annotate_html(text: str) -> str:
+    """Renders HTML as-is while adding source ranges to its outermost blocks."""
+    parser = _HtmlAnnotator()
+    parser.feed(text)
+    parser.close()
+    last_line = max(1, len(text.splitlines()))
+    for _, index, _ in parser.blocks:
+        parser.parts[index] = parser.parts[index].replace("__end__", str(last_line))
+    return "".join(parser.parts)
+
+
+def document_format(path: Path) -> str:
+    suffix = path.suffix.lower()
+    if suffix in {".html", ".htm"}:
+        return "html"
+    if suffix == ".pdf":
+        return "pdf"
+    if suffix == ".docx":
+        return "docx"
+    return "text"
+
+
+def document_mime(document_format_name: str) -> str:
+    return {
+        "pdf": "application/pdf",
+        "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    }.get(document_format_name, mimetypes.types_map.get(f".{document_format_name}", "application/octet-stream"))
+
+
 class Session:
     """Holds the rendered document and receives the reviewer's verdict."""
 
@@ -84,10 +177,20 @@ class Session:
         self.clients = 0                   # open event streams, one per review page
         self.arrived = False               # a page has connected at least once
         self.left_at: float | None = None  # when the last page disconnected
-        text = doc.read_text(encoding="utf-8")
+        self.format = document_format(doc)
+        if self.format in {"text", "html"}:
+            text = doc.read_text(encoding="utf-8")
+            rendered = annotate_html(text) if self.format == "html" else render(text)
+            source = None
+            lines = len(text.splitlines())
+        else:
+            rendered = '<p class="loading">Loading document…</p>'
+            source = doc.read_bytes()
+            lines = None
+        self.source = source
         self.page = (
             VIEWER.read_text(encoding="utf-8")
-            .replace("__DOC_HTML__", render(text))
+            .replace("__DOC_HTML__", rendered)
             .replace(
                 "__STATE_JSON__",
                 json.dumps(
@@ -95,7 +198,8 @@ class Session:
                         "path": str(doc),
                         "title": doc.name,
                         "mtime": int(doc.stat().st_mtime),
-                        "lines": len(text.splitlines()),
+                        "lines": lines,
+                        "format": self.format,
                     }
                 ),
             )
@@ -154,6 +258,8 @@ class Handler(BaseHTTPRequestHandler):
         route = self.path.split("?")[0]
         if route in ("/", "/index.html"):
             self._send(200, self.session.page.encode("utf-8"), "text/html; charset=utf-8")
+        elif route == "/api/document" and self.session.source is not None:
+            self._send(200, self.session.source, document_mime(self.session.format))
         elif route == "/api/events":
             self._events()
         else:
@@ -229,7 +335,7 @@ def summarize(result: dict) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("document", type=Path, help="markdown (or plain text) file to review")
+    parser.add_argument("document", type=Path, help="markdown, text, HTML, PDF, or DOCX file to review")
     parser.add_argument("--out", type=Path, help="where to write the comments JSON (default: <document>.review.json)")
     parser.add_argument("--port", type=int, default=8787, help="port to serve on (default: 8787, falling back to any free port)")
     parser.add_argument("--no-open", action="store_true", help="print the URL instead of opening a browser")
