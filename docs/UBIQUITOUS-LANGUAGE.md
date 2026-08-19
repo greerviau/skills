@@ -50,6 +50,8 @@ One entry per term; keep entries short and precise.
 - **map**: the canonical issue that indexes a wayfinder effort, its decisions, its unresolved fog, and its scope boundary.
 - **frontier**: the open, unblocked, unclaimed decision tickets available to resolve.
 - **fog of war**: in-scope work that is known to be ahead but cannot yet be stated as a precise ticket.
+- **star map**: a browser view that renders a Wayfinder map's issues and relationships as interactive stars and links.
+- **north star**: the map issue rendered as the destination star in a star map.
 - **ticket type**: the `research`, `prototype`, `grilling`, or `task` label that identifies how a decision ticket is resolved.
 
 ## prototype (skills/engineering/prototype)
