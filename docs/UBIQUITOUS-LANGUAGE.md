@@ -56,6 +56,13 @@ One entry per term; keep entries short and precise.
 
 - **throwaway spike**: a disposable implementation used to answer one design question; its source is discarded and never merged into production.
 
+## triage (skills/engineering/triage)
+
+- **inbound item**: a GitHub issue or pull request being classified before work starts.
+- **agent-ready brief**: a structured handoff containing the objective, evidence, scope, acceptance criteria, verification, constraints, and references an agent needs to act.
+- **disposition**: the decision about whether an inbound item is ready, needs information, duplicates existing work, is out of scope, is deferred, or is already resolved.
+- **work type**: the action an agent takes for an inbound item: implement, review, investigate, answer, or close.
+
 ## lit-research (skills/research/lit-research)
 
 - **canonical record**: the normalized paper representation all sources map into, keyed by DOI (source-native id when no DOI exists). Embodied by the record dataclass in `scripts/common.py`.

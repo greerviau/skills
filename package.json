@@ -18,6 +18,7 @@
     "./skills/engineering/spec",
     "./skills/engineering/spec-to-tickets",
     "./skills/engineering/wayfinder",
+    "./skills/engineering/triage",
     "./skills/engineering/dev-workflow",
     "./skills/engineering/open-issue",
     "./skills/engineering/open-pr",
