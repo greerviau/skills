@@ -81,7 +81,7 @@ Fixing the cause or landing a quarantine is a separate step, done however you no
    Set an expiry date according to repository policy; use 14 days when no policy exists.
    Keep the test running in a visible non-blocking or diagnostic lane that reports failures and unexpected passes.
    If the repository has no such lane, keep the test blocking and fix the cause rather than silently skipping it.
-   Review quarantines before expiry and remove them after the cause is fixed, the original reproduction is green, the prior failing seeds or orders are green, and at least `N=20` independent runs are clean.
+   Review quarantines before expiry and remove them after the cause is fixed, the original reproduction is green, the prior failing seeds or orders are green, and the investigation's predeclared `N` independent runs are clean.
 
 ## Report
 
