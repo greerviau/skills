@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # improve-codebase-architecture
 
-Scan a codebase for evidence-backed opportunities to make shallow modules deeper, reduce accidental information leaks, improve seam placement, eliminate error conditions, or restore locality.
+Run `/improve-codebase-architecture` explicitly to scan a codebase for evidence-backed opportunities to make shallow modules deeper, reduce accidental information leaks, improve seam placement, eliminate error conditions, or restore locality.
 The output is a ranked HTML report in the operating system's temporary directory.
 This skill does not edit production code or design the selected change's interface.
 
