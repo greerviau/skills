@@ -56,6 +56,7 @@ See the role table for who reads or invokes what.
 `handoff` is missing for the opposite reason: it hands off to nothing and nothing hands off to it, so it has no edge to draw.
 `prototype` is missing for the same reason: it produces design evidence, discards its source, and hands no code to another skill.
 `improve-codebase-architecture` is missing because it produces a report and waits for the user to select a candidate; it has no runtime hand-off.
+`wayfinder-starmap` is missing because it produces a browser artifact and has no runtime hand-off.
 `triage` is missing because it produces an agent-ready brief for a fleet-style runner rather than feeding another skill directly.
 
 ## Roles
@@ -79,6 +80,7 @@ See the role table for who reads or invokes what.
 | `perf` | model | Entry - optimization | A change needs to get faster, cheaper, or higher-throughput, and the improvement must be proven with a before/after measurement | `dev-workflow` (lands the measured change) |
 | `prototype` | model | Entry - design spike | A design question needs evidence from a disposable implementation | none (produces a decision record and discards the spike) |
 | `improve-codebase-architecture` | user | Entry - architecture scan | A codebase needs structural opportunities identified and ranked before implementation | none (produces a visual report and waits for candidate selection) |
+| `wayfinder-starmap` | user | Entry - map visualization | A Wayfinder map needs a browser-based visual view | none (produces a standalone star map) |
 | `dev-workflow` | model | Entry + spine | Any request to write and land code in a GitHub repo | invokes `open-issue`, `doc-audit`, `run`, `open-pr`, and `tdd` for an explicitly test-first request |
 | `review` | model | Entry - gate | Changes need checking before they land | reports only; findings go to `dev-workflow` to apply |
 | `handoff` | user | Entry - utility | A conversation needs compacting for another agent to continue | none (produces a document) |
