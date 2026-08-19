@@ -1,6 +1,6 @@
 ---
 name: doc-review
-description: Use only when the user explicitly asks to mark up a document in the browser (a spec, plan, draft, report, README, or any markdown or text file). Renders the document, where the user highlights passages and leaves Notion-style comments, then hands every comment back with its source line range and quoted text so the document can be revised against them. Never invoke it on your own after producing a document. Trigger on "/doc-review", "let me mark this up in the browser", "open the doc for inline comments", "send me the draft to comment on".
+description: Render a document for browser-based inline comments and return the comments with source ranges.
 disable-model-invocation: true
 ---
 

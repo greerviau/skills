@@ -1,6 +1,6 @@
 ---
 name: review
-description: Use when reviewing changes before they land — a working-tree diff, a branch, or a GitHub PR — against the user's own engineering standards (lint clean, tests present and green, no flakiness, correctness and structure over development cost) and, when one can be located, against the originating spec or issue. Complements the built-in code review by adding the standards layer and flagging incidental lint/test/flakiness defects even when unrelated. Trigger on "review this", "review my changes", "look over this PR", "check this before I push", "is this ready to ship".
+description: Use when reviewing a working-tree diff, branch, or pull request. Checks standards, tests, flakiness, correctness, structure, and conformance to an originating issue or spec when available.
 ---
 
 # review

@@ -1,6 +1,6 @@
 ---
 name: open-pr
-description: Use when opening a pull request or writing/rewriting its title and body — standalone ("open a PR for this branch", "write the PR description") or as the PR step of the dev workflow. Produces a `feat(...)`/`fix(...)` title and a short, evergreen body (Problem, Changes, Testing, Additional testing required, Regressions) that fits on one screen, with no AI attribution, no co-author lines, and no volatile version details, then opens the PR. Trigger on "open a PR", "open a PR for this branch", "write the PR description", "describe this PR", "PR title and body for this branch".
+description: Use when opening or writing a pull request. Produces a concise conventional-commit title and evergreen body with problem, changes, testing, additional testing, and regressions.
 ---
 
 # open-pr

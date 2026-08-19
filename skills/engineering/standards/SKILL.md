@@ -1,6 +1,6 @@
 ---
 name: standards
-description: The shared engineering standards the other engineering skills enforce — documentation and plain-language style, naming and ubiquitous language, testing bias, branch hygiene, issue hygiene, PR and commit hygiene, and the interactive-vs-autonomous interaction contract. Read it when a skill references "the standards skill", or directly when writing code, docs, commits, or PRs so the same house rules apply everywhere. Trigger on "what are the house standards", "engineering standards", "house style", "write this in plain language".
+description: Shared engineering standards for documentation, naming, testing, branch and issue hygiene, pull requests and commits, and interactive or autonomous runs. Read when writing project artifacts or when another skill references standards.
 ---
 
 # standards
