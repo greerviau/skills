@@ -13,6 +13,8 @@ One entry per term; keep entries short and precise.
 - **seam**: the point where a public boundary is crossed and behavior can be substituted without editing the code on the other side of it; also the point where a test attaches.
 - **load-bearing leak**: a fact about implementation a caller genuinely needs to know (e.g. a rate limit), as distinct from an **accidental leak** — one that escaped only because nothing hid it.
 - **error-condition elimination**: designing away the precondition that produces an error case, rather than handling or propagating it.
+- **architecture review**: a scan of a codebase that produces ranked, evidence-backed structural opportunities without changing the code.
+- **deepening opportunity**: a proposed structural change that makes a shallow module deeper by narrowing its interface or hiding more implementation behind it.
 
 ## dep-upgrade (skills/engineering/dep-upgrade)
 

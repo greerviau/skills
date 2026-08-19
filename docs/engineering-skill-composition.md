@@ -55,6 +55,7 @@ Arrows are runtime hand-offs (one skill invokes or feeds the next).
 See the role table for who reads or invokes what.
 `handoff` is missing for the opposite reason: it hands off to nothing and nothing hands off to it, so it has no edge to draw.
 `prototype` is missing for the same reason: it produces design evidence, discards its source, and hands no code to another skill.
+`improve-codebase-architecture` is missing because it produces a report and waits for the user to select a candidate; it has no runtime hand-off.
 
 ## Roles
 
@@ -72,6 +73,7 @@ See the role table for who reads or invokes what.
 | `refactor` | Entry — restructuring | Working code needs its structure improved without behavior change | `dev-workflow` (lands the test-guarded change) |
 | `perf` | Entry — optimization | A change needs to get faster, cheaper, or higher-throughput, and the improvement must be proven with a before/after measurement | `dev-workflow` (lands the measured change) |
 | `prototype` | Entry — design spike | A design question needs evidence from a disposable implementation | none (produces a decision record and discards the spike) |
+| `improve-codebase-architecture` | Entry - architecture scan | A codebase needs structural opportunities identified and ranked before implementation | none (produces a visual report and waits for candidate selection) |
 | `dev-workflow` | Entry + spine | Any request to write and land code in a GitHub repo | invokes `open-issue`, `doc-audit`, `run`, `open-pr`, and `tdd` for an explicitly test-first request |
 | `review` | Entry — gate | Changes need checking before they land | reports only; findings go to `dev-workflow` to apply |
 | `handoff` | Entry — utility | A conversation needs compacting for another agent to continue | none (produces a document) |
@@ -86,6 +88,7 @@ See the role table for who reads or invokes what.
 ## Composition rules
 
 - **`wayfinder` owns multi-session decision mapping.** It advances decision tickets and hands a cleared map to `spec`; it does not turn decisions into implementation work.
+- **`improve-codebase-architecture` stops at candidate selection.** It grounds structural opportunities in code evidence and the design vocabulary, then leaves interface design and implementation to a later workflow.
 - **`dev-workflow` is the spine.** Every skill that produces a code change hands the landing of it to `dev-workflow` rather than opening worktrees or PRs itself.
 - **Entry points don't invoke each other's mechanics.** `tdd` drives the red-green-refactor loop but doesn't touch worktree/PR mechanics; `debug` proves a cause but doesn't commit; `refactor` and `perf` each prove their own guarantee (an unchanged test suite, a before/after measurement) but don't commit either; `dep-upgrade` proves a lockfile and downstream-suite result but doesn't commit; `review` reports but doesn't apply; `tech-research` answers a question but doesn't build; `spec` plans but doesn't build. Each stays in its lane and hands off.
 - **Components are leaves, except `tdd`.** `open-issue`, `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and don't hand off further. `tdd` is invoked by `dev-workflow`'s own step the same way, but as an entry point in its own right it hands back to `dev-workflow` rather than terminating there; see the dual-role note under "The graph".
