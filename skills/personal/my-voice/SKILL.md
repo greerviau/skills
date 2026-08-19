@@ -46,47 +46,53 @@ The test: would a draft that violates this rule still read as written by someone
 Claim nothing the samples do not show.
 Where they are too few or too uniform to support an observation, leave it out.
 
-**3. Write `~/VOICE.md`** with these sections.
-The lines under each heading say what belongs there; replace them with the user's actual profile.
+**3. Write `~/VOICE.md`.**
+
+Every line is either a rule the writer applies or a verbatim sample they match against.
+Nothing else goes in the file: no sample counts, no capture dates, no note of which registers back the profile, no evidence for a rule, no caveat about the corpus, no commentary around an excerpt.
+Report those to the user in step 4 instead.
+
+Write rules as instructions to a writer, not as observations about the user.
+"Append hedges at the end of the sentence" is a rule; "he tends to hedge at the end of the sentence, consistently across the informal samples" is an observation with its evidence attached.
+
+Use these sections, dropping any the samples do not support:
 
 ```markdown
 # Voice
 
-## Coverage
-Which registers the profile is drawn from, and how many samples back it.
+## Stance
+Who to write as, how formal, how close to the reader. A few imperative lines.
 
-## Register
-One paragraph: who the user sounds like, how formal they are, and how close they stand to the reader.
-
-## Sentence and paragraph shape
-Typical and longest sentence length, how much length varies, fragments, paragraph length,
-when prose gives way to a list.
+## Sentences
+Sentence length and how much it varies, fragments, paragraph length, when prose becomes a list.
 
 ## Diction
-Words and phrasings the user reaches for, quoted. Contractions, jargon tolerance,
-how technical terms get introduced.
+Words and constructions to reach for, quoted. Contractions, jargon tolerance, how technical
+terms get introduced, which words not to swap out.
 
-## Punctuation and mechanics
+## Mechanics
 Dashes, semicolons, parentheticals, Oxford comma, heading capitalization, emphasis,
-sentence-per-line habits.
+how identifiers and paths are written.
 
 ## Moves
-Recurring structural habits: how a piece opens, how it closes, whether the conclusion
-leads or lands, how the user hedges or refuses to.
+Structural habits: how a piece opens and closes, whether the conclusion leads or lands,
+how the user hedges or refuses to.
 
 ## Never
 Words and constructions absent from every sample.
 
 ## Excerpts
-Three to six verbatim passages, two to four sentences each, labeled by register and
-copied exactly. These calibrate the rewriter better than any rule above them.
+Three to six verbatim passages, two to four sentences each, labeled by register and copied
+exactly. These calibrate the rewriter better than any rule above them. Label and text only.
 ```
 
-**4. Show the user what was captured** and ask whether it reads right.
+Give a rule an inline example only where it is unusable without one, and keep the example inside the rule rather than beside it.
+
+**4. Report what was captured** and ask whether it reads right.
+Say here which registers the samples covered and which they did not, and name any rule the samples were too thin to support.
 
 **Updating an existing profile:** revise the entries the new samples contradict, add the ones they support, and replace excerpts the voice has outgrown.
 Do not append a second set of rules beside the first; a profile that argues with itself gives the rewriter no answer.
-Update the Coverage section to match.
 
 ## Rewrite
 
