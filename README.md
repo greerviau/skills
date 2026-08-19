@@ -98,7 +98,7 @@ How these skills fit together — entry points, components, and hand-offs — is
 
 #### User-invoked
 
-- **[doc-review](skills/personal/doc-review/SKILL.md)** - on request, renders a document in the browser for Notion-style inline commenting, then hands every comment back with its source line range and quoted text so the document can be revised against them.
+- **[doc-review](skills/personal/doc-review/SKILL.md)** - on request, renders Markdown, text, HTML, PDF, or DOCX in the browser for Notion-style inline commenting, then hands every comment back with its source location and quoted text so the document can be revised against them.
 - **[my-voice](skills/personal/my-voice/SKILL.md)** - captures how you write into `~/VOICE.md` from samples you supply, then rewrites a finished draft against it in a subagent pass bounded to wording only, so a spec or README goes out sounding like you without a fact or a section moving.
 - **[memory-audit](skills/personal/memory-audit/SKILL.md)** - on request, scans every agent memory directory for duplicates, contradictions, stale claims, rules a `CLAUDE.md` already states, and index drift, then interviews you over each memory with a case against it and applies your keep/edit/delete/move verdicts, so the corpus an agent recalls stays true and small.
 
