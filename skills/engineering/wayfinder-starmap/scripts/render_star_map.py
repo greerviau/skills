@@ -376,6 +376,7 @@ HTML_TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23050913'/%3E%3Cpath d='m32 8 5.5 18.5L56 32 37.5 37.5 32 56l-5.5-18.5L8 32l18.5-5.5z' fill='%23ffe9a6'/%3E%3Ccircle cx='32' cy='32' r='4' fill='white'/%3E%3C/svg%3E">
 <title>Wayfinder star map</title>
 <style>
 :root { color-scheme: dark; --ink: #e8eefb; --muted: #8c9ab4; --line: #27344e; --panel: rgba(11, 18, 34, .86); }

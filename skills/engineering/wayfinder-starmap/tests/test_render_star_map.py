@@ -47,6 +47,7 @@ class RenderStarMapTests(unittest.TestCase):
 
         self.assertNotIn("</script>\"", html)
         self.assertIn("\\u003c/script>", html)
+        self.assertIn('<link rel="icon"', html)
 
     @staticmethod
     def node(identifier):
