@@ -41,6 +41,15 @@ One entry per term; keep entries short and precise.
 - **merge base**: the common ancestor Git uses to compare diverging histories and identify each side's changes.
 - **semantic resolution**: choosing the resulting behavior from each change's intent and the integration contract, rather than from conflict-marker position.
 
+## wayfinder (skills/engineering/wayfinder)
+
+- **destination**: the outcome the map is finding its way to; it fixes the map's scope.
+- **decision ticket**: a child issue that resolves a question or prerequisite before implementation; it is not an implementation ticket.
+- **map**: the canonical issue that indexes a wayfinder effort, its decisions, its unresolved fog, and its scope boundary.
+- **frontier**: the open, unblocked, unclaimed decision tickets available to resolve.
+- **fog of war**: in-scope work that is known to be ahead but cannot yet be stated as a precise ticket.
+- **ticket type**: the `research`, `prototype`, `grilling`, or `task` label that identifies how a decision ticket is resolved.
+
 ## lit-research (skills/research/lit-research)
 
 - **canonical record**: the normalized paper representation all sources map into, keyed by DOI (source-native id when no DOI exists). Embodied by the record dataclass in `scripts/common.py`.

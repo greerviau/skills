@@ -60,7 +60,6 @@ Rejected as already covered:
 | `code-review` | `review` | Their two-axis split is worth stealing as an edit to `review`, not a new skill. |
 | `research` | `research/lit-research` | Ours is science-only. The engineering half is the `tech-research` gap. |
 | `resolving-merge-conflicts` | none | Genuine gap, but small; deferred. |
-| `wayfinder` | `spec` plus `spec-to-tickets` | Deferred; see rationale below. |
 | `grill-with-docs` | `spec`'s interview step | Only worth extracting if a second skill needs the same adversarial interview. |
 | `improve-codebase-architecture` | none | Blocked on `design`; without the vocabulary the scan produces taste, not findings. |
 
@@ -223,7 +222,6 @@ Each needs its own spec if promoted; recorded here so the rationale is not re-de
 - **`prototype`** - a throwaway spike that answers a design question and is explicitly never landed. The value is the boundary; the failure mode it prevents is a prototype accreting into main.
 - **`map-subsystem`** - read a subsystem and emit a durable map document. The built-in `Explore` agent covers the reading; nothing makes the output persist.
 - **`merge-conflict`** - small but real given long-lived worktrees and evergreen PRs: rebase-versus-merge policy, resolve semantically rather than textually, re-run the suite after.
-- **`wayfinder` analog** - planning work larger than one agent session as a map of decision tickets. Deferred deliberately: `spec` plus `spec-to-tickets` handles the current scale of work, and building this now is building for unfelt pain.
 - **`improve-codebase-architecture` analog** - scan a codebase for structural opportunities and rank them. Blocked on `design`; revisit once the vocabulary exists.
 
 ## Steps
@@ -258,6 +256,6 @@ The two design forks this section previously carried as open questions - whether
 
 ## Follow-ups
 
-- Promote deferred candidates as the pain shows up, most likely `flake-hunt` and `dep-upgrade` first.
+- Promote the remaining deferred candidates as the pain shows up, most likely `triage`, `prototype`, and `map-subsystem` next.
 - Consider extracting `spec`'s interview step into a reusable adversarial-interview component if `design` work turns out to need the same thing.
 - Revisit whether `tech-research` and `research/lit-research` should share a plugin or stay split by category.
