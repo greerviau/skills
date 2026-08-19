@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # spec-to-tickets
 
-Turn a reviewed spec (the human-facing markdown a `spec` run produces) into GitHub Issues. Sits between `spec` (produces the spec) and `dev-workflow` (executes the work items).
+Run `/spec-to-tickets` explicitly to turn a reviewed spec (the human-facing markdown a `spec` run produces) into GitHub Issues. Sits between `spec` (produces the spec) and `dev-workflow` (executes the work items).
 Judges the ticket shape and the breakdown; each individual issue is written and filed per `open-issue`.
 
 **This skill is explicit** — it creates external, hard-to-reverse artifacts other people see. Never fire on your own; never create anything before the user confirms the proposed breakdown.

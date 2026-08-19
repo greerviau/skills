@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # wayfinder
 
-Use `/wayfinder` explicitly for an effort whose destination is known but whose route does not fit in one agent session.
+Run `/wayfinder` explicitly for an effort whose destination is known but whose route does not fit in one agent session.
 The skill stores the route in GitHub Issues as one map issue and child decision tickets.
 
 Wayfinder plans the route.

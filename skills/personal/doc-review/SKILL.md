@@ -1,11 +1,12 @@
 ---
 name: doc-review
 description: Use only when the user explicitly asks to mark up a document in the browser (a spec, plan, draft, report, README, or any markdown or text file). Renders the document, where the user highlights passages and leaves Notion-style comments, then hands every comment back with its source line range and quoted text so the document can be revised against them. Never invoke it on your own after producing a document. Trigger on "/doc-review", "let me mark this up in the browser", "open the doc for inline comments", "send me the draft to comment on".
+disable-model-invocation: true
 ---
 
 # doc-review
 
-Collect a human's comments on a document in the browser, then revise the document against them.
+Run `/doc-review` explicitly to collect a human's comments on a document in the browser, then revise the document against them.
 A reviewer marking up passages in place gives comments anchored to exact lines, which chat feedback does not.
 
 Run it when the user asks for it; handing a document back in chat stays the default.

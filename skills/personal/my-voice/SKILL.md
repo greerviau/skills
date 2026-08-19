@@ -1,9 +1,12 @@
 ---
 name: my-voice
 description: Use only when the user explicitly asks to rewrite a document in their own voice, or to capture that voice from writing samples; the document is a spec, README, report, announcement, PR body, or any prose a person reads. Reads ~/VOICE.md and hands the draft to a subagent that rewrites the wording without touching a fact or a section. Never invoke it on your own after producing a document. Trigger on "/my-voice", "make this sound like me", "rewrite this in my voice", "learn my writing style".
+disable-model-invocation: true
 ---
 
 # my-voice
+
+Run `/my-voice` explicitly to capture or apply the user's writing voice.
 
 `~/VOICE.md` records how the user writes, in enough detail that a rewriter can match it.
 This skill has two jobs: capture that record from writing samples, and rewrite a finished draft against it.

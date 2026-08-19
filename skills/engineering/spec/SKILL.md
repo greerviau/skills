@@ -1,11 +1,12 @@
 ---
 name: spec
 description: Use when the user hands you a request to scope and plan before building — a feature they want, a bug to fix, a new pipeline, or a piece of infrastructure — and wants a reviewed plan of action rather than immediate code. Interviews the user to sharpen the requirements, explores the relevant code across one or many repos to discover scope, settles the approach with the rejected alternatives recorded, maintains the repo's ubiquitous-language glossary, writes the detailed agent-facing implementation plan against the real code, derives a short human-facing spec from that plan, and asks whether to execute or iterate. Trigger on "/spec", "spec this out", "plan this", "scope this out", "how should we approach", "figure out what it'll take to", "before we build", "write a spec/plan for ...".
+disable-model-invocation: true
 ---
 
 # spec
 
-Turn a raw request — a feature, a bug fix, a new pipeline, a piece of infrastructure — into a concrete, reviewed plan of action, whether it touches one file or spans many repos. **This skill plans; it does not build.** The files it writes are the spec, the implementation plan, and the ubiquitous-language glossary. Implementation starts only after the user reviews the spec and chooses to execute.
+Run `/spec` explicitly to turn a raw request - a feature, a bug fix, a new pipeline, or a piece of infrastructure - into a concrete, reviewed plan of action, whether it touches one file or spans many repos. **This skill plans; it does not build.** The files it writes are the spec, the implementation plan, and the ubiquitous-language glossary. Implementation starts only after the user reviews the spec and chooses to execute.
 
 ## Two artifacts, two readers
 

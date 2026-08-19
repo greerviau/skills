@@ -5,7 +5,7 @@ argument-hint: "What will the next session be used for?"
 disable-model-invocation: true
 ---
 
-Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS - not the current workspace.
+Run `/handoff` explicitly to write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS - not the current workspace.
 
 The reader is an agent, not a person: follow the agent-facing rules in *Artifact audience* (`standards`) - exhaustive about facts (exact paths, symbols, commands, what was already tried and what it did), terse about prose, with anything unverified marked as such.
 

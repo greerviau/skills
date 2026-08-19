@@ -43,6 +43,26 @@ Two ways to install, two philosophies:
 - **[skills.sh](https://skills.sh/greerviau/skills)** copies the skills into your project so you can hack on them and make them your own.
 - **The plugins** keep them as read-only, always-current bundles you don't edit - best when you just want the set to work and follow along as it evolves.
 
+## Invocation reference
+
+Claude Code uses `disable-model-invocation: true` to mark a skill as user-invoked.
+Skills without that field are model-invoked and remain available when the model recognizes a matching task.
+
+### User-invoked
+
+These skills require an explicit user command because they create a review gate, wait for a human response, or control a deliberate session boundary.
+
+`wayfinder`, `triage`, `improve-codebase-architecture`, `spec`, `spec-to-tickets`, `handoff`, `doc-review`, `my-voice`, `memory-audit`
+
+### Model-invoked
+
+These skills provide reusable investigation, design, validation, policy, or workflow discipline.
+Model-invoked workflows may create external state when an explicit task, repository instruction, or upstream workflow calls for it.
+
+`debug`, `dep-upgrade`, `dev-workflow`, `design`, `doc-audit`, `flake-hunt`, `lit-research`, `merge-conflict`, `open-issue`, `open-pr`, `mermaid`, `opinions`, `perf`, `prototype`, `refactor`, `review`, `standards`, `tdd`, `tech-research`
+
+`standards` and `design` are model-invoked reference skills that other skills read for shared policy and structural vocabulary.
+
 ## Skills reference
 
 ### Engineering 

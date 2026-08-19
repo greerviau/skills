@@ -1,9 +1,12 @@
 ---
 name: memory-audit
 description: Use only when the user explicitly asks to audit, review, prune, or clean up their agent memory - the facts an agent has saved about them and their projects. Scans every memory directory for duplicates, contradictions, stale claims, and index drift, interviews the user over each memory with a case against it, then applies their keep/edit/delete/move verdicts. Trigger on "/memory-audit", "audit my memory", "review what you've remembered about me", "clean up your memory", "what have you saved about me".
+disable-model-invocation: true
 ---
 
 # memory-audit
+
+Run `/memory-audit` explicitly to audit the agent's saved memories.
 
 Agent memory accumulates without review: facts get saved once and never revisited, so duplicates pile up across projects, decisions get reversed without the old memory being deleted, and rules that later moved into `CLAUDE.md` stay behind as dead weight.
 This skill puts a human in front of the whole corpus and applies their verdicts.
