@@ -56,12 +56,14 @@ See the role table for who reads or invokes what.
 `handoff` is missing for the opposite reason: it hands off to nothing and nothing hands off to it, so it has no edge to draw.
 `prototype` is missing for the same reason: it produces design evidence, discards its source, and hands no code to another skill.
 `improve-codebase-architecture` is missing because it produces a report and waits for the user to select a candidate; it has no runtime hand-off.
+`triage` is missing because it produces an agent-ready brief for a fleet-style runner rather than feeding another skill directly.
 
 ## Roles
 
 | Skill | Role | Lands on it when | Hands off to |
 | --- | --- | --- | --- |
 | `wayfinder` | Entry — multi-session planning | An effort spans sessions and its destination is clear but its route is not | `spec` (to collapse the cleared map into a reviewed plan) |
+| `triage` | Entry - inbound intake | An inbound GitHub issue or pull request needs a category, disposition, and agent-ready brief | none (a fleet-style runner consumes the brief) |
 | `spec` | Entry — planning | A request needs scoping into a reviewed plan before building | `spec-to-tickets` (to file issues) or `dev-workflow` (to execute) |
 | `spec-to-tickets` | Entry — ticketing | A reviewed spec should become GitHub Issues | `open-issue` (writes and files each one), then `dev-workflow` (executes each issue) |
 | `tech-research` | Entry — research | A technical question needs a sourced, version-pinned answer about third-party or external behavior | none (produces a findings file); `spec` cites it instead of re-deriving |
