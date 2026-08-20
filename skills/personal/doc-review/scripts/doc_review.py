@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["markdown-it-py[linkify]>=3.0", "mdit-py-plugins>=0.4"]
+# dependencies = ["markdown-it-py[linkify]>=3.0", "mdit-py-plugins>=0.4", "Pygments>=2.17"]
 # ///
 """Render a document in the browser for Notion-style commenting, then hand the comments back.
 
@@ -40,14 +40,36 @@ EXIT_TIMEOUT = 3
 EXIT_ABORTED = 4
 
 
+def highlight_code(source: str, lang: str, _attrs: str) -> str:
+    """Highlight a fenced block into `tok-`-prefixed spans, or return "" to leave it plain.
+
+    Mermaid fences stay plain text so the browser can render them as diagrams.
+    """
+    if not lang or lang.lower() == "mermaid":
+        return ""
+    from pygments import highlight
+    from pygments.formatters import HtmlFormatter
+    from pygments.lexers import get_lexer_by_name
+    from pygments.util import ClassNotFound
+
+    try:
+        lexer = get_lexer_by_name(lang, stripnl=False)
+    except ClassNotFound:
+        return ""
+    # nowrap keeps the fence's own <pre><code data-line>, which comment anchors resolve against;
+    # classprefix keeps Pygments' short names (k, s, p) out of the page's class space.
+    return highlight(source, lexer, HtmlFormatter(nowrap=True, classprefix="tok-"))
+
+
 def make_md():
     """A GitHub-flavored parser, degrading to CommonMark if the extras are unavailable."""
     from markdown_it import MarkdownIt
 
+    options = {"highlight": highlight_code}
     try:
-        md = MarkdownIt("gfm-like")
+        md = MarkdownIt("gfm-like", options)
     except Exception:
-        md = MarkdownIt("commonmark").enable(["table", "strikethrough"])
+        md = MarkdownIt("commonmark", options).enable(["table", "strikethrough"])
     for module, plugin in (
         ("mdit_py_plugins.front_matter", "front_matter_plugin"),
         ("mdit_py_plugins.tasklists", "tasklists_plugin"),

@@ -10,12 +10,18 @@
     --bg: #ffffff; --panel: #f7f7f5; --ink: #1f1f1f; --muted: #6b6b6b;
     --line: #e3e3e0; --accent: #2f6fdb; --mark: #ffe9a3; --mark-active: #ffd45e;
     --pending: #ffdb75; --danger: #b3261e; --radius: 8px;
+    --tok-key: #cf222e; --tok-str: #0a3069; --tok-num: #0550ae;
+    --tok-fn: #8250df; --tok-type: #953800; --tok-var: #0550ae; --tok-punct: #57606a;
+    --tok-add: #116329; --tok-del: #82071e;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #1b1b1a; --panel: #232322; --ink: #e9e9e6; --muted: #9d9d97;
       --line: #35352f; --accent: #7aa5f0; --mark: #6b5a1c; --mark-active: #9a8221;
       --pending: rgba(255, 212, 94, .45); --danger: #f2a29c;
+      --tok-key: #ff7b72; --tok-str: #a5d6ff; --tok-num: #79c0ff;
+      --tok-fn: #d2a8ff; --tok-type: #ffa657; --tok-var: #79c0ff; --tok-punct: #b9b9b2;
+      --tok-add: #7ee787; --tok-del: #ffa198;
     }
   }
   * { box-sizing: border-box; }
@@ -59,6 +65,25 @@
   .pdf-text-layer { position: absolute; inset: 0; overflow: hidden; opacity: .2; line-height: 1; }
   .pdf-text-layer > span { position: absolute; color: transparent; white-space: pre; transform-origin: 0 0; cursor: text; }
   .docx-wrapper { max-width: none; }
+
+  /* Pygments token classes, grouped onto the palette above */
+  .tok-c, .tok-ch, .tok-cm, .tok-c1, .tok-cs, .tok-cp, .tok-cpf { color: var(--muted); font-style: italic; }
+  .tok-k, .tok-kc, .tok-kd, .tok-kn, .tok-kp, .tok-kr, .tok-ow { color: var(--tok-key); }
+  .tok-kt, .tok-nc, .tok-ne, .tok-nn, .tok-nt { color: var(--tok-type); }
+  .tok-s, .tok-s1, .tok-s2, .tok-sa, .tok-sb, .tok-sc, .tok-sd, .tok-se, .tok-sh, .tok-si,
+  .tok-sr, .tok-ss, .tok-sx, .tok-dl, .tok-ld { color: var(--tok-str); }
+  .tok-m, .tok-mb, .tok-mf, .tok-mh, .tok-mi, .tok-mo, .tok-il { color: var(--tok-num); }
+  .tok-nf, .tok-fm, .tok-nd { color: var(--tok-fn); }
+  .tok-nb, .tok-bp, .tok-no, .tok-na, .tok-ni, .tok-py,
+  .tok-nv, .tok-vc, .tok-vg, .tok-vi, .tok-vm { color: var(--tok-var); }
+  .tok-o, .tok-p, .tok-pm { color: var(--tok-punct); }
+  .tok-err, .tok-gr, .tok-gt { color: var(--danger); }
+  .tok-gi { color: var(--tok-add); }
+  .tok-gd { color: var(--tok-del); }
+  .tok-gh, .tok-gu { color: var(--tok-type); font-weight: 600; }
+  .tok-gp, .tok-go { color: var(--muted); }
+  .tok-ge, .tok-ges { font-style: italic; }
+  .tok-gs, .tok-ges { font-weight: 600; }
 
   .hl { background: var(--mark); border-radius: 2px; cursor: pointer; }
   .hl.active { background: var(--mark-active); }
