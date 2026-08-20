@@ -71,7 +71,10 @@ Run it whenever the draft is over budget or too long to hold in one screen.
 - A comment earns its place by carrying a fact the code cannot state: a non-obvious constraint, a why, a subtlety a reader would otherwise miss, an external contract the code has to match. Narrating what the code plainly does is noise to delete.
 - Settle each comment rather than deciding by feel. Name the fact the comment carries, then look for code on the lines it describes that already states it. Delete the comment when the fact is unnamed, the code already states it, or you can't settle the call.
 - Keep inline comments to **two lines or less**, and never clarify one with an example. An inline comment that needs an example or a third line means the code is not clean enough; fix the code instead of explaining it.
-- Docstrings and module-level documentation are exempt from the length cap; present tense and the no-narrative rule still apply.
+- A docstring states what the thing does, then its parameters, return, and raises, in the language's standard format - PEP 257 or Google style for Python, and the equivalent elsewhere. Nothing else belongs in it.
+- Keep a docstring's summary to a single line. Add a body only when a caller cannot use the thing correctly without it; a docstring that walks through the implementation, enumerates edge cases, or argues for the design is over budget however long it is.
+- Skip a parameter the signature and its types already state. "path: str, the path as a string" carries no fact.
+- Module-level documentation is exempt from the inline two-line cap, and the present-tense and no-narrative rules still apply to it.
 
 ### Plain language
 
