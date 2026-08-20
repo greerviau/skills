@@ -12,6 +12,27 @@ assert spec.loader is not None
 spec.loader.exec_module(doc_review)
 
 
+class FencedCodeTests(unittest.TestCase):
+    def test_fence_is_highlighted_inside_the_anchored_code_element(self):
+        rendered = doc_review.render('```python\ndef f():\n    return "x"\n```\n')
+
+        self.assertIn('data-line="1:4"', rendered)
+        self.assertIn('class="language-python"', rendered)
+        self.assertIn('<span class="tok-k">def</span>', rendered)
+        self.assertIn('<span class="tok-s2">&quot;x&quot;</span>', rendered)
+
+    def test_mermaid_fence_stays_plain_text(self):
+        rendered = doc_review.render("```mermaid\ngraph TD; A-->B;\n```\n")
+
+        self.assertIn('class="language-mermaid">graph TD; A--&gt;B;\n</code>', rendered)
+
+    def test_unknown_language_falls_back_to_escaped_source(self):
+        rendered = doc_review.render("```nosuchlang\nraw <b>text</b>\n```\n")
+
+        self.assertIn("raw &lt;b&gt;text&lt;/b&gt;", rendered)
+        self.assertNotIn("tok-", rendered)
+
+
 class DocumentFormatTests(unittest.TestCase):
     def test_format_detection(self):
         self.assertEqual(doc_review.document_format(Path("draft.HTML")), "html")
