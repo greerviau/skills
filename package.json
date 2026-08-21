@@ -39,6 +39,7 @@
     "./skills/engineering/tdd",
     "./skills/engineering/tech-research",
     "./skills/engineering/dep-upgrade",
+    "./skills/engineering/rfc",
     "./skills/research/lit-research",
     "./skills/personal/opinions",
     "./skills/personal/doc-review",
