@@ -4,7 +4,7 @@
 
 **Date:**
 
-**Status:** Draft | In Review | Accepted | Rejected | Superseded
+**Status:** Draft
 
 **Tracking:** (link to the issue or project this RFC is filed under)
 
