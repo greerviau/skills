@@ -1,11 +1,12 @@
 ---
 name: rfc
-description: Use when drafting or revising an RFC - a design proposal to be circulated for agreement before anyone implements it. Triggers on "write an RFC", "draft an RFC", "RFC for ...", and on revising a draft. Carries the template, the section order, the per-section rules, and the review round before the draft is shared. Not for a spec or an implementation plan.
+description: Draft an RFC against a template: a design proposal for circulation to the people who have to agree before anyone implements it.
+disable-model-invocation: true
 ---
 
 # rfc
 
-An RFC is a design proposal circulated for agreement before anyone implements it.
+Run `/rfc` explicitly to draft an RFC: a design proposal circulated for agreement before anyone implements it.
 Its reader is a person deciding whether to agree, so it follows the human-facing rules in *Artifact audience* (`standards`): one fact in one section, nothing the reader cannot act on, and "None known" in place of prose that fills a heading.
 
 This skill produces a draft and stops.
@@ -44,7 +45,7 @@ Order the phases by dependency and state in the Summary what forces the order.
 
 Write to the repo's RFC directory, `docs/rfc/` by default, honoring an existing location.
 Name it date-prefixed kebab-case, e.g. `2026-08-17-staged-gpu-featurization-and-caching.md`.
-Fill author, date, `Status: Draft`, the tracking issue, and the precursor if one exists.
+Fill author, date, the tracking issue, and the precursor if one exists.
 
 Done when the file exists with every header field either filled or deleted.
 
