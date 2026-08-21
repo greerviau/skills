@@ -76,6 +76,22 @@ Run it whenever the draft is over budget or too long to hold in one screen.
 - Skip a parameter the signature and its types already state. "path: str, the path as a string" carries no fact.
 - Module-level documentation is exempt from the inline two-line cap, and the present-tense and no-narrative rules still apply to it.
 
+### Precision
+
+These apply to any document a person reads.
+
+- Open a section with what the thing is, in one sentence, before any mechanism.
+- State a problem in domain terms, not in terms of the document's own scoping.
+- Never claim prior work exists without linking to it.
+- Never write a conclusion the author has not reached. An option still being weighed is "we could potentially do X", not a specified design.
+- Explain a behavior by walking through a concrete case with real numbers, not by stating the rule abstractly.
+- Name the real artifact: `manifest-000.json`, not "the per-part manifest file".
+- Replace a vague quantifier with an estimate and its scope: "roughly 10-20 at today's volume", not "in the tens" or "plus a handful".
+- Mark an illustrative case as an example and say it is one of several. Never let one instance stand as the subject when the point is general.
+- Say whether a constraint is an impossibility or only true today, every time. "A GitHub runner carries only `metaflow boto3 kubernetes pyyaml`" is true today; "the Kubernetes API server owns the object-size limit" is not going to change.
+- A section that depends on a mechanism from another document restates that mechanism in one sentence before using it.
+- A cross reference names its target: "see Phase 2 of this doc", never "see below".
+
 ### Plain language
 
 - Prefer the short common word: start (not begin/commence/initiate), use (not utilize/leverage), help (not facilitate), before (not prior to), after (not subsequent to), about (not regarding/concerning), get (not obtain/acquire), show (not demonstrate), also (not additionally/furthermore/moreover).
