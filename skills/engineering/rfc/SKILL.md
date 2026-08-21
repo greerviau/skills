@@ -1,6 +1,6 @@
 ---
 name: rfc
-description: Use when writing, revising, or accepting an RFC - a design proposal circulated for agreement before anyone implements it. Triggers on "write an RFC", "draft an RFC", "RFC for ...", and on revising one against review comments. Carries the template, the section order, the per-section rules, and the review round. Not for a spec or an implementation plan.
+description: Use when drafting or revising an RFC - a design proposal to be circulated for agreement before anyone implements it. Triggers on "write an RFC", "draft an RFC", "RFC for ...", and on revising a draft. Carries the template, the section order, the per-section rules, and the review round before the draft is shared. Not for a spec or an implementation plan.
 ---
 
 # rfc
@@ -8,9 +8,9 @@ description: Use when writing, revising, or accepting an RFC - a design proposal
 An RFC is a design proposal circulated for agreement before anyone implements it.
 Its reader is a person deciding whether to agree, so it follows the human-facing rules in *Artifact audience* (`standards`): one fact in one section, nothing the reader cannot act on, and "None known" in place of prose that fills a heading.
 
-This skill ends when the RFC reaches **Accepted**.
-Publishing it to wherever the team reads RFCs, replacing the tracking issue's placeholder link, and reconciling child issues against what the RFC ended at are the author's work after acceptance.
-Say so when handing back, and name any child issue whose text no longer matches the RFC.
+This skill produces a draft and stops.
+The status stays `Draft` throughout, including after the author is satisfied with it: agreement comes from the team, not from the conversation that wrote the document.
+Sharing the draft, moving the status, and recording what the team decides are the author's, after this skill hands back.
 
 ## Structure
 
@@ -67,18 +67,15 @@ Done when every section the RFC keeps satisfies its rule in "Section rules".
 
 Run the concision pass (`standards`) over the draft and apply what it returns.
 
-### 5. Take a review round before circulating it
+### 5. Take a review round with the author
 
-An RFC gets inline review before it reaches the people whose agreement it asks for.
+The draft gets inline review from the author before it reaches the team.
 Ask the user to run `/doc-review` if they use it; it renders the draft for inline commenting and hands each comment back with its source location and quoted text.
 Otherwise ask for comments against the draft directly.
 
 Revise against every comment, then run another round.
 Done when a round returns no comment that changes the design or the text of a section.
 
-### 6. Set the status and record the decisions
+Hand back with the file path, the status still `Draft`, and anything a section rule could not be satisfied on.
 
-`Draft` while writing, `In Review` once circulated, `Accepted` once agreed.
-Add a Decision Log entry, with date and owner, for each decision that changed the design.
-
-**Interaction mode** (see `standards`): running autonomously, skip step 5's request for comments, review the draft against the section rules yourself, leave the status at `In Review`, and report which rules the draft could not satisfy.
+**Interaction mode** (see `standards`): running autonomously, skip step 5's request for comments, review the draft against the section rules yourself, and report which rules the draft could not satisfy.

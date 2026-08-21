@@ -57,7 +57,7 @@ See the role table for who reads or invokes what.
 `prototype` is missing for the same reason: it produces design evidence, discards its source, and hands no code to another skill.
 `improve-codebase-architecture` is missing because it produces a report and waits for the user to select a candidate; it has no runtime hand-off.
 `wayfinder-starmap` is missing because it produces a browser artifact and has no runtime hand-off.
-`rfc` is missing because it stops at `Accepted`: publishing the document and reconciling the issues filed against it stay with the author, so it hands nothing to another skill.
+`rfc` is missing because it stops at a draft: sharing it with the team, and whatever the team then decides, stay with the author, so it hands nothing to another skill.
 `triage` is missing because it produces an agent-ready brief for a fleet-style runner rather than feeding another skill directly.
 
 ## Roles
@@ -72,7 +72,7 @@ See the role table for who reads or invokes what.
 | `spec` | user | Entry - planning | A request needs scoping into a reviewed plan before building | `spec-to-tickets` (to file issues) or `dev-workflow` (to execute) |
 | `spec-to-tickets` | user | Entry - ticketing | A reviewed spec should become GitHub Issues | `open-issue` (writes and files each one), then `dev-workflow` (executes each issue) |
 | `tech-research` | model | Entry - research | A technical question needs a sourced, version-pinned answer about third-party or external behavior | none (produces a findings file); `spec` cites it instead of re-deriving |
-| `rfc` | model | Entry - design agreement | A design needs agreement across people before anyone plans or builds it | none (produces an accepted RFC; the author publishes it and files the work) |
+| `rfc` | model | Entry - design proposal | A design needs agreement across people before anyone plans or builds it | none (produces a draft; the author shares it and carries the decision) |
 | `dep-upgrade` | model | Entry - dependency maintenance | A uv-managed Python project needs a dependency, lockfile, or git-sourced internal tag upgraded | `dev-workflow` (lands the verified dependency change) |
 | `tdd` | model | Entry - test-first loop | A request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor") | `dev-workflow` (lands the test-driven change) |
 | `debug` | model | Entry - diagnosis | Something is broken and the cause is unknown | `dev-workflow` (lands the fix as a regression-tested change) |
