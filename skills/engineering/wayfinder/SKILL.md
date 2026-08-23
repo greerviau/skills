@@ -18,7 +18,7 @@ A ticket that says "build X" is an implementation ticket and belongs after the m
 ## GitHub model
 
 The map is one issue labelled `wayfinder:map`.
-Each ticket is a child issue of the map and has one `wayfinder:<type>` label: `research`, `prototype`, `grilling`, or `task`.
+Each ticket is a child issue of the map and has one `wayfinder:<type>` label: `research`, `prototype`, `interview`, or `task`.
 GitHub native sub-issues and issue dependencies expose the map's structure in the tracker.
 
 The map is an index.
@@ -33,12 +33,12 @@ Put the issue number and URL inside the linked title rather than using a bare is
 | --- | --- | --- | --- |
 | `research` | AFK | A fact outside the working directory blocks a decision. | Read primary sources or local resources, then link the findings from the ticket. |
 | `prototype` | HITL | A rough artifact is needed to decide how something looks or behaves. | Make the smallest disposable artifact, show it to the user, and record the user's choice. |
-| `grilling` | HITL | Conversation can settle the question. | Ask focused questions and record the user's answer. |
+| `interview` | HITL | Conversation can settle the question. | Ask focused questions and record the user's answer. |
 | `task` | HITL or AFK | Manual prerequisite work blocks a decision. | Complete the prerequisite or give the user a precise checklist and record the result. |
 
 `task` never delivers a slice of the destination.
 A HITL ticket requires the user to answer for themselves.
-Do not invent the user's answer to a `grilling` or `prototype` ticket.
+Do not invent the user's answer to an `interview` or `prototype` ticket.
 
 ## Preflight
 
@@ -56,7 +56,7 @@ The first chart may need these labels:
 - `wayfinder:map`
 - `wayfinder:research`
 - `wayfinder:prototype`
-- `wayfinder:grilling`
+- `wayfinder:interview`
 - `wayfinder:task`
 
 If a required label is missing, list the missing labels in the proposed breakdown.
