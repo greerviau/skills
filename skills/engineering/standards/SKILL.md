@@ -110,9 +110,16 @@ These apply to any document a person reads.
 
 ## Testing
 
-- Weight tests toward **E2E over narrow unit tests** — exercise the functionality as close to how a user interacts with it as possible, driving the real entry point (CLI, endpoint, UI flow).
+- Weight tests toward **E2E over narrow unit tests** - exercise the functionality as close to how a user interacts with it as possible, driving the real entry point (CLI, endpoint, UI flow).
 - A bug fix carries a regression test built from the reproduction, so the bug can't return silently.
 - Flakiness is a defect: no unseeded randomness, real clocks, order-dependent tests, or un-stubbed network.
+
+## Engineering decisions
+
+- Prefer correctness, simplicity, maintainability, and scalability when development cost conflicts with them, unless the user sets cost as a constraint.
+- Recommend the smallest change that fully solves the request. Put genuine alternatives in follow-up work instead of presenting several incomplete paths.
+- Reuse an existing mechanism and owner before adding another lifecycle, storage path, or policy.
+- When a new concept enters a design, revisit its interfaces, vocabulary, and ownership. Do not preserve an old shape only for compatibility.
 
 ## Branch hygiene
 

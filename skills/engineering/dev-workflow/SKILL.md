@@ -17,12 +17,7 @@ Carry the issue number forward to step 7 so the PR closes it.
 
 ## 2. Set up an isolated workspace
 
-Use a git worktree so this work is isolated. If the user's instructions specify worktree tooling, use that; otherwise create a worktree and a `feat/`- or `fix/`-named branch, and work from inside it:
-
-```bash
-git worktree add ../<short-description> -b <feat|fix>/<short-description>
-cd ../<short-description>
-```
+Use the repository's configured workspace tooling so this work is isolated. If the user's instructions specify workspace tooling, use it; otherwise use the repository's documented method. Create a `feat/`- or `fix/`-named branch and work from inside the isolated workspace.
 
 ## 3. Do the work
 
@@ -68,8 +63,4 @@ An open PR still needs to survive review, and the worktree is the only place the
 
 ## 10. Cleanup
 
-Only when the PR is **merged**, was closed without merging, or the user told you to wrap up — never just because a PR opened or CI went green. Remove the worktree with the tooling that created it:
-
-```bash
-git worktree remove ../<short-description>
-```
+Only when the PR is **merged**, was closed without merging, or the user told you to wrap up - never just because a PR opened or CI went green. Return or remove the isolated workspace with the tooling that created it.
