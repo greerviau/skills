@@ -17,11 +17,16 @@ Carry the issue number to step 7 so the PR closes it.
 
 ## 2. Set up an isolated workspace
 
-Use the worktree tooling the user's instructions specify. Otherwise create a worktree on a `feat/` or `fix/` branch and work inside it:
+Create the worktree at `.worktrees/<short-description>` under the main checkout's root, on a `feat/` or `fix/` branch, and work inside it.
+The commands resolve the main checkout from any worktree and add `.worktrees/` to the repo's local exclude file, so the repo's `.gitignore` stays unchanged:
 
 ```bash
-git worktree add ../<short-description> -b <feat|fix>/<short-description>
-cd ../<short-description>
+common=$(git rev-parse --path-format=absolute --git-common-dir)
+grep -qxF '.worktrees/' "$common/info/exclude" || echo '.worktrees/' >> "$common/info/exclude"
+wt="$(dirname "$common")/.worktrees/<short-description>"
+git fetch origin
+git worktree add "$wt" -b <feat|fix>/<short-description> origin/<default-branch>
+cd "$wt"
 ```
 
 ## 3. Do the work
@@ -71,8 +76,10 @@ When no user can answer, watch the PR through merge or CI under a bounded timeou
 
 ## 10. Cleanup
 
-Clean up only when the PR is merged, closed without merging, or the user says to wrap up. An opened PR or green CI is not a reason. Remove the worktree with the tooling that created it:
+Clean up only when the PR is merged, closed without merging, or the user says to wrap up. An opened PR or green CI is not a reason. Remove the worktree and its local branch:
 
 ```bash
-git worktree remove ../<short-description>
+common=$(git rev-parse --path-format=absolute --git-common-dir)
+git -C "$(dirname "$common")" worktree remove .worktrees/<short-description>
+git -C "$(dirname "$common")" branch -D <feat|fix>/<short-description>
 ```
