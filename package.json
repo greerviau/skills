@@ -17,8 +17,6 @@
   "skills": [
     "./skills/engineering/spec",
     "./skills/engineering/spec-to-tickets",
-    "./skills/engineering/wayfinder",
-    "./skills/engineering/wayfinder-starmap",
     "./skills/engineering/triage",
     "./skills/engineering/dev-workflow",
     "./skills/engineering/open-issue",
@@ -39,7 +37,6 @@
     "./skills/engineering/tdd",
     "./skills/engineering/tech-research",
     "./skills/engineering/dep-upgrade",
-    "./skills/engineering/rfc",
     "./skills/research/lit-research",
     "./skills/personal/opinions",
     "./skills/personal/doc-review",
