@@ -9,15 +9,15 @@ The development workflow for work inside a GitHub project repo.
 
 ## 1. Open an issue first
 
-Per the issue hygiene rules in `standards`, work starts from an issue.
-Before writing any code, ask the user whether to open one — the `open-issue` skill, if you use it, writes and files it.
-Skip the ask only when an issue already covers the work (the user pointed at one, or a ticketing run just filed it) or the change is trivial (a typo, a one-line fix).
-Running autonomously (see `standards`), file the issue instead of asking.
-Carry the issue number forward to step 7 so the PR closes it.
+Work starts from an issue (`standards`, issue hygiene).
+Before writing code, ask the user whether to open one. The `open-issue` skill, if you use it, writes and files it.
+Skip the ask when an issue already covers the work (the user pointed at one, or a ticketing run filed it) or the change is trivial (a typo, a one-line fix).
+Running autonomously (`standards`), file the issue instead of asking.
+Carry the issue number to step 7 so the PR closes it.
 
 ## 2. Set up an isolated workspace
 
-Use a git worktree so this work is isolated. If the user's instructions specify worktree tooling, use that; otherwise create a worktree and a `feat/`- or `fix/`-named branch, and work from inside it:
+Use the worktree tooling the user's instructions specify. Otherwise create a worktree on a `feat/` or `fix/` branch and work inside it:
 
 ```bash
 git worktree add ../<short-description> -b <feat|fix>/<short-description>
@@ -26,49 +26,51 @@ cd ../<short-description>
 
 ## 3. Do the work
 
-The house rules for this step live in the `standards` skill — ubiquitous language, the E2E-weighted testing bias, and branch hygiene (flag unrelated out-of-scope bugs, fix them on a separate branch). Beyond those: follow any provided plan exactly, and commit in stages if the scope is large so history stays reviewable. When the request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor"), reach for the `tdd` skill, if you use it, to drive this step. Without one of those markers, do the work directly - the default for most requests.
+Follow the `standards` rules for ubiquitous language, E2E-weighted tests, and branch hygiene.
+Follow any provided plan exactly. Commit in stages when the scope is large.
+When the request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor"), drive this step with the `tdd` skill, if you use it. Otherwise work directly.
 
 ## 4. Validate locally
 
 - Run tests, if available.
 - Run lints.
-- For changes with a runtime surface, exercise the change end-to-end against its real entry point (`run`, where available).
+- For a change with a runtime surface, exercise it end to end through its real entry point (`run`, where available).
 
-## 5. Audit the comments and documentation
+## 5. Audit comments and documentation
 
-Audit every comment line the change adds and every documentation surface it touches, before publishing anything. The `doc-audit` skill, if you use it, carries the procedure and reads the rules it applies from `standards`.
+Before publishing, audit every comment line the change adds and every documentation surface it touches. The `doc-audit` skill, if you use it, carries the procedure and applies the rules in `standards`.
 
-This step is a precondition for publishing rather than one validation task among several, so it closes with a stated result: what the audit covered, and what it settled or updated. A step with no stated result has not been run.
+The step closes with a stated result: what the audit covered and what it updated. A step with no stated result has not run.
 
 ## 6. Publish
 
-Push the branch once validation and step 5 both pass.
+Push the branch once steps 4 and 5 pass.
 
-## 7. Open a PR when ready for review
+## 7. Open a PR
 
-Open the PR per the `open-pr` skill, passing it the issue from step 1 so the body carries a closing reference. Do not stop here — wait and watch it through CI.
+Open the PR per the `open-pr` skill, passing it the issue from step 1 so the body carries a closing reference. Then continue to CI.
 
 ## 8. Watch CI
 
-Wait for CI to complete. If it fails, investigate, fix, and push until it's green.
+Wait for CI to finish. On failure, investigate, fix, and push until it passes.
 
-## 9. Keep the worktree alive and watch the PR
+## 9. Keep the worktree and watch the PR
 
-An open PR still needs to survive review, and the worktree is the only place the branch, build cache, and environment live. **Do not tear it down while the PR is open** — tearing it down forces a full recreate on the next round of feedback.
+Keep the worktree while the PR is open. It holds the branch, build cache, and environment, and recreating it for each round of feedback is slow.
 
-- Watch the PR from a harness-tracked background task (`Bash` with `run_in_background: true`) that blocks until the PR leaves `OPEN`, then exits — not a detached `nohup` daemon. When it exits, the harness re-invokes you for cleanup; check whether the PR ended `MERGED` (work landed) or `CLOSED`.
+- Watch the PR from a harness-tracked background task (`Bash` with `run_in_background: true`) that exits when the PR leaves `OPEN`. Do not use a detached `nohup` daemon. When the task exits, the harness re-invokes you; check whether the PR ended `MERGED` or `CLOSED`.
   ```bash
   until [ "$(gh pr view <branch> --json state --jq .state)" != "OPEN" ]; do
     sleep 60
   done
   ```
-- While it runs, handle feedback (PR comments or the live session) on the still-live worktree: fix, revalidate (steps 4–8), push, then let the watcher keep waiting.
+- Handle feedback (PR comments or the live session) in the worktree: fix, revalidate (steps 4-8), push, and let the watcher keep waiting.
 
-**Interaction mode** (see `standards`): running autonomously with no user to return, watch the PR through merge/CI under a bounded timeout, then go to cleanup and record the final PR state — don't hold the worktree open for feedback that won't come.
+Autonomous runs (`standards`) with no user to return to watch the PR through merge or CI under a bounded timeout, record the final PR state, and go to cleanup.
 
 ## 10. Cleanup
 
-Only when the PR is **merged**, was closed without merging, or the user told you to wrap up — never just because a PR opened or CI went green. Remove the worktree with the tooling that created it:
+Clean up only when the PR is merged, closed without merging, or the user says to wrap up. An opened PR or green CI is not a reason. Remove the worktree with the tooling that created it:
 
 ```bash
 git worktree remove ../<short-description>

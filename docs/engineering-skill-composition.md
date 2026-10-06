@@ -1,7 +1,7 @@
 # Engineering skill composition
 
-How the engineering skills fit together: which are entry points a request lands on, which are components another skill invokes, and who hands off to whom.
-An autonomous runner reads this to route a request to the right entry point without reverse-engineering each skill.
+Which engineering skills are entry points a request lands on, which are components another skill invokes, and who hands off to whom.
+An autonomous runner reads this to route a request to the right entry point.
 
 ## The graph
 
@@ -45,21 +45,26 @@ flowchart LR
     devworkflow -->|PR step| openpr
 ```
 
-Arrows are runtime hand-offs (one skill invokes or feeds the next).
-`standards` and `design` are missing on purpose: both are model-invoked policy references, never workflow steps, so an edge from each node would repeat the same fact rather than add one. `standards` is read by nearly every skill above; `design` by `spec`, `refactor`, `review`, and `tdd`. `perf` doesn't join that list - its guard is a benchmark, not a structural judgment call.
-`mermaid` is missing too, for a related reason: it's invoked rather than merely read, but by nearly every skill that writes a diagram, so drawing it in would clutter the graph the same way.
-`tdd` doubles as a component: it's drawn above as an entry point handing a change to `dev-workflow`, and `dev-workflow` names it in turn as the option for building test-first. The back edge is omitted to keep the graph acyclic.
-`tech-research` has the same shape in miniature: drawn as an entry point `spec` reaches at an open question, but its findings file exists so `spec` can cite it back instead of re-deriving the answer, which would be a `spec`-to-`tech-research`-to-`spec` loop. The back edge is omitted for the same reason as `tdd`'s.
-See the role table for who reads or invokes what.
-`handoff` is missing for the opposite reason: it hands off to nothing and nothing hands off to it, so it has no edge to draw.
-`prototype` is missing for the same reason: it produces design evidence, discards its source, and hands no code to another skill.
-`improve-codebase-architecture` is missing because it produces a report and waits for the user to select a candidate; it has no runtime hand-off.
-`triage` is missing because it produces an agent-ready brief for a fleet-style runner rather than feeding another skill directly.
+Arrows are runtime hand-offs, where one skill invokes or feeds the next.
+
+Skills left out of the graph:
+
+- `standards` and `design` are model-invoked policy references and never workflow steps, so an edge from each node would repeat one fact. Nearly every skill above reads `standards`. `spec`, `refactor`, `review`, and `tdd` read `design`. `perf` does not read it, because a benchmark guards `perf` instead of a structural judgment.
+- `mermaid` is invoked by nearly every skill that writes a diagram, so drawing it would clutter the graph.
+- `handoff` hands off to nothing, and nothing hands off to it.
+- `prototype` produces design evidence, discards its source, and hands no code to another skill.
+- `improve-codebase-architecture` produces a report and waits for the user to select a candidate. It has no runtime hand-off.
+- `triage` produces an agent-ready brief for a fleet-style runner and does not feed another skill directly.
+
+Two skills are both entry points and components, and their back edges are omitted to keep the graph acyclic:
+
+- `tdd` hands a change to `dev-workflow`, and `dev-workflow` names `tdd` as the option for building test-first.
+- `tech-research` is an entry point `spec` reaches at an open question, and `spec` cites its findings file instead of re-deriving the answer.
 
 ## Roles
 
 `user` skills require an explicit command.
-`model` skills remain available for automatic selection and composition.
+`model` skills stay available for automatic selection and composition.
 
 | Skill | Invocation | Role | Lands on it when | Hands off to |
 | --- | --- | --- | --- | --- |
@@ -76,12 +81,12 @@ See the role table for who reads or invokes what.
 | `perf` | model | Entry - optimization | A change needs to get faster, cheaper, or higher-throughput, and the improvement must be proven with a before/after measurement | `dev-workflow` (lands the measured change) |
 | `prototype` | model | Entry - design spike | A design question needs evidence from a disposable implementation | none (produces a decision record and discards the spike) |
 | `improve-codebase-architecture` | user | Entry - architecture scan | A codebase needs structural opportunities identified and ranked before implementation | none (produces a visual report and waits for candidate selection) |
-| `dev-workflow` | model | Entry + spine | Any request to write and land code in a GitHub repo | invokes `open-issue`, `doc-audit`, `run`, `open-pr`, and `tdd` for an explicitly test-first request |
+| `dev-workflow` | model | Entry and hub | Any request to write and land code in a GitHub repo | invokes `open-issue`, `doc-audit`, `run`, `open-pr`, and `tdd` for an explicitly test-first request |
 | `review` | model | Entry - gate | Changes need checking before they land | reports only; findings go to `dev-workflow` to apply |
 | `handoff` | user | Entry - utility | A conversation needs compacting for another agent to continue | none (produces a document) |
 | `open-issue` | model | Component | `dev-workflow` reaches its issue-first step, `spec-to-tickets` files a work item, or an issue is opened standalone | none |
 | `open-pr` | model | Component | `dev-workflow` reaches its PR step, or a PR is opened standalone | none |
-| `doc-audit` | model | Component | `dev-workflow` validates, or docs/comments are written standalone | none |
+| `doc-audit` | model | Component | `dev-workflow` validates, or docs and comments are written standalone | none |
 | `run` | n/a | Component - harness-provided, not a skill in this repo | `dev-workflow` validates a change with a runtime surface | none |
 | `mermaid` | model | Component | Any skill drafts, renders, or refines a diagram in a doc, spec, PR, or ADR | none |
 | `standards` | model | Reference | Any skill applies a house rule | none - read directly |
@@ -89,11 +94,18 @@ See the role table for who reads or invokes what.
 
 ## Composition rules
 
-- **Invocation is a boundary.** User-invoked skills run only after an explicit command and may compose model-invoked skills. Model-invoked skills remain available for automatic selection and may compose other model-invoked skills, including `dev-workflow`, `open-issue`, and `open-pr` when the task or repository instruction requires them.
-- **`improve-codebase-architecture` stops at candidate selection.** It grounds structural opportunities in code evidence and the design vocabulary, then leaves interface design and implementation to a later workflow.
-- **`dev-workflow` is the spine.** Every skill that produces a code change hands the landing of it to `dev-workflow` rather than opening worktrees or PRs itself.
-- **Entry points don't invoke each other's mechanics.** `tdd` drives the red-green-refactor loop but doesn't touch worktree/PR mechanics; `debug` proves a cause but doesn't commit; `refactor` and `perf` each prove their own guarantee (an unchanged test suite, a before/after measurement) but don't commit either; `dep-upgrade` proves a lockfile and downstream-suite result but doesn't commit; `review` reports but doesn't apply; `tech-research` answers a question but doesn't build; `spec` plans but doesn't build. Each stays in its lane and hands off.
-- **Components are leaves, except `tdd`.** `open-issue`, `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and don't hand off further. `tdd` is invoked by `dev-workflow`'s own step the same way, but as an entry point in its own right it hands back to `dev-workflow` rather than terminating there; see the dual-role note under "The graph".
-- **Delegation isn't hand-off.** `doc-audit` (its language check) and `mermaid` (its render loop) hand work to a subagent rather than to another skill; both stay leaves.
-- **`standards` and `design` are policy, not phases.** Each is referenced for its own kind of rule — compliance for `standards`, structural vocabulary for `design` — never inserted as a numbered step.
-- **`merge-conflict` completes the active merge or rebase.** It returns to `dev-workflow` for any remaining validation, publication, or PR lifecycle work.
+- User-invoked skills run only after an explicit command and may compose model-invoked skills. Model-invoked skills stay available for automatic selection and may compose other model-invoked skills, including `dev-workflow`, `open-issue`, and `open-pr`, when the task or repository instruction requires them.
+- `improve-codebase-architecture` stops at candidate selection. It grounds structural opportunities in code evidence and the design vocabulary, then leaves interface design and implementation to a later workflow.
+- Every skill that produces a code change hands the landing of it to `dev-workflow` instead of opening worktrees or PRs itself.
+- Entry points do not run each other's mechanics, and each stays in its lane and hands off:
+  - `tdd` drives the red-green-refactor loop and does not touch worktree or PR mechanics.
+  - `debug` proves a cause and does not commit.
+  - `refactor` and `perf` each prove their own guarantee (an unchanged test suite, a before/after measurement) and do not commit.
+  - `dep-upgrade` proves a lockfile and downstream-suite result and does not commit.
+  - `review` reports and does not apply.
+  - `tech-research` answers a question and does not build.
+  - `spec` plans and does not build.
+- Components are leaves, except `tdd`. `open-issue`, `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and do not hand off further. `tdd` is invoked by a `dev-workflow` step the same way, but as an entry point it hands back to `dev-workflow` instead of terminating there.
+- Delegation to a subagent is not a hand-off. `doc-audit` (its language check) and `mermaid` (its render loop) hand work to a subagent, and both stay leaves.
+- `standards` and `design` are policy references and never numbered steps. `standards` holds compliance rules and `design` holds structural vocabulary.
+- `merge-conflict` completes the active merge or rebase, then returns to `dev-workflow` for remaining validation, publication, or PR lifecycle work.

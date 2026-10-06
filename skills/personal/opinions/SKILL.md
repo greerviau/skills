@@ -5,20 +5,21 @@ description: Use before making a subjective call the user may have a standing pr
 
 # opinions
 
-`~/OPINIONS.md` is the user's running record of opinions on how to build things — an evolving document, not a fixed spec.
+`~/OPINIONS.md` is the user's running record of opinions on how to build things.
 
-## Before deciding on your own default
+## Before choosing a default
 
-When a task involves a judgment call that benefits from the user's informed opinion (UI/UX conventions, tooling choices, code style, workflow shape, etc.), read `~/OPINIONS.md` first and follow any guidance that applies.
+For a judgment call where the user's opinion matters (UI/UX conventions, tooling choices, code style, workflow shape), read `~/OPINIONS.md` first and follow any entry that applies.
+Entries are durable defaults for their stated domain. Apply them without being asked again.
 
-- **Don't infer an opinion that isn't written down.** If the document is silent on the specific situation and it's genuinely ambiguous, ask the user rather than guessing what they'd want.
-- Treat entries as durable defaults for their stated domain, not one-off notes — apply them without being asked again.
+If the document is silent on the situation and the answer is ambiguous, ask the user. Do not infer an opinion that is not written down.
 
-## When the user gives an opinion mid-task
+## When the user states an opinion
 
-If the user states an opinion that generalizes beyond the immediate task — a preference, a correction, a "no, do it this way" — ask whether to capture it in `~/OPINIONS.md`. Confirm first; never add unprompted.
+If the user states an opinion that generalizes beyond the current task (a preference, a correction, "no, do it this way"), ask whether to record it in `~/OPINIONS.md`. Never add one without confirmation.
 
-When adding an entry:
-- Create `~/OPINIONS.md` with a short header if it doesn't exist yet.
-- File it under the section it belongs to (e.g. `## UI/UX`), or create a new section for a new domain.
-- Write it as a direct, standalone rule someone else could follow without extra context — include the reasoning if it clarifies when the rule applies.
+To add an entry:
+
+- Create `~/OPINIONS.md` with a short header if it does not exist.
+- File the entry under its section (for example `## UI/UX`), or create a section for a new domain.
+- Write a direct, standalone rule someone could follow without extra context. Include the reasoning when it clarifies where the rule applies.

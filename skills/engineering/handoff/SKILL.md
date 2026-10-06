@@ -5,16 +5,16 @@ argument-hint: "What will the next session be used for?"
 disable-model-invocation: true
 ---
 
-Run `/handoff` explicitly to write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS - not the current workspace.
+Run `/handoff` to write a document summarizing the current conversation so a fresh agent can continue the work. Save it to the OS temporary directory, not the current workspace.
 
-The reader is an agent, not a person: follow the agent-facing rules in *Artifact audience* (`standards`) - exhaustive about facts (exact paths, symbols, commands, what was already tried and what it did), terse about prose, with anything unverified marked as such.
+The reader is an agent. Follow the agent-facing rules in *Artifact audience* (`standards`): exact paths, symbols, commands, and what was tried and what happened, in terse prose, with unverified items marked.
 
-Include a "suggested skills" section in the document, which suggests skills that the agent should invoke.
+Include a "suggested skills" section naming skills the next agent should invoke.
 
-Do not duplicate content already captured in other artifacts (specs, plans, ADRs, issues, commits, diffs). Reference them by path or URL instead.
+Reference specs, plans, ADRs, issues, commits, and diffs by path or URL instead of repeating them.
 
-Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
+Redact secrets and personal data, such as API keys, passwords, and personally identifiable information.
 
-If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
+If the user passed arguments, treat them as the next session's focus and tailor the document to it.
 
-Before saving, run the concision pass (`standards`) over the draft and apply what it returns. Its floor - never cut a fact - protects the paths, commands, and findings the next agent needs.
+Before saving, run the concision pass (`standards`) over the draft and apply what it returns. The never-cut-a-fact floor keeps the paths, commands, and findings the next agent needs.

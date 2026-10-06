@@ -7,27 +7,25 @@ disable-model-invocation: true
 
 # triage
 
-Run `/triage` explicitly for one inbound GitHub issue or pull request.
-Classify it and produce one agent-ready brief.
-This skill does not change code, labels, issue state, or pull request state.
+Run `/triage` on one inbound GitHub issue or pull request.
+It classifies the item and produces one agent-ready brief.
+It does not change code, labels, issue state, or pull request state, and it does not implement, review, label, close, merge, or comment on the item.
 
 ## Procedure
 
-1. **Resolve the source item.** Accept a GitHub issue or pull request URL, or a number in the current repository.
-   Use the URL's repository when one is present.
+1. Resolve the source item. Accept a GitHub issue or PR URL, or a number in the current repository. Use the URL's repository when one is present.
    Load the body, state, author, labels, comments, linked items, and timestamps with `gh`.
-   For a pull request, also load the base and head, changed files, diff, review comments, and check results.
+   For a PR, also load the base and head, changed files, diff, review comments, and check results.
    If GitHub data is unavailable, ask for the item's text and mark repository context as unverified.
-2. **Read the repository context.** Read the repository glossary and the contribution or issue guidance that applies to the item.
+2. Read the repository context: the glossary and the contribution or issue guidance that applies.
    For an issue, locate the likely entry point, owning code, tests, and configuration from the request's terms.
-   For a pull request, inspect the changed files, nearby tests, and the linked issue when one exists.
-   Search for likely duplicate issues using the item's distinctive terms and report candidates with links, for example `gh issue list --search "<terms> in:title,body" --state all --limit 20`.
-   Do not modify the repository while triaging it.
-3. **Separate evidence from interpretation.** Record what the source item states, what the repository confirms, and what remains inferred.
-   Treat a proposed fix in an issue as a suggestion rather than a requirement.
-   Treat a pull request's diff as the implementation under review, not as a request to reimplement.
-   Preserve the repository's ubiquitous-language terms verbatim.
-4. **Assign one category.** Use the first category whose definition fits the item's primary purpose:
+   For a PR, inspect the changed files, nearby tests, and the linked issue if one exists.
+   Search for duplicate issues using the item's distinctive terms and report candidates with links, for example `gh issue list --search "<terms> in:title,body" --state all --limit 20`.
+   Do not modify the repository.
+3. Separate evidence from interpretation. Record what the source item states, what the repository confirms, and what is inferred.
+   Treat a fix proposed in an issue as a suggestion. Treat a PR's diff as the implementation under review, not a request to reimplement.
+   Use the repository's ubiquitous-language terms verbatim.
+4. Assign one category, the first whose definition fits the item's primary purpose:
 
    | Category | Use when |
    | --- | --- |
@@ -38,11 +36,25 @@ This skill does not change code, labels, issue state, or pull request state.
    | `question` | The item asks for an explanation or decision without requesting implementation. |
    | `unknown` | The available evidence cannot distinguish the category. |
 
-   If one item contains separate requests, classify the primary request and list the others as scope or open questions.
-5. **Assign one disposition and work type.** Use `ready` when an agent can act without guessing, `needs-information` when a named question blocks action, `duplicate` when a linked or confirmed item covers the same work, `out-of-scope` when the request conflicts with the repository boundary, `deferred` when the request is valid but intentionally postponed, and `closed` when the item is already resolved and needs no further action.
-   Use `implement` for a ready issue, `review` for a ready pull request, `investigate` for an unresolved technical problem, `answer` for a question, and `close` for a duplicate, out-of-scope, or deferred item.
+   If the item contains separate requests, classify the primary one and list the others as scope or open questions.
+5. Assign one disposition and one work type.
+   Dispositions:
+   - `ready`: an agent can act without guessing.
+   - `needs-information`: a named question blocks action.
+   - `duplicate`: a linked or confirmed item covers the same work.
+   - `out-of-scope`: the request conflicts with the repository boundary.
+   - `deferred`: the request is valid but intentionally postponed.
+   - `closed`: the item is already resolved and needs no further action.
+
+   Work types:
+   - `implement`: a ready issue.
+   - `review`: a ready PR.
+   - `investigate`: an unresolved technical problem.
+   - `answer`: a question.
+   - `close`: a duplicate, out-of-scope, or deferred item.
+
    A `needs-information` result may use `investigate` when the missing evidence can be gathered without a user decision.
-6. **Write the brief.** Produce the following fields in this order:
+6. Write the brief with these fields in this order:
 
    ```markdown
    ## Triage result
@@ -82,21 +94,19 @@ This skill does not change code, labels, issue state, or pull request state.
    ```
 
    Keep source-backed facts separate from inference.
-   Make acceptance criteria checkable and derive them from the source item or confirmed repository behavior.
-   Mark an unverified command, path, or assumption as unverified rather than filling it in.
-   For a non-ready disposition, state the blocking reason in `Objective` and `Constraints and open questions`.
-7. **Return the result without starting implementation.** Give the complete brief to the caller or fleet runner.
-   Any later code change follows the repository's normal development workflow outside this skill.
+   Derive checkable acceptance criteria from the source item or confirmed repository behavior.
+   Mark an unverified command, path, or assumption as unverified instead of filling it in.
+   For a disposition other than `ready`, state the blocking reason in `Objective` and `Constraints and open questions`.
+7. Return the complete brief to the caller or fleet runner without starting implementation. Any later code change follows the repository's normal development workflow outside this skill.
 
 ## Interaction mode
 
-In interactive use, ask for the source item when the argument is absent and ask only the focused questions needed to resolve a blocking ambiguity.
-In autonomous use, do not block on missing information; emit `needs-information`, list the exact questions, and record every assumption in the brief.
+Interactive: ask for the source item when the argument is absent, and ask only the questions needed to resolve a blocking ambiguity.
+Autonomous: do not block on missing information. Emit `needs-information`, list the exact questions, and record every assumption in the brief.
 Never claim `ready` when the agent would have to invent a requirement, path, command, or acceptance criterion.
 
-## Boundaries
+## Notes
 
-- `triage` classifies an inbound item and writes a brief; it does not implement, review, label, close, merge, or comment on the item.
-- The category describes the item's primary purpose; the disposition describes whether and how work proceeds.
-- A pull request is an inbound item even when its head repository is owned by an external contributor.
-- Triage does not replace a design or implementation plan when the brief exposes a decision that needs one.
+- Category describes the item's primary purpose. Disposition describes whether and how work proceeds.
+- A PR is an inbound item even when an external contributor owns its head repository.
+- When the brief exposes a decision that needs a design or implementation plan, triage does not replace that plan.

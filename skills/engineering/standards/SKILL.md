@@ -5,138 +5,142 @@ description: Shared engineering standards for documentation, naming, testing, br
 
 # standards
 
-The single source of truth for the **compliance** rules the engineering skills share: house policy, not structural judgment (`design` is the peer reference for that).
-Other skills (`spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-issue`, `open-pr`, `mermaid`, `design`, `tdd`, `triage`) reference this document instead of restating these rules, so a change here changes them everywhere.
-Each rule is policy; the referencing skill supplies the procedure that applies it at the right moment.
+Compliance rules shared by the engineering skills: house policy, not structural judgment (`design` covers structure).
+`spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-issue`, `open-pr`, `mermaid`, `design`, `tdd`, and `triage` reference this document instead of restating it.
+Each rule is policy; the referencing skill supplies the procedure that applies it.
 
 ## Artifact audience
 
-Every artifact has one primary reader: a person who will review it, or an agent who will execute it.
-Decide which before writing. The two have opposite failure modes.
+Every artifact has one primary reader: a person who reviews it or an agent who executes it.
+Decide which before writing.
 
-**Human-facing** - specs, issues, PR bodies, review comments, ADRs, docs.
-The reader has the code and the diff, and limited attention; the artifact orients them and stops.
+### Human-facing
+
+Specs, issues, PR bodies, review comments, ADRs, docs.
+The reader has the code and the diff and limited attention. The artifact orients them and stops.
 The failure mode is bulk.
 
-- Work to a budget: issue and PR bodies roughly 200 words, rarely over 400; a spec one to two screens, longer only where the scope genuinely spans repos.
-- State each fact once, in one section. Length comes from repeating the same fact across summary, requirements, and steps.
-- Cut what the reader can't act on: background essays, alternatives that were never close, restatements of the diff or the issue, self-assessment ("comprehensive", "robust", "thorough").
-- An empty section is an answer. Write "None known" rather than prose that fills the heading.
-- Detail a reviewer would skip but an executor needs belongs in an agent-facing artifact, linked rather than inlined.
+- Budget: issue and PR bodies about 200 words, rarely over 400. A spec is one to two screens, longer only when the scope spans repos.
+- State each fact once, in one section. Repeating a fact across summary, requirements, and steps is the main source of length.
+- Cut what the reader cannot act on: background essays, alternatives that were never close, restatements of the diff or the issue, self-assessment ("comprehensive", "robust", "thorough").
+- An empty section is an answer. Write "None known" instead of prose that fills the heading.
+- Put detail a reviewer would skip and an executor needs in an agent-facing artifact, and link to it.
 
-**Agent-facing** - implementation plans, task briefs, structured findings, handoff documents.
-Nobody skims it; an ambiguity becomes a wrong edit.
-The failure mode is vagueness, not length.
+### Agent-facing
 
-- Be exhaustive about facts: exact paths, symbols, signatures, commands, expected output, and the edge cases investigation surfaced. Every fact comes from investigation, never from a guess; mark anything unverified as unverified.
-- Stay just as terse about prose. Precision earns length; motivation, alternatives, and reassurance don't. No paragraph argues that a step is a good idea.
-- Each step is executable in isolation and names how to verify it.
-- Write to a scratch or ignored path unless the user asks otherwise. These are disposable inputs to one run, not documents to maintain.
+Implementation plans, task briefs, structured findings, handoff documents.
+Nobody skims these, and an ambiguity becomes a wrong edit.
+The failure mode is vagueness.
 
-When one artifact has both readers, split it rather than compromise: the short one carries the review gate, the long one carries the detail, and the short one links to it.
+- Give exact paths, symbols, signatures, commands, expected output, and the edge cases investigation surfaced. Every fact comes from investigation, never a guess. Mark anything unverified as unverified.
+- Keep prose terse. Omit motivation, alternatives, and reassurance.
+- Make each step executable in isolation and name how to verify it.
+- Write to a scratch or ignored path unless the user asks otherwise. These are inputs to one run and are not maintained.
 
-**The test.** Before keeping a sentence in a human-facing artifact, ask whether a reviewer would decide differently without it.
-Before cutting one from an agent-facing artifact, ask whether an executor could get it wrong without it.
+When one artifact has both readers, split it. The short one carries the review gate and links to the long one, which carries the detail.
 
-**Justification answers the person who asked, not the artifact.**
-Asked to explain or defend a decision, answer in the reply.
-The explanation becomes a comment, a PR section, or a docstring only where that artifact's purpose is to record decisions (the exception under *Documentation and comments*), never because someone asked for it.
+### Tests for cutting
+
+- Human-facing: keep a sentence only if a reviewer would decide differently without it.
+- Agent-facing: cut a sentence only if an executor could not get it wrong without it.
+
+### Justification
+
+When asked to explain or defend a decision, answer in the reply.
+The explanation goes into a comment, PR section, or docstring only where that artifact records decisions (the exception under *Documentation and comments*), never because someone asked.
 
 ### The concision pass
 
-Before an artifact is created, published, or handed to a review gate, give the draft to a subagent that didn't write it.
-An author rationalizes their own sentences; fresh eyes are the point.
+Before an artifact is created, published, or sent to a review gate, give the draft to a subagent that did not write it.
+Pass the draft, its audience, and its budget, and leave out the conversation that produced it.
+The subagent returns cuts, not a rewrite. Each cut is the quoted span, the rule it breaks, and what remains.
 
-Hand the subagent the draft, its audience, and its budget — not the conversation that produced it.
-Ask for **cuts, not a rewrite**: a rewrite reintroduces in new words what it just removed.
-Each cut comes back as the quoted span, the rule it breaks, and what remains after it.
+The subagent must never cut a fact.
+Paths, symbols, versions, numbers, commands, acceptance criteria, citations, and stated uncertainty stay even when the draft is over budget; it reports "over budget, no filler left" instead.
+Only words carrying no fact are cut.
 
-State the floor to the subagent: **never cut a fact.**
-Paths, symbols, versions, numbers, commands, acceptance criteria, citations, and stated uncertainty stay, even when the draft is over budget — it reports "over budget, no filler left" rather than cutting into substance.
-Only words carrying no fact get cut.
-
-Apply what comes back, keeping the veto for a cut that takes a fact the pass misread as filler.
+Apply the cuts, and veto any that remove a fact the subagent misread as filler.
 Run the check inline when no subagent is available.
-
-Skip the pass when the draft is already comfortably inside its budget — a sixty-word PR body doesn't need a second agent.
-Run it whenever the draft is over budget or too long to hold in one screen.
+Skip the pass when the draft is well inside its budget, such as a sixty-word PR body. Run it when the draft is over budget or longer than one screen.
 
 ## Documentation and comments
 
-- Write documentation and code comments in **present tense**, describing what *is*, not what changed. When editing existing docs, rewrite the affected passages to reflect current reality instead of appending "changed from ..." notes.
-- **Exception:** records whose purpose is to capture a decision or history may describe before/after and motivation — ADRs, decision logs, design proposals, CHANGELOGs, release notes, migration guides, commit messages, and PR descriptions. This exception does not extend to code comments or documentation living alongside the code.
-- Don't add repo layouts to documentation.
-- In prose markdown (docs, READMEs, plans, design docs), use **semantic line breaks**: one sentence per line, no hard-wrapping to a fixed column width. This keeps diffs and blame scoped to the sentence that changed. Does not apply to code, tables, or code blocks.
-- Favor mermaid diagrams over ASCII diagrams, unless mermaid can't express the diagram or the user asks otherwise. Don't one-shot a mermaid diagram — the `mermaid` skill supplies the render-and-refine procedure.
-- A comment earns its place by carrying a fact the code cannot state: a non-obvious constraint, a why, a subtlety a reader would otherwise miss, an external contract the code has to match. Narrating what the code plainly does is noise to delete.
-- Settle each comment rather than deciding by feel. Name the fact the comment carries, then look for code on the lines it describes that already states it. Delete the comment when the fact is unnamed, the code already states it, or you can't settle the call.
-- Keep inline comments to **two lines or less**, and never clarify one with an example. An inline comment that needs an example or a third line means the code is not clean enough; fix the code instead of explaining it.
-- A docstring states what the thing does, then its parameters, return, and raises, in the language's standard format - PEP 257 or Google style for Python, and the equivalent elsewhere. Nothing else belongs in it.
-- Keep a docstring's summary to a single line. Add a body only when a caller cannot use the thing correctly without it; a docstring that walks through the implementation, enumerates edge cases, or argues for the design is over budget however long it is.
-- Skip a parameter the signature and its types already state. "path: str, the path as a string" carries no fact.
-- Module-level documentation is exempt from the inline two-line cap, and the present-tense and no-narrative rules still apply to it.
+- Write documentation and code comments in present tense, describing what is, not what changed. When editing docs, rewrite the affected passages to match current behavior instead of appending "changed from ..." notes.
+- Records that exist to capture a decision or history may describe before/after and motivation: ADRs, decision logs, design proposals, CHANGELOGs, release notes, migration guides, commit messages, and PR descriptions. Code comments and documentation next to the code do not get this exception.
+- Do not add repo layouts to documentation.
+- In prose markdown (docs, READMEs, plans, design docs), use semantic line breaks: one sentence per line, no hard-wrapping. Code, tables, and code blocks are exempt.
+- Prefer mermaid to ASCII diagrams unless mermaid cannot express the diagram or the user asks otherwise. Draft mermaid with the `mermaid` skill's render-and-refine procedure.
+- A comment carries a fact the code cannot state: a non-obvious constraint, a reason, a subtlety, or an external contract the code must match. Delete comments that narrate what the code does.
+- For each comment, name the fact it carries and check whether the code on the lines it describes already states it. Delete the comment when the fact is unnamed, the code states it, or you cannot decide.
+- Limit inline comments to two lines and never add an example. A comment that needs an example or a third line means the code needs fixing.
+- A docstring states what the thing does, then parameters, return, and raises, in the language's standard format (PEP 257 or Google style for Python). Nothing else belongs in it.
+- Keep a docstring summary to one line. Add a body only when a caller cannot use the thing correctly without it. A docstring that walks through the implementation, enumerates edge cases, or argues for the design is over budget at any length.
+- Omit parameters the signature and types already state. "path: str, the path as a string" carries no fact.
+- Module-level documentation is exempt from the two-line inline cap. The present-tense and no-narrative rules still apply.
 
 ### Precision
 
 These apply to any document a person reads.
 
-- Open a section with what the thing is, in one sentence, before any mechanism.
+- Open a section with one sentence saying what the thing is, before any mechanism.
 - State a problem in domain terms, not in terms of the document's own scoping.
-- Never claim prior work exists without linking to it.
-- Never write a conclusion the author has not reached. An option still being weighed is "we could potentially do X", not a specified design.
-- Explain a behavior by walking through a concrete case with real numbers, not by stating the rule abstractly.
-- Name the real artifact: `manifest-000.json`, not "the per-part manifest file".
+- Link any prior work you cite.
+- Do not write a conclusion the author has not reached. An option still being weighed is "we could do X", not a specified design.
+- Explain a behavior with a concrete case and real numbers.
+- Name the artifact: `manifest-000.json`, not "the per-part manifest file".
 - Replace a vague quantifier with an estimate and its scope: "roughly 10-20 at today's volume", not "in the tens" or "plus a handful".
-- Mark an illustrative case as an example and say it is one of several. Never let one instance stand as the subject when the point is general.
-- Say whether a constraint is an impossibility or only true today, every time. "A GitHub runner carries only `metaflow boto3 kubernetes pyyaml`" is true today; "the Kubernetes API server owns the object-size limit" is not going to change.
-- A section that depends on a mechanism from another document restates that mechanism in one sentence before using it.
+- Label an illustrative case as one example of several, so a single instance does not read as the whole subject.
+- For every constraint, say whether it is impossible or only true today. "A GitHub runner carries only `metaflow boto3 kubernetes pyyaml`" is true today. "The Kubernetes API server owns the object-size limit" will not change.
+- When a section depends on a mechanism from another document, restate it in one sentence first.
 - A cross reference names its target: "see Phase 2 of this doc", never "see below".
 
 ### Plain language
 
-- Prefer the short common word: start (not begin/commence/initiate), use (not utilize/leverage), help (not facilitate), before (not prior to), after (not subsequent to), about (not regarding/concerning), get (not obtain/acquire), show (not demonstrate), also (not additionally/furthermore/moreover).
+- Use the short common word: start (not begin, commence, initiate), use (not utilize, leverage), help (not facilitate), before (not prior to), after (not subsequent to), about (not regarding, concerning), get (not obtain, acquire), show (not demonstrate), also (not additionally, furthermore, moreover).
 - No marketing adjectives: seamless, robust, powerful, cutting-edge, effortless, world-class, next-generation, revolutionary.
-- Active voice with the actor named, and a verb for an action: "the parser reads the file" and "analyze the log", not "the file is read by the parser" or "perform an analysis of the log".
-- No stacked auxiliaries. Not "it is important to note that this may help to improve"; write "this improves X".
-- One word for one thing, and one meaning per word. Reuse a term verbatim rather than varying it for style; a second word for the same thing reads as a second thing.
-- Every "this", "it", and "that" has one clear antecedent in the same sentence or the one before it. Where it does not, name the thing.
+- Use active voice with the actor named and a verb for the action: "the parser reads the file" and "analyze the log", not "the file is read by the parser" or "perform an analysis of the log".
+- No stacked auxiliaries. Write "this improves X", not "it is important to note that this may help to improve X".
+- Use one word per thing and one meaning per word. Repeat a term verbatim instead of varying it, because a second word reads as a second thing.
+- Give every "this", "it", and "that" one antecedent in the same sentence or the one before. Otherwise name the thing.
 
 ## Naming and ubiquitous language
 
-- Name identifiers with **fully expressed words**, never abbreviations or truncations: `configuration` not `cfg`, `index` not `idx`, `sample_count` not `n_samps`. Domain acronyms the glossary records (`mz`, `xic`, `ms2`) are the real names, not abbreviations, and stay verbatim.
-- Each repo (or bounded context within it) carries a glossary of its domain terms, by default `docs/UBIQUITOUS-LANGUAGE.md`, version-controlled so it travels with the code.
-- **Read** the relevant glossary before naming anything, and use its terms **verbatim** — in code (types, functions, endpoints, tables, tests) and in prose (commits, PRs, docs). Never coin a synonym for a concept the glossary already names.
-- **Extend** the glossary in the same change when implementation forces a new domain term or exposes a stale entry.
+- Name identifiers with full words, never abbreviations or truncations: `configuration` not `cfg`, `index` not `idx`, `sample_count` not `n_samps`. Domain acronyms the glossary records (`mz`, `xic`, `ms2`) are names and stay verbatim.
+- Each repo, or bounded context within it, keeps a glossary of domain terms, by default `docs/UBIQUITOUS-LANGUAGE.md`, under version control.
+- Read the relevant glossary before naming anything and use its terms verbatim in code (types, functions, endpoints, tables, tests) and prose (commits, PRs, docs). Never coin a synonym for a term the glossary defines.
+- Extend the glossary in the same change when implementation forces a new domain term or exposes a stale entry.
 
 ## Testing
 
-- Weight tests toward **E2E over narrow unit tests** — exercise the functionality as close to how a user interacts with it as possible, driving the real entry point (CLI, endpoint, UI flow).
-- A bug fix carries a regression test built from the reproduction, so the bug can't return silently.
-- Flakiness is a defect: no unseeded randomness, real clocks, order-dependent tests, or un-stubbed network.
+- Weight tests toward E2E over narrow unit tests. Exercise the functionality as a user does, through the real entry point (CLI, endpoint, UI flow).
+- A bug fix carries a regression test built from the reproduction.
+- Flakiness is a defect. Do not use unseeded randomness, real clocks, order-dependent tests, or un-stubbed network calls.
 
 ## Branch hygiene
 
-- Unrelated out-of-scope bugs or improvements that surface mid-work don't get fixed on the current branch. **Flag them, then fix them on a separate worktree/branch/PR** following the normal workflow. A behavior change smuggled into a refactor, or an incidental fix folded into an unrelated PR, is exactly what this rule prevents.
+Unrelated bugs or improvements found mid-work are not fixed on the current branch.
+Flag them, then fix them on a separate worktree, branch, and PR through the normal workflow.
+This rule stops a behavior change from riding in a refactor and an incidental fix from riding in an unrelated PR.
 
 ## Issue hygiene
 
-- **Work starts from an issue.** A code change gets an issue before the branch, so the PR's closing reference attaches the work to it and closes it on merge. The exceptions: an issue already covers the work, or the change is trivial (a typo, a one-line fix).
-- Issue titles are plain descriptive sentences naming the problem or the request, not conventional-commit form. The type belongs in the label; `feat(...)` / `fix(...)` belongs on the commit and PR.
-- Label from the repo's existing labels, read rather than guessed at. Propose a new label only when nothing in the set fits.
+- Work starts from an issue. A code change gets an issue before the branch, so the PR's closing reference attaches to it and closes it on merge. Exceptions: an issue already covers the work, or the change is trivial (a typo, a one-line fix).
+- Issue titles are plain descriptive sentences naming the problem or request, not conventional-commit form. The type goes in the label; `feat(...)` and `fix(...)` go on the commit and PR.
+- Label from the repo's existing labels, read with `gh label list`. Propose a new label only when none fits.
 
 ## PR and commit hygiene
 
-- Titles follow the conventional-commit `feat(...)` / `fix(...)` form with a concise scope and summary.
-- PR bodies are **evergreen** — written once and kept accurate as the branch evolves — covering problem/request, changes, testing, additional testing required, and regressions. Honor a repo's PR template where one exists.
-- PR bodies and issue bodies are human-facing: hold them to the budget and the cuts in *Artifact audience* above.
-- **No AI attribution of any kind:** no "generated by" notes in bodies, no agent co-author lines in commits.
-- No volatile details that go stale (specific version bumps, transient counts).
+- Titles use conventional-commit form, `feat(...)` or `fix(...)`, with a concise scope and summary.
+- PR bodies are evergreen: written once and kept accurate as the branch changes. They cover problem or request, changes, testing, additional testing required, and regressions. Follow the repo's PR template if one exists.
+- PR and issue bodies are human-facing. Hold them to the budget and cuts in *Artifact audience*.
+- No AI attribution: no "generated by" notes in bodies and no agent co-author lines in commits.
+- No volatile details that go stale, such as specific version bumps or transient counts.
 
 ## Interaction mode
 
-Skills that can block on a human must degrade gracefully when run by an autonomous agent (e.g. a wingman-style runner) that cannot answer prompts. Every human-blocking skill declares its own degradation; the default contract is:
+Every skill that can block on a human declares its own degradation for autonomous runs, where no one can answer a prompt. The default:
 
-- **Interactive** — ask the user (via `AskUserQuestion` or a direct question) at genuine decision points, and pause for review where the skill calls for it.
-- **Autonomous** — never block on a prompt. Take the most defensible default, **record the assumption** in the skill's durable output (the spec, the PR body, the findings report), and proceed. Emit machine-consumable output (a verdict plus a structured list) rather than a conversational back-and-forth, so a runner can gate on it.
+- Interactive: ask the user (via `AskUserQuestion` or a direct question) at decision points, and pause for review where the skill calls for it.
+- Autonomous: never block on a prompt. Take the most defensible default, record the assumption in the skill's durable output (the spec, the PR body, the findings report), and proceed. Emit a verdict plus a structured list so a runner can gate on it.
 
-Detect the mode from the environment: if there is no interactive user to answer (no way to surface an `AskUserQuestion`), run autonomous.
+Run autonomous when no interactive user can answer, meaning there is no way to surface an `AskUserQuestion`.
