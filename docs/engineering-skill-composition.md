@@ -8,7 +8,6 @@ An autonomous runner reads this to route a request to the right entry point with
 ```mermaid
 %%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
 flowchart LR
-    wayfinder[wayfinder]
     spec[spec]
     tdd[tdd]
     debug[debug]
@@ -26,7 +25,6 @@ flowchart LR
     openissue[open-issue]
     openpr[open-pr]
 
-    wayfinder -->|cleared map| spec
     spec -->|reviewed plan| s2t
     spec -->|reviewed plan| devworkflow
     spec -->|open question| techresearch
@@ -56,8 +54,6 @@ See the role table for who reads or invokes what.
 `handoff` is missing for the opposite reason: it hands off to nothing and nothing hands off to it, so it has no edge to draw.
 `prototype` is missing for the same reason: it produces design evidence, discards its source, and hands no code to another skill.
 `improve-codebase-architecture` is missing because it produces a report and waits for the user to select a candidate; it has no runtime hand-off.
-`wayfinder-starmap` is missing because it produces a browser artifact and has no runtime hand-off.
-`rfc` is missing because it stops at a draft: sharing it with the team, and whatever the team then decides, stay with the author, so it hands nothing to another skill.
 `triage` is missing because it produces an agent-ready brief for a fleet-style runner rather than feeding another skill directly.
 
 ## Roles
@@ -67,11 +63,9 @@ See the role table for who reads or invokes what.
 
 | Skill | Invocation | Role | Lands on it when | Hands off to |
 | --- | --- | --- | --- | --- |
-| `wayfinder` | user | Entry - multi-session planning | An effort spans sessions and its destination is clear but its route is not | `spec` (to collapse the cleared map into a reviewed plan) |
 | `triage` | user | Entry - inbound intake | An inbound GitHub issue or pull request needs a category, disposition, and agent-ready brief | none (a fleet-style runner consumes the brief) |
 | `spec` | user | Entry - planning | A request needs scoping into a reviewed plan before building | `spec-to-tickets` (to file issues) or `dev-workflow` (to execute) |
 | `spec-to-tickets` | user | Entry - ticketing | A reviewed spec should become GitHub Issues | `open-issue` (writes and files each one), then `dev-workflow` (executes each issue) |
-| `rfc` | user | Entry - design proposal | A design needs agreement across people before anyone plans or builds it | none (produces a draft; the author shares it and carries the decision) |
 | `tech-research` | model | Entry - research | A technical question needs a sourced, version-pinned answer about third-party or external behavior | none (produces a findings file); `spec` cites it instead of re-deriving |
 | `dep-upgrade` | model | Entry - dependency maintenance | A uv-managed Python project needs a dependency, lockfile, or git-sourced internal tag upgraded | `dev-workflow` (lands the verified dependency change) |
 | `tdd` | model | Entry - test-first loop | A request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor") | `dev-workflow` (lands the test-driven change) |
@@ -82,7 +76,6 @@ See the role table for who reads or invokes what.
 | `perf` | model | Entry - optimization | A change needs to get faster, cheaper, or higher-throughput, and the improvement must be proven with a before/after measurement | `dev-workflow` (lands the measured change) |
 | `prototype` | model | Entry - design spike | A design question needs evidence from a disposable implementation | none (produces a decision record and discards the spike) |
 | `improve-codebase-architecture` | user | Entry - architecture scan | A codebase needs structural opportunities identified and ranked before implementation | none (produces a visual report and waits for candidate selection) |
-| `wayfinder-starmap` | user | Entry - map visualization | A Wayfinder map needs a browser-based visual view | none (produces a standalone star map) |
 | `dev-workflow` | model | Entry + spine | Any request to write and land code in a GitHub repo | invokes `open-issue`, `doc-audit`, `run`, `open-pr`, and `tdd` for an explicitly test-first request |
 | `review` | model | Entry - gate | Changes need checking before they land | reports only; findings go to `dev-workflow` to apply |
 | `handoff` | user | Entry - utility | A conversation needs compacting for another agent to continue | none (produces a document) |
@@ -97,7 +90,6 @@ See the role table for who reads or invokes what.
 ## Composition rules
 
 - **Invocation is a boundary.** User-invoked skills run only after an explicit command and may compose model-invoked skills. Model-invoked skills remain available for automatic selection and may compose other model-invoked skills, including `dev-workflow`, `open-issue`, and `open-pr` when the task or repository instruction requires them.
-- **`wayfinder` owns multi-session decision mapping.** It advances decision tickets and hands a cleared map to `spec`; it does not turn decisions into implementation work.
 - **`improve-codebase-architecture` stops at candidate selection.** It grounds structural opportunities in code evidence and the design vocabulary, then leaves interface design and implementation to a later workflow.
 - **`dev-workflow` is the spine.** Every skill that produces a code change hands the landing of it to `dev-workflow` rather than opening worktrees or PRs itself.
 - **Entry points don't invoke each other's mechanics.** `tdd` drives the red-green-refactor loop but doesn't touch worktree/PR mechanics; `debug` proves a cause but doesn't commit; `refactor` and `perf` each prove their own guarantee (an unchanged test suite, a before/after measurement) but don't commit either; `dep-upgrade` proves a lockfile and downstream-suite result but doesn't commit; `review` reports but doesn't apply; `tech-research` answers a question but doesn't build; `spec` plans but doesn't build. Each stays in its lane and hands off.

@@ -9,7 +9,7 @@
       "name": "greerviau-engineering",
       "source": "./",
       "strict": false,
-      "description": "Engineering skills: shared standards and design vocabulary, architecture scans, planning, inbound issue and pull request triage, GitHub development workflows, design spikes, pull requests, test-driven development, technical research, dependency upgrades, debugging, flaky-test investigation, merge-conflict resolution, review, refactoring, performance optimization, doc audits, RFC authoring, mermaid diagrams, and conversation handoffs.",
+      "description": "Engineering skills: shared standards and design vocabulary, architecture scans, planning, inbound issue and pull request triage, GitHub development workflows, design spikes, pull requests, test-driven development, technical research, dependency upgrades, debugging, flaky-test investigation, merge-conflict resolution, review, refactoring, performance optimization, doc audits, mermaid diagrams, and conversation handoffs.",
       "category": "engineering",
       "keywords": [
         "engineering",
@@ -19,8 +19,6 @@
         "improve-codebase-architecture",
         "spec",
         "spec-to-tickets",
-        "wayfinder",
-        "wayfinder-starmap",
         "triage",
         "dev-workflow",
         "open-pr",
@@ -35,7 +33,6 @@
         "perf",
         "prototype",
         "doc-audit",
-        "rfc",
         "mermaid",
         "handoff"
       ],
