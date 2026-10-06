@@ -7,38 +7,41 @@ disable-model-invocation: true
 
 # spec-to-tickets
 
-Run `/spec-to-tickets` explicitly to turn a reviewed spec (the human-facing markdown a `spec` run produces) into GitHub Issues. Sits between `spec` (produces the spec) and `dev-workflow` (executes the work items).
-Judges the ticket shape and the breakdown; each individual issue is written and filed per `open-issue`.
+Run `/spec-to-tickets` to turn a reviewed spec (the human-facing markdown a `spec` run produces) into GitHub Issues. It sits between `spec`, which produces the spec, and `dev-workflow`, which executes the work items.
+This skill picks the ticket shape and the breakdown. Each issue is written and filed per `open-issue`.
 
-**This skill is explicit** — it creates external, hard-to-reverse artifacts other people see. Never fire on your own; never create anything before the user confirms the proposed breakdown.
+Issues are external and hard to reverse, and other people see them. Run only on explicit request, and create nothing until the user confirms the proposed breakdown.
 
-## Preflight (do this first, every time)
+## Preflight
 
-1. **Confirm the target repo.** Issues land in the current git repo's GitHub remote, which `gh` resolves automatically. If the working directory isn't a GitHub repo, or the user wants issues filed against a different repo, ask for the `owner/repo` and pass it with `--repo`.
-2. **Verify auth** with `gh auth status`. If it fails, **stop** and tell the user to run `gh auth login`.
-3. Only once both pass, read the spec and propose a ticket shape.
+Run this every time, before anything else.
+
+1. Confirm the target repo. Issues land in the current git repo's GitHub remote, which `gh` resolves automatically. If the working directory is not a GitHub repo, or the user wants a different repo, ask for the `owner/repo` and pass it with `--repo`.
+2. Run `gh auth status`. If it fails, stop and tell the user to run `gh auth login`. Never guess a destination.
+3. When both pass, read the spec and propose a ticket shape.
 
 ## Choosing the ticket shape
 
-The shape is **driven by the spec's scope**, not a fixed template. Read the whole spec, judge its weight, and pick one:
+Read the whole spec, judge its scope, and pick one shape:
 
-- **Single issue** — a small, self-contained spec (a one-file bug fix). No parent, no children.
-- **A few flat issues** — a handful of independent work items with no coordinating parent. Create them as siblings.
-- **Parent + sub-issues** — a large or multi-part spec (cross-file, cross-repo, staged rollout). A parent/epic captures the whole; children capture each work item.
+- Single issue: a small, self-contained spec such as a one-file bug fix. No parent, no children.
+- A few flat issues: a handful of independent work items with no coordinating parent, created as siblings.
+- Parent plus sub-issues: a large or multi-part spec (cross-file, cross-repo, staged rollout). The parent or epic captures the whole and each child captures one work item.
 
-The signal comes from the spec's own structure: the number of distinct work items under "Scope" and "Approach / design", whether it spans multiple repos, and whether the steps have ordering/dependencies a parent would coordinate. Propose the shape with your reasoning. Decide a clearly-small or clearly-large spec without asking; when the weight sits on the boundary (e.g. three-to-five items that could be flat siblings *or* a small epic), present the candidates and let the user choose.
+The signal is the spec's structure: the number of distinct work items under "Scope" and "Approach", whether it spans repos, and whether the steps have an ordering or dependencies a parent would coordinate.
+Propose the shape with your reasoning. Decide a small or large spec without asking. When the weight is on the boundary (for example, three to five items that could be flat siblings or a small epic), present the candidates and let the user choose.
 
 ## Creating the issues
 
-Write and create each issue per the `open-issue` skill, which owns the title, body, and label conventions — a plain descriptive title, a short problem/acceptance-criteria body, labels picked from the repo's real labels. This skill owns only the shape and the breakdown.
+Write and create each issue per `open-issue`, which owns title, body, and label conventions. This skill owns only the shape and breakdown.
 
-Regardless of shape:
+For every shape:
 
-- **Titles and bodies use the spec's ubiquitous-language terms, verbatim** — no coined synonyms.
-- **Issues link the spec only when it is reachable**, per *Linking the spec* below.
-- **Nothing is created until the user confirms** the proposed shape and breakdown.
+- Titles and bodies use the spec's ubiquitous-language terms verbatim, with no coined synonyms.
+- An issue links the spec only when the spec is reachable (see Linking the spec).
+- Nothing is created until the user confirms the shape and breakdown.
 
-Without `open-issue`, create each with the `gh` CLI directly:
+Without `open-issue`, create each issue with the `gh` CLI:
 
 ```bash
 gh issue create --title "<title>" --body "<body>" --label "<label>"
@@ -48,47 +51,47 @@ Pass `--repo <owner/repo>` when filing against a repo other than the working dir
 
 ### Linking the spec
 
-An issue carries a spec reference only as a URL every reader of that issue can open. Link the human-facing spec, never the implementation plan: the plan lives at a scratch or git-ignored path by design, so it has no URL to link.
+An issue references the spec only as a URL every reader of the issue can open. Link the human-facing spec and never the implementation plan, which lives at a scratch or git-ignored path and has no URL.
 
-Verify the URL exists rather than assuming it, against the repo holding the spec:
+Verify the URL against the repo that holds the spec:
 
 ```bash
 gh api "repos/<owner>/<repo>/contents/<path-from-repo-root>?ref=<default-branch>" -q .html_url
 ```
 
-A returned `html_url` is the link, as long as the issue's readers can read that repo; the call proves the file exists, not that they can see it. Anything else means the spec is unreachable: it sits outside any repo, is uncommitted, or is committed only on a branch that was never pushed.
+A returned `html_url` is the link, provided the issue's readers can read that repo. The call proves the file exists, not that they can see it.
+Any other result means the spec is unreachable: it is outside any repo, uncommitted, or committed only on a branch that was never pushed.
 
-Never stand a path in for the URL. A filesystem path, a workspace-relative path, a repo-relative path with no URL, or the spec's bare filename resolves on one machine and says nothing to any other reader. These are not weaker links; they are not links.
+Never substitute a path for the URL. A filesystem path, a workspace-relative path, a repo-relative path, or a bare filename resolves on one machine and tells other readers nothing.
 
-When the spec is unreachable, omit the reference entirely. **That is the correct output, not a degraded one.** An implementer works from the issue's own Problem and Acceptance criteria, which `open-issue` already makes stand alone; the link is a convenience some runs have and others don't. A linkless issue is finished, so there is nothing here for a local path to satisfy. Say which issues carry a link when you propose the breakdown, so the user sees the reference was decided rather than forgotten.
+When the spec is unreachable, omit the reference. The implementer works from the issue's own Problem and Acceptance criteria, which `open-issue` makes self-contained, so a linkless issue is complete.
+When you propose the breakdown, say which issues carry a link, so the user sees the reference was decided and not forgotten.
 
-### Parent + sub-issues: use GitHub's native Sub-issues
+### Parent and sub-issues
 
-For a parent + sub-issues shape, wire the children with GitHub's **native Sub-issues relationship**, not a plain markdown checklist. The native link gives the parent a real progress bar and Sub-issues panel, and rolls child completion up to the parent.
+For the parent plus sub-issues shape, link the children with GitHub's native Sub-issues relationship, not a markdown checklist. The native link gives the parent a progress bar and Sub-issues panel and rolls child completion up to the parent.
 
 1. Create the parent issue, then each child issue.
-2. For each child, resolve its REST database id (this is the `id` field, **not** the issue number):
+2. For each child, get its REST database id (the `id` field, not the issue number):
 
    ```bash
    child_id=$(gh api repos/<owner>/<repo>/issues/<child_number> -q .id)
    ```
 
-3. Link it under the parent via the sub-issues endpoint:
+3. Link it under the parent through the sub-issues endpoint:
 
    ```bash
    gh api --method POST repos/<owner>/<repo>/issues/<parent_number>/sub_issues -F sub_issue_id=$child_id
    ```
 
-Do not fall back to a `- [ ] #123` task list in the parent body — the markdown checklist does not create the real parent/child relationship and does not close the parent when the children close.
+Do not use a `- [ ] #123` task list in the parent body. It creates no parent/child relationship and does not close the parent when the children close.
 
 ## Idempotency
 
-After creating issues, write a **"Tickets" section back into the spec doc** listing each work item → its issue URL. On a re-run, read that section first: skip work items that already have an issue (or offer to update them), and create only the new ones. This prevents the duplicate-flood failure mode of re-running against an already-ticketed spec.
+After creating issues, write a "Tickets" section into the spec doc listing each work item with its issue URL.
+On a re-run, read that section first, skip work items that already have an issue (or offer to update them), and create only the new ones. This prevents duplicate issues when a spec is ticketed twice.
 
-## Boundaries
+## Scope
 
-- Explicit only — never auto-fire, never create before the user confirms.
-- Missing auth → stop and instruct (`gh auth login`). Never guess a destination.
-- Owns shape and breakdown, not issue conventions — those live in `open-issue`.
-- Never commits, moves, or publishes the spec to manufacture a URL. Where the spec lives is the user's call, made outside this skill.
-- Creates issues; does not execute them — that's `dev-workflow`, which references each issue in its commits and PR.
+- Never commit, move, or publish the spec to manufacture a URL. Where the spec lives is the user's decision.
+- This skill creates issues and does not execute them. `dev-workflow` executes them and references each issue in its commits and PR.

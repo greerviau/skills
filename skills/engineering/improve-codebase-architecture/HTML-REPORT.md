@@ -1,6 +1,6 @@
 # Architecture review report
 
-Write the report as one HTML file in the operating system's temporary directory.
+Write the report as one HTML file in the OS temporary directory.
 Do not add the report or its working diagrams to the repository.
 
 ## Scaffold
@@ -43,8 +43,8 @@ Do not add the report or its working diagrams to the repository.
 </html>
 ```
 
-The report stays readable if scripts or external assets fail.
-Use a CDN Mermaid script only when a graph materially improves the comparison; inline SVG or styled HTML boxes avoid a dependency for simple diagrams.
+The report must stay readable if scripts or external assets fail.
+Use a CDN Mermaid script only when a graph improves the comparison. Inline SVG or styled HTML boxes avoid the dependency for simple diagrams.
 
 ## Candidate card
 
@@ -53,24 +53,24 @@ Each candidate is one `article` containing:
 - a short title naming the deepening;
 - a recommendation badge: `Strong`, `Worth exploring`, or `Speculative`;
 - the exact files and symbols involved;
-- a side-by-side before/after visualisation;
+- a side-by-side before/after visualization;
 - one-sentence problem and direction statements;
-- short gains phrased in terms of module depth, information hiding, seam placement, error-condition elimination, or navigability;
+- short gains stated in terms of module depth, information hiding, seam placement, error-condition elimination, or navigability;
 - an ADR warning when the candidate conflicts with a recorded decision.
 
 Use one visual pattern per candidate:
 
-- **Call graph:** show the current chain and the proposed deep module hiding its internal calls.
-- **Cross-section:** show several shallow modules before and one deeper owner after.
-- **Mass diagram:** show a wide interface over a small implementation before and a narrow interface over a larger hidden implementation after.
-- **Seam diagram:** show accidental leaks crossing the seam before and the hidden implementation after.
+- Call graph: the current chain, and the proposed deep module hiding its internal calls.
+- Cross-section: several shallow modules before, one deeper owner after.
+- Mass diagram: a wide interface over a small implementation before, a narrow interface over a larger hidden implementation after.
+- Seam diagram: accidental leaks crossing the seam before, the hidden implementation after.
 
-The visualisation must be grounded in the cited files and symbols.
+Base the visualization on the cited files and symbols.
 Do not draw a speculative interface as if it were settled.
 
 ## Style
 
 Use plain English and the repository's glossary.
-Prefer `module`, `interface`, `implementation`, `depth`, `seam`, `information hiding`, `error-condition elimination`, and `navigability` over vague claims such as "cleaner" or "more maintainable."
+Use `module`, `interface`, `implementation`, `depth`, `seam`, `information hiding`, `error-condition elimination`, and `navigability` instead of vague claims like "cleaner" or "more maintainable".
 Keep each gains list to six short bullets or fewer.
 Use red only for accidental leaks and amber only for ADR warnings.

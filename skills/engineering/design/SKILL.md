@@ -5,48 +5,48 @@ description: Shared vocabulary for judging code structure through module depth, 
 
 # design
 
-The shared vocabulary for structural judgment: what makes a module well-designed, where a boundary belongs, when an error case can be designed away instead of handled.
-Other skills (`spec`, `refactor`, `review`) reference this document instead of asserting "simplicity" or "maintainability" as if the terms were self-evident, so a structural claim is citable and reviewable rather than a matter of taste.
-Each section is a lens applied to a structural decision, read rather than run as a procedure.
+Shared vocabulary for structural judgment: what makes a module well designed, where a boundary belongs, and when an error case can be designed away instead of handled.
+`spec`, `refactor`, and `review` cite this document instead of asserting "simplicity" or "maintainability", so a structural claim can be checked.
+Each section is a lens to apply to a structural decision.
 
 ## Module depth
 
-A module's interface is a cost every caller pays; the functionality behind it is what a caller doesn't have to think about. Depth is that functionality weighed against the interface's complexity.
+A module's interface is a cost every caller pays. The functionality behind it is what callers do not have to think about. Depth is that functionality weighed against the interface's complexity.
 
-- A **deep module** hides substantial functionality behind a narrow interface, e.g. a filesystem's `open`/`read`/`write`/`close` hiding disk layout, caching, and buffering.
-- A **shallow module**'s interface is about as complex as what it does. A pass-through wrapper, a function whose body is one call to another function with the arguments renamed, is the primary smell: it adds a name without adding depth.
-- Judging a proposed split or merge: does the new boundary make each side's interface simpler relative to what it hides, or does it just relocate the same complexity behind a new name?
+- A **deep module** hides substantial functionality behind a narrow interface. A filesystem's `open`/`read`/`write`/`close` hides disk layout, caching, and buffering.
+- A **shallow module** has an interface about as complex as what it does. A pass-through wrapper, whose body is one call to another function with renamed arguments, adds a name and no depth.
+- To judge a proposed split or merge, ask whether the new boundary simplifies each side's interface relative to what it hides, or moves the same complexity behind a new name.
 
 ## Information hiding
 
-What must a caller know to use this correctly, beyond the signature? Every fact a caller has to hold in their head to call something safely is a hiding failure somewhere.
+Ask what a caller must know to use this correctly beyond the signature. Each fact a caller must hold in mind to call something safely is a hiding failure somewhere.
 
-- A **load-bearing leak** is a fact the caller genuinely needs, e.g. an API's rate limit; an **accidental leak** is an implementation detail that escaped only because nothing hid it, e.g. an internal retry count. Fix the second kind; document the first.
-- A leak that shows up in more than one caller means the boundary is in the wrong place, not that the callers need reminding.
+- A **necessary leak** is a fact the caller needs, such as an API's rate limit. An **accidental leak** is an implementation detail that escaped because nothing hid it, such as an internal retry count. Fix accidental leaks and document necessary ones.
+- A leak that appears in more than one caller means the boundary is in the wrong place.
 
 ## Seam placement
 
-A **seam** is the point where a public boundary is crossed: where behavior can be substituted without editing the code on the other side of it. It is also, mechanically, where a test attaches; assert at the seam, not on internals.
+A **seam** is where a public boundary is crossed: where behavior can be substituted without editing the code on the other side. It is also where a test attaches. Assert at the seam, not on internals.
 
-- Too low, inside a helper: a test exercises mechanics unrelated to the behavior it's checking.
-- Too high, only at the process boundary: testing anything specific means driving the whole system.
-- The right seam sits at the real entry point (CLI, endpoint, flow, per the E2E bias in `standards`) that still lets the one thing under test be substituted.
+- A seam too low, inside a helper, makes tests exercise mechanics unrelated to the behavior under test.
+- A seam too high, only at the process boundary, forces any specific test to drive the whole system.
+- The right seam is the real entry point (CLI, endpoint, flow, per the E2E bias in `standards`) that still lets the one thing under test be substituted.
 
 ## Error-condition elimination
 
-An error handled well is still a cost: a branch, a message, a caller who has to decide what to do with it. An error that cannot occur is free.
+A handled error still costs a branch, a message, and a caller who must decide what to do. An error that cannot occur costs nothing.
 
-- Before writing the handling, ask whether the precondition that produces the error can be made impossible instead: a type that can't represent the invalid state, a default that removes the empty case, a merge that removes the conflict.
-- Only propagate what's left after that question. Propagating everything by default is the shallow move.
+- Before writing the handling, ask whether the precondition producing the error can be made impossible: a type that cannot represent the invalid state, a default that removes the empty case, a merge that removes the conflict.
+- Propagate only the errors that remain. Propagating everything by default produces shallow modules.
 
 ## Navigability
 
-A concept should have one place it lives, findable by the name recorded in the repo's ubiquitous-language glossary (`standards`), not scattered across files that each hold a fragment of it.
+A concept lives in one place, findable by its name in the repo's ubiquitous-language glossary (`standards`), instead of being split across files that each hold a fragment.
 
-- Name things after what they are, not how they're currently implemented. A name tied to an implementation detail stops being true the moment the detail changes, and a stale name is the direct cause of a reader, human or agent, failing to find the code that owns a concept.
-- Locality: code that changes together lives together. A change that touches many files for one concept is a navigability defect worth naming, not a refactor inconvenience.
+- Name things for what they are, not how they are currently implemented. A name tied to an implementation detail becomes false when the detail changes, and a stale name keeps readers, human or agent, from finding the code that owns a concept.
+- Code that changes together lives together. A change touching many files for one concept is a navigability defect.
 
-## Boundaries
+## Related skills
 
-- Against `refactor`: a request framed as "is this well-structured" or "how should this be organized" reads `design`; a request framed as "clean this up" or "reduce duplication" invokes `refactor`, which then reads `design` for the vocabulary it judges by.
-- Against `tdd` (the `tdd` skill, if you use it): a request to explain or judge a seam reads `design`; a request to drive the test-first loop invokes `tdd`, which reads `design` for the harder calls.
+- A request framed as "is this well-structured" or "how should this be organized" reads `design`. A request framed as "clean this up" or "reduce duplication" invokes `refactor`, which reads `design` for its vocabulary.
+- A request to explain or judge a seam reads `design`. A request to run the test-first loop invokes `tdd` (if you use it), which reads `design` for harder calls.
