@@ -13,7 +13,7 @@ It does not change code, labels, issue state, or pull request state, and it does
 
 ## Procedure
 
-1. Resolve the source item. Accept a GitHub issue or PR URL, or a number in the current repository. Use the URL's repository when one is present.
+1. Resolve the source item. Ask for it when the argument is absent. Accept a GitHub issue or PR URL, or a number in the current repository. Use the URL's repository when one is present.
    Load the body, state, author, labels, comments, linked items, and timestamps with `gh`.
    For a PR, also load the base and head, changed files, diff, review comments, and check results.
    If GitHub data is unavailable, ask for the item's text and mark repository context as unverified.
@@ -54,6 +54,8 @@ It does not change code, labels, issue state, or pull request state, and it does
    - `close`: a duplicate, out-of-scope, or deferred item.
 
    A `needs-information` result may use `investigate` when the missing evidence can be gathered without a user decision.
+   Ask the user only the questions needed to resolve a blocking ambiguity. When no user can answer (`standards`), emit `needs-information`, list the exact questions, and record every assumption in the brief.
+   Never claim `ready` when an agent would have to invent a requirement, path, command, or acceptance criterion.
 6. Write the brief with these fields in this order:
 
    ```markdown
@@ -98,12 +100,6 @@ It does not change code, labels, issue state, or pull request state, and it does
    Mark an unverified command, path, or assumption as unverified instead of filling it in.
    For a disposition other than `ready`, state the blocking reason in `Objective` and `Constraints and open questions`.
 7. Return the complete brief to the caller or fleet runner without starting implementation. Any later code change follows the repository's normal development workflow outside this skill.
-
-## Interaction mode
-
-Interactive: ask for the source item when the argument is absent, and ask only the questions needed to resolve a blocking ambiguity.
-Autonomous: do not block on missing information. Emit `needs-information`, list the exact questions, and record every assumption in the brief.
-Never claim `ready` when the agent would have to invent a requirement, path, command, or acceptance criterion.
 
 ## Notes
 

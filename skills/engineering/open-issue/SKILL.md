@@ -1,12 +1,12 @@
 ---
 name: open-issue
-description: Use when filing a GitHub issue - standalone ("open an issue for this", "file a bug for X") or as the issue-first step before any code change. Checks for duplicates, honors `.github/ISSUE_TEMPLATE/`, writes a plain descriptive title and a short body (Problem, Reproduction, Acceptance criteria), and labels from the repo's real labels read with `gh label list`, then creates the issue. Trigger on "open an issue", "file a bug", "create a ticket for this", "write the issue for this work".
+description: Use when filing a GitHub issue, either standalone ("open an issue for this", "file a bug for X") or as the issue-first step before any code change. Checks for duplicates, honors `.github/ISSUE_TEMPLATE/`, writes a plain descriptive title and a short body (Problem, Reproduction, Acceptance criteria), and labels from the repo's real labels read with `gh label list`, then creates the issue. Trigger on "open an issue", "file a bug", "create a ticket for this", "write the issue for this work".
 ---
 
 # open-issue
 
 File a GitHub issue: write its title, body, and labels, then create it.
-This skill is the source for issue conventions, whether invoked directly, as the issue-first step of `dev-workflow`, or per issue by `spec-to-tickets`.
+This skill is the single source of truth for issue conventions, whether invoked directly, as the issue-first step of `dev-workflow`, or per issue by `spec-to-tickets`.
 
 ## Preflight
 
@@ -19,7 +19,7 @@ This skill is the source for issue conventions, whether invoked directly, as the
    ```
 
    If an existing issue covers it, say so and offer to comment there instead of filing a second.
-4. If `.github/ISSUE_TEMPLATE/` holds a template that fits, read it and follow it.
+4. If `.github/ISSUE_TEMPLATE/` holds a template that fits, read it and follow it, keeping any section below that it lacks.
 
 ## Write the issue
 
@@ -65,4 +65,4 @@ Add `--assignee`, `--milestone`, or `--project` when the user names one.
 Report the issue number and URL. The branch and the PR's closing reference need the number.
 
 Create nothing until the user confirms the title, body, and labels.
-Autonomous runs (`standards`) file without asking and record any assumption in the issue body.
+When no user can answer (`standards`), file without asking and record any assumption in the issue body.

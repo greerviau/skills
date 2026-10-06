@@ -5,7 +5,7 @@ description: Use when opening or writing a pull request. Produces a concise conv
 
 # open-pr
 
-Write a pull request's title and body, then create it. This skill is the source for PR title and body conventions, whether invoked directly or as the PR step of `dev-workflow`.
+Write a pull request's title and body, then create it. This skill is the single source of truth for PR title and body conventions, whether invoked directly or as the PR step of `dev-workflow`.
 
 ## Procedure
 

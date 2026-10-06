@@ -4,15 +4,15 @@ description: Use when a design question needs evidence from a disposable impleme
 argument-hint: "What design question should the spike answer?"
 ---
 
-Answer one design question with a throwaway spike: a disposable implementation whose source never enters production.
+Answer one design question with a **throwaway spike**: a disposable implementation whose source never enters production.
 The result records evidence and a decision. It does not create a feature branch.
 
 ## Procedure
 
-1. State the question. Write one question with a falsifiable answer and the decision it informs.
+1. State the question. When the argument is absent or underspecified, ask for the design question. Write one question with a falsifiable answer and the decision it informs.
    Name the competing approaches when the question compares designs.
    Set a stop condition before writing code.
-   If the question is ambiguous and the run is autonomous, take the narrowest defensible interpretation and record the assumption in the result.
+   If the question is ambiguous and no user can answer (`standards`), take the narrowest defensible interpretation and record the assumption in the result.
 2. Set the boundary. List the production entry point, seam, inputs, and constraints the spike must exercise.
    Test the real entry point when the question concerns integration.
    Keep the experiment to the smallest slice that can answer the question.
@@ -29,11 +29,7 @@ The result records evidence and a decision. It does not create a feature branch.
    Save it outside the spike workspace, or in a user-requested decision record that contains no disposable source.
 7. Discard the spike. Delete the disposable workspace and verify the original checkout has no source or configuration changes from the experiment.
    Never commit, push, open a pull request, merge, or copy spike source into a production directory.
-
-## Interaction mode
-
-Interactive: ask for the design question when the argument is absent or underspecified.
-Autonomous: take the narrowest defensible interpretation, record it in the result, and stop instead of expanding the spike into implementation.
+   When no user can answer, stop here instead of expanding the spike into implementation.
 
 ## Related skills
 

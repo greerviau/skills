@@ -21,5 +21,5 @@ Testing policy (E2E bias, regression tests, flakiness as a defect) is in `standa
 
 ## Related skills
 
-- A report of broken behavior goes to `debug`, which produces a failing reproduction and hands the fix to `dev-workflow`. A request for new behavior is this skill.
+- A report of broken behavior goes to `debug`, which produces a red reproduction. A request for new behavior is this skill.
 - A plain "implement this feature" goes to `dev-workflow`, which works directly without routing through this skill. This skill's triggers stay narrow and explicit so they do not compete with that broader skill.

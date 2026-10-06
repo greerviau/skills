@@ -56,6 +56,7 @@ Before designing, ask the user (via `AskUserQuestion`) about whichever of these 
 - Terminology: domain terms the request uses ambiguously or the glossary does not cover. These become glossary entries.
 
 Keep asking until the answers stop changing the plan, and record them in the spec.
+When no user can answer (`standards`), resolve what exploration can, take the most defensible call on the rest, and record each assumption under "Risks and open questions".
 Questions the user cannot answer better than exploration can go in the open-questions section.
 
 ### 3. Explore to discover scope
@@ -68,7 +69,7 @@ Map the real code the request touches: repos, files and symbols, existing conven
 - Note the test framework, lint setup, layout, and naming so the plan fits the codebase.
 
 Keep a running list: primary repo, other affected repos, key files and symbols, new or corrected glossary terms, open questions.
-If exploration surfaces a new fork, return to the user before designing past it.
+If exploration surfaces a new fork, return to the user before designing past it. When no user can answer, settle it in step 4 and record it as an assumption.
 
 ### 4. Choose the approach
 
@@ -125,5 +126,4 @@ Say where the spec is and ask how to proceed:
 - Iterate: refine the spec with the user, revise the plan wherever the change reaches it, and present again.
 
 Stop for the answer.
-
-Autonomous runs (`standards`) do not block on the interview or review gate. Resolve what exploration can, take the most defensible call on the rest, record each assumption under "Risks and open questions", write both artifacts, and execute (via the `dev-workflow` skill, if you use it).
+When no user can answer, the review gate stays open (`standards`): report the spec path, the plan path, and the recorded assumptions, and stop without executing.

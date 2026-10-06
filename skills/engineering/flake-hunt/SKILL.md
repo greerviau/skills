@@ -20,7 +20,7 @@ Fixing the cause or landing a quarantine is a separate step (the `dev-workflow` 
 
 2. Rerun a fixed number of independent processes. Choose `N` before the rerun and record it.
    Use the repository's real test command and a fresh process for each run, because a test-runner retry inside one process cannot expose process state leaks.
-   Default to `N=20` for a cheap test, or the repository's flake threshold if it defines one.
+   Default to `N=20` for a cheap test, or the repository's flake threshold if it defines one. When no user can answer (`standards`), use that value without asking and record it in the report.
    Record every pass and failure, the failure rate, and each run's environment.
 
    Classify the result:
@@ -75,10 +75,10 @@ Fixing the cause or landing a quarantine is a separate step (the `dev-workflow` 
    Quarantine a confirmed flake or an identified environment failure only when it blocks the main signal and the repository can keep running it outside the blocking path.
 
    A quarantine record names the test, observed failure rate, reproduction command, seeds or order, suspected cause, owner, tracking issue, entry date, expiry date, and removal condition.
-   Set the expiry per repository policy, or 14 days when there is none.
+   Set the expiry per repository policy, or 14 days when there is none. When no user can answer, apply the 14-day expiry and the diagnostic-lane requirement below without asking, and record them in the report.
    Keep the test running in a visible non-blocking or diagnostic lane that reports failures and unexpected passes.
    If the repository has no such lane, keep the test blocking and fix the cause.
-   Review quarantines before expiry. Remove one when the cause is fixed, the original reproduction passes, the earlier failing seeds and orders pass, and the investigation's predeclared `N` independent runs are clean.
+   Review quarantines before expiry. Remove one when the cause is fixed, the original reproduction is green, the earlier failing seeds and orders are green, and the investigation's predeclared `N` independent runs are clean.
 
 ## Report
 
@@ -97,9 +97,7 @@ Action: <fix, continue investigation, or bounded quarantine>
 Tracking: <issue or CI job URL, if any>
 ```
 
-Autonomous runs (`standards`) do not block on a missing rerun count or quarantine decision.
-They default to `N=20`, a 14-day quarantine expiry, and the visible diagnostic-lane requirement when the repository gives no policy, and record those assumptions in the report.
-They emit the verdict and structured fields even when the result is inconclusive.
+Emit the verdict and every field even when the result is inconclusive.
 
 ## Scope
 

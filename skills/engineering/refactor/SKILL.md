@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: Use when improving the structure of working code without changing its behavior - reducing duplication, clarifying names, simplifying control flow, aligning with conventions - guarded by an unchanged test suite. Adds characterization tests first when coverage is thin, then refactors in small behavior-preserving steps. Trigger on "clean this up", "refactor this", "reduce duplication", "simplify this code", "tidy up", "make this more maintainable".
+description: Use when improving the structure of working code without changing its behavior (reducing duplication, clarifying names, simplifying control flow, aligning with conventions), guarded by an unchanged test suite. Adds characterization tests first when coverage is thin, then refactors in small behavior-preserving steps. Trigger on "clean this up", "refactor this", "reduce duplication", "simplify this code", "tidy up", "make this more maintainable".
 ---
 
 # refactor
@@ -13,7 +13,7 @@ A change to observable behavior is feature work or a fix (`debug`) and belongs o
 
 ## Procedure
 
-1. Confirm the affected code has passing tests covering the behavior you will restructure. If coverage is thin, write characterization tests that capture current behavior before changing structure.
+1. Confirm the affected code has passing tests covering the behavior you will restructure. If coverage is thin, write **characterization tests** that capture current behavior before changing structure.
 2. Refactor in small steps, keeping tests green throughout. If you find a bug, flag it for a separate branch and leave it unfixed here.
 3. Validate: the full suite passes with unchanged intent, lint is clean, and the runtime surface works through `run` if there is one.
 4. Land the change as you normally do (the `dev-workflow` skill, if you use it). The PR description states that behavior is preserved, so the reviewer checks that nothing changed.

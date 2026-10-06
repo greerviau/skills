@@ -12,7 +12,7 @@ The development workflow for work inside a GitHub project repo.
 Work starts from an issue (`standards`, issue hygiene).
 Before writing code, ask the user whether to open one. The `open-issue` skill, if you use it, writes and files it.
 Skip the ask when an issue already covers the work (the user pointed at one, or a ticketing run filed it) or the change is trivial (a typo, a one-line fix).
-Running autonomously (`standards`), file the issue instead of asking.
+When no user can answer (`standards`, interaction mode), file the issue instead of asking.
 Carry the issue number to step 7 so the PR closes it.
 
 ## 2. Set up an isolated workspace
@@ -48,7 +48,8 @@ Push the branch once steps 4 and 5 pass.
 
 ## 7. Open a PR
 
-Open the PR per the `open-pr` skill, passing it the issue from step 1 so the body carries a closing reference. Then continue to CI.
+Open the PR per the `open-pr` skill, passing it the issue from step 1 so the body carries a closing reference.
+Do not stop after opening the PR. Wait for CI in step 8.
 
 ## 8. Watch CI
 
@@ -66,7 +67,7 @@ Keep the worktree while the PR is open. It holds the branch, build cache, and en
   ```
 - Handle feedback (PR comments or the live session) in the worktree: fix, revalidate (steps 4-8), push, and let the watcher keep waiting.
 
-Autonomous runs (`standards`) with no user to return to watch the PR through merge or CI under a bounded timeout, record the final PR state, and go to cleanup.
+When no user can answer, watch the PR through merge or CI under a bounded timeout, record the final PR state, and go to cleanup.
 
 ## 10. Cleanup
 

@@ -13,20 +13,20 @@ Each section is a lens to apply to a structural decision.
 
 A module's interface is a cost every caller pays. The functionality behind it is what callers do not have to think about. Depth is that functionality weighed against the interface's complexity.
 
-- A deep module hides substantial functionality behind a narrow interface. A filesystem's `open`/`read`/`write`/`close` hides disk layout, caching, and buffering.
-- A shallow module has an interface about as complex as what it does. A pass-through wrapper, whose body is one call to another function with renamed arguments, adds a name and no depth.
+- A **deep module** hides substantial functionality behind a narrow interface. A filesystem's `open`/`read`/`write`/`close` hides disk layout, caching, and buffering.
+- A **shallow module** has an interface about as complex as what it does. A pass-through wrapper, whose body is one call to another function with renamed arguments, adds a name and no depth.
 - To judge a proposed split or merge, ask whether the new boundary simplifies each side's interface relative to what it hides, or moves the same complexity behind a new name.
 
 ## Information hiding
 
 Ask what a caller must know to use this correctly beyond the signature. Each fact a caller must hold in mind to call something safely is a hiding failure somewhere.
 
-- A necessary leak is a fact the caller needs, such as an API's rate limit. An accidental leak is an implementation detail that escaped because nothing hid it, such as an internal retry count. Fix accidental leaks and document necessary ones.
+- A **necessary leak** is a fact the caller needs, such as an API's rate limit. An **accidental leak** is an implementation detail that escaped because nothing hid it, such as an internal retry count. Fix accidental leaks and document necessary ones.
 - A leak that appears in more than one caller means the boundary is in the wrong place.
 
 ## Seam placement
 
-A seam is where a public boundary is crossed: where behavior can be substituted without editing the code on the other side. It is also where a test attaches. Assert at the seam, not on internals.
+A **seam** is where a public boundary is crossed: where behavior can be substituted without editing the code on the other side. It is also where a test attaches. Assert at the seam, not on internals.
 
 - A seam too low, inside a helper, makes tests exercise mechanics unrelated to the behavior under test.
 - A seam too high, only at the process boundary, forces any specific test to drive the whole system.

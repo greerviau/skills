@@ -11,8 +11,10 @@ Write for a capable reader who acts on instruction and does not need convincing.
 - Match weight to the task. A simple single-shot skill is a few plain sentences with no headers (see `handoff`). A stateful multi-step workflow earns structure. Do not pad a small skill or force a complex one to be terse.
 - Keep reference detail. Command examples, flag docs, and API mechanics (as in `lit-research`, `standards`, and the `gh` calls in `spec-to-tickets`) are substance. Cut rationale prose, not substance.
 - Each skill stands alone. A skill does its own job to completion and works without any sibling skill installed. Name another skill only as an option for a step outside this skill's job (for example, "land the change with the `dev-workflow` skill, if you use it"), never as a required handoff. Cross-references position siblings and create no dependencies.
-- Describe current behavior in present tense. Use semantic line breaks in prose markdown (one sentence per line). Use normal dashes or semicolons, never em dashes.
-- Avoid the common AI-writing markers: figurative labels in place of claims ("load-bearing", "the lever", "surgical"), antithesis flourishes ("not X, but Y"), `**Bold term:** explanation` bullets, trailing "-ing" clauses that grade the previous sentence, and the vocabulary `standards` bans under "Plain language".
+- Describe current behavior in present tense. Use semantic line breaks in prose markdown (one sentence per line).
+- Where a sentence reaches for an em dash, rewrite it with a comma, colon, period, or parentheses, whichever the sentence needs. A hyphen swapped in for the dash is not a rewrite.
+- Write each rule as the claim or mechanism it states, in the plain language `standards` defines. Bold a term once, where it is defined.
+- Write the autonomous fallback on the line of the checkpoint it governs, as "When no user can answer, ..." (`standards`, interaction mode).
 
 ## The test
 

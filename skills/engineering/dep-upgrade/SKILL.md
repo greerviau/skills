@@ -12,6 +12,7 @@ Use `uv` for dependency, environment, and test commands. Do not use `pip`, `pip-
 
 1. Capture the target and current state.
    Run `git status --short --branch` and record the issue, branch, commit, and requested package, version, tag, or revision.
+   When the target version, tag, or scope is missing and no user can answer (`standards`), take the narrowest compatible interpretation the repository can verify, record the assumption in the report, and proceed. Stop when no defensible target exists.
    Locate every `pyproject.toml`, `uv.lock`, workspace member, and CI or README command that defines or verifies the project.
    Confirm the project uses uv and has a lockfile.
    Run `uv lock --check`. If the lockfile is stale or missing, stop unless repairing it is part of the request.
@@ -77,5 +78,3 @@ Use `uv` for dependency, environment, and test commands. Do not use `pip`, `pip-
 - This skill owns dependency declaration changes, uv resolution, lockfile review, and downstream verification. It does not fix application code broken by an incompatible upgrade.
 - Keep upgrades targeted unless a broad refresh is requested.
 - Flag unrelated dependency or application defects for their own issue and branch.
-
-Autonomous runs (`standards`) with a missing target version, tag, or scope take the narrowest compatible interpretation, record the assumption in the report, and proceed when the repository can verify it. They stop when no defensible target exists or the baseline is not green.

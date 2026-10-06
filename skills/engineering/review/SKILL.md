@@ -41,7 +41,6 @@ It reviews and reports and does not land changes.
 6. Report findings ranked most severe first, each concrete and actionable, ending in a ship or don't-ship call. Merge the findings from both passes. A stopped spec-conformance pass contributes its one-line note.
    A review a person reads is human-facing (*Artifact audience* in `standards`): one or two sentences per finding naming the location and the fix. Include no preamble, no summary of the diff, no closing restatement, and no list of what was checked and found clean.
    Run the concision pass (`standards`) first when the report is posted as PR comments or a review body.
-
-Autonomous runs (`standards`) acting as a gate emit a machine-consumable verdict plus the ranked findings list.
+   When no user can answer and the review runs as a gate (`standards`), emit a machine-consumable verdict plus the ranked findings list.
 
 Applying findings is a separate step (the `dev-workflow` skill, if you use it). Incidental defects are flagged, not fixed in place.

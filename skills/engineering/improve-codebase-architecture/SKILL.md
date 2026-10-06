@@ -61,13 +61,11 @@ This skill does not edit production code or design the selected change's interfa
 7. Open the absolute path with `open` on macOS, `xdg-open` on Linux, or `start` on Windows.
    Return the path and the ranked candidate titles.
    Interactive runs end by asking: `Which of these would you like to explore?`
+   When no user can answer (`standards`), return the report path, the ranked list, and the top recommendation with its evidence, and record that no candidate was selected.
    Do not start implementation in this invocation.
-
-Autonomous runs do not wait for a selection. Return the report path, the ranked list, and the top recommendation with its evidence, and record that no candidate was selected.
 
 ## Scope
 
-- This skill scans and ranks structural opportunities and does not implement them.
 - It uses a glossary or code term when one exists and does not invent domain terms.
 - It proposes no final interface before the user selects a candidate.
 - After selection, use the `spec` skill, if installed, to investigate and plan the change. Otherwise hold an explicit design discussion before editing code.

@@ -35,6 +35,7 @@ Do not pick a side because its markers appear first, and do not declare success 
 4. Resolve each hunk semantically. State the behavior each side adds, removes, or changes before editing.
    Keep both changes when they address independent behavior.
    When they are incompatible, choose the behavior that satisfies the integration target and repository contract, and record the rejected behavior in the resolution notes or handoff.
+   When no user can answer (`standards`), choose by the repository's documented policy and the integration target's current behavior. If both incompatible behaviors satisfy the contract and the choice changes a public interface, migration, data format, or security boundary, stop before editing that hunk and report the decision required.
    Keep surrounding invariants intact: ordering, validation, error handling, generated output, and public interfaces.
    Use `git checkout --ours` or `--theirs` on a whole file only when review of the primary sources shows the whole file belongs to that side.
    Do not add new behavior to make a hunk compile.
@@ -75,12 +76,8 @@ Completion: <completed operation and resulting commit, or remaining blocker>
 Confidence: <high|moderate|low>
 ```
 
-Autonomous runs (`standards`) resolve using the repository's documented policy and the integration target's current behavior when no human decision is needed.
-When two incompatible behaviors both satisfy the contract and the choice changes a public interface, migration, data format, or security boundary, stop before editing that hunk and report the decision required.
-
 ## Scope
 
-- This skill resolves conflicts and completes the active Git operation. It does not invent a feature, skip a commit, or discard a side without evidence.
 - Resume the repository's normal validation and PR workflow after completion.
 - A deterministic test failure caused by the resolved code belongs to `debug`, if you use it. An intermittent failure belongs to `flake-hunt`, if you use it.
 - Flag unrelated bugs and pre-existing check failures for their own issue and branch.
