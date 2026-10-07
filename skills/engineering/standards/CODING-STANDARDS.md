@@ -13,6 +13,7 @@ The present-tense and no-change-narrative rules in `SKILL.md` (*Documentation an
 
 - A comment carries a fact the code cannot state: a non-obvious constraint, a reason, a subtlety, or an external contract the code must match. Delete comments that narrate what the code does.
 - For each comment, name the fact it carries and check whether the code on the lines it describes already states it. Delete the comment when the fact is unnamed, the code states it, or you cannot decide.
+- Do not reference this repo's issues or PRs in a comment (`#123`, `fixes #45`, `added in PR #88`). The commit and PR carry that link. A comment may link an external tracker (an upstream bug, a vendor issue) when it states the constraint in words and the link backs it. A TODO states what is wrong, and a tracking link may follow it.
 - Limit inline comments to two lines and never add an example. A comment that needs an example or a third line means the code needs fixing.
 - A docstring states what the thing does, then parameters, return, and raises, in the language's standard format (PEP 257 or Google style for Python). Nothing else belongs in it.
 - Keep a docstring summary to one line. Add a body only when a caller cannot use the thing correctly without it. A docstring that walks through the implementation, enumerates edge cases, or argues for the design is over budget at any length.
