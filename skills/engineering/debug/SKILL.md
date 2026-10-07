@@ -15,7 +15,7 @@ This skill finds and proves the cause. Landing the fix is a separate step (the `
 1. Reproduce. Build the smallest reliable reproduction that drives the real entry point (CLI, endpoint, UI flow), not a convenient unit. If the bug does not reproduce, report what you tried and ask for the missing detail (environment, inputs, version) instead of guessing at a fix.
 2. Localize. With the reproduction red, narrow to the root cause: bisect history, add instrumentation, read the failing path. Separate the symptom (what the user sees) from the cause (why it happens).
 3. Confirm. State the root cause and how the reproduction proves it: the reproduction is red at this point because of this cause, and would go green if the cause were corrected.
-4. Fix, only if asked. The reproduction becomes an E2E-weighted regression test, and the fix lands through your normal process.
+4. Fix, only if asked. The reproduction becomes an E2E-weighted regression test that fails before the fix and passes after it, and the fix lands through your normal process.
 
 Do not fix a bug you have not reproduced. A green reproduction after the change is the evidence the fix worked.
 Flag unrelated bugs found while localizing for their own branch.

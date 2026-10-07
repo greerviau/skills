@@ -17,7 +17,7 @@ Write a pull request's title and body, then create it. This skill is the single 
 4. Write an evergreen body with these sections, following the repo's PR template where one exists:
    - Problem / request: the problem or requested feature, and what this PR does about it. State the goal separately only when the scope is deliberately narrower or broader than the problem, or the goal is not obvious.
    - Changes: a concise summary of what was done.
-   - Testing: how it was tested.
+   - Testing: how it was tested. For a behavior change, name a test that failed before the change and its failure message.
    - Additional testing required: what a reviewer or QA should still exercise.
    - Regressions: known or potential regressions to watch for.
 5. Keep it short. The body is human-facing, so hold it to the budget and cuts in *Artifact audience* (`standards`):

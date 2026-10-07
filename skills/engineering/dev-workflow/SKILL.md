@@ -31,14 +31,20 @@ cd "$wt"
 
 ## 3. Do the work
 
-Follow the `standards` rules for ubiquitous language, E2E-weighted tests, and branch hygiene.
+Read `standards` and its `CODING-STANDARDS.md` before writing code, and follow their rules for ubiquitous language, test-first testing, and branch hygiene.
 Follow any provided plan exactly. Commit in stages when the scope is large.
-When the request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor"), drive this step with the `tdd` skill, if you use it. Otherwise work directly.
+
+Build each behavior change test-first with the `tdd` skill, if you use it.
+Without it, run the loop directly: write a test at the change's real entry point, run it and confirm it fails because the behavior is missing, write the minimum code to pass, then refactor while it stays green.
+Record each red run's test name and failure message for the PR.
+The exemptions (no behavior to test, or another guard proves the change) are in `CODING-STANDARDS.md`.
+
+While building, run the typechecker and the test file you are changing after each edit. Run the full suite in step 4.
 
 ## 4. Validate locally
 
-- Run tests, if available.
-- Run lints.
+- Run the full test suite, if available.
+- Run lints and the typechecker, if the repo has one.
 - For a change with a runtime surface, exercise it end to end through its real entry point (`run`, where available).
 
 ## 5. Audit comments and documentation

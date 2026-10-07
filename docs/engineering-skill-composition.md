@@ -58,7 +58,7 @@ Skills left out of the graph:
 
 Two skills are both entry points and components, and their back edges are omitted to keep the graph acyclic:
 
-- `tdd` hands a change to `dev-workflow`, and `dev-workflow` names `tdd` as the option for building test-first.
+- `tdd` hands a change to `dev-workflow`, and `dev-workflow` runs `tdd` as its build step for every behavior change.
 - `tech-research` is an entry point `spec` reaches at an open question, and `spec` cites its findings file instead of re-deriving the answer.
 
 ## Roles
@@ -73,7 +73,7 @@ Two skills are both entry points and components, and their back edges are omitte
 | `spec-to-tickets` | user | Entry - ticketing | A reviewed spec should become GitHub Issues | `open-issue` (writes and files each one), then `dev-workflow` (executes each issue) |
 | `tech-research` | model | Entry - research | A technical question needs a sourced, version-pinned answer about third-party or external behavior | none (produces a findings file); `spec` cites it instead of re-deriving |
 | `dep-upgrade` | model | Entry - dependency maintenance | A uv-managed Python project needs a dependency, lockfile, or git-sourced internal tag upgraded | `dev-workflow` (lands the verified dependency change) |
-| `tdd` | model | Entry - test-first loop | A request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor") | `dev-workflow` (lands the test-driven change) |
+| `tdd` | model | Entry - test-first loop | Code behavior is built or changed, including `dev-workflow`'s build step, or a request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor") | `dev-workflow` (lands the test-driven change) |
 | `debug` | model | Entry - diagnosis | Something is broken and the cause is unknown | `dev-workflow` (lands the fix as a regression-tested change) |
 | `flake-hunt` | model | Entry - flake diagnosis | A test failure may be intermittent, order-dependent, seed-dependent, or limited to CI | `dev-workflow` (lands the fix or bounded quarantine) |
 | `merge-conflict` | model | Entry - integration recovery | A Git merge or rebase has conflicts that require semantic resolution | `dev-workflow` (resumes validation and the remaining integration workflow) |
@@ -81,7 +81,7 @@ Two skills are both entry points and components, and their back edges are omitte
 | `perf` | model | Entry - optimization | A change needs to get faster, cheaper, or higher-throughput, and the improvement must be proven with a before/after measurement | `dev-workflow` (lands the measured change) |
 | `prototype` | model | Entry - design spike | A design question needs evidence from a disposable implementation | none (produces a decision record and discards the spike) |
 | `improve-codebase-architecture` | user | Entry - architecture scan | A codebase needs structural opportunities identified and ranked before implementation | none (produces a visual report and waits for candidate selection) |
-| `dev-workflow` | model | Entry - lands code changes | Any request to write and land code in a GitHub repo | invokes `open-issue`, `doc-audit`, `run`, `open-pr`, and `tdd` for an explicitly test-first request |
+| `dev-workflow` | model | Entry - lands code changes | Any request to write and land code in a GitHub repo | invokes `open-issue`, `tdd` (builds each behavior change test-first), `doc-audit`, `run`, and `open-pr` |
 | `review` | model | Entry - gate | Changes need checking before they land | reports only; findings go to `dev-workflow` to apply |
 | `handoff` | user | Entry - utility | A conversation needs compacting for another agent to continue | none (produces a document) |
 | `open-issue` | model | Component | `dev-workflow` reaches its issue-first step, `spec-to-tickets` files a work item, or an issue is opened standalone | none |
@@ -89,7 +89,7 @@ Two skills are both entry points and components, and their back edges are omitte
 | `doc-audit` | model | Component | `dev-workflow` validates, or docs and comments are written standalone | none |
 | `run` | n/a | Component - harness-provided, not a skill in this repo | `dev-workflow` validates a change with a runtime surface | none |
 | `mermaid` | model | Component | Any skill drafts, renders, or refines a diagram in a doc, spec, PR, or ADR | none |
-| `standards` | model | Reference | Any skill applies a house rule | none - read directly |
+| `standards` | model | Reference | Any skill applies a house rule. `CODING-STANDARDS.md` holds the rules for code | none - read directly |
 | `design` | model | Reference | Any skill judges or explains a structural decision | none - read directly |
 
 ## Composition rules
@@ -107,5 +107,5 @@ Two skills are both entry points and components, and their back edges are omitte
   - `spec` plans and does not build.
 - Components are leaves, except `tdd`. `open-issue`, `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and do not hand off further. `tdd` is invoked by a `dev-workflow` step the same way, but as an entry point it hands back to `dev-workflow` instead of terminating there.
 - Delegation to a subagent is not a hand-off. `doc-audit` (its language check) and `mermaid` (its render loop) hand work to a subagent, and both stay leaves.
-- `standards` and `design` are policy references and never numbered steps. `standards` holds compliance rules and `design` holds structural vocabulary.
+- `standards` and `design` are policy references and never numbered steps. `standards` holds compliance rules (prose and workflow in `SKILL.md`, code in `CODING-STANDARDS.md`) and `design` holds structural vocabulary.
 - `merge-conflict` completes the active merge or rebase, then returns to `dev-workflow` for remaining validation, publication, or PR lifecycle work.
