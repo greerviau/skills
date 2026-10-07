@@ -219,6 +219,24 @@ class NamingTests(CheckDiffTestCase):
 
         self.assertNoFinding(findings, "naming")
 
+    def test_keyword_argument_at_call_site_is_not_reported(self):
+        self.repository.write("app.py", "loader = DataLoader(dataset, num_workers=4)\n")
+        self.repository.commit("add loader")
+
+        _, findings = self.repository.check()
+
+        self.assertNoFinding(findings, "naming")
+
+    def test_abbreviated_parameter_in_own_definition_is_reported(self):
+        self.repository.write(
+            "app.py", "def load(path, num_items=3):\n    return path\n"
+        )
+        self.repository.commit("add load")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:1", "naming")
+
     def test_framework_fixture_names_are_not_reported(self):
         self.repository.write(
             "tests/test_export.py",
@@ -383,6 +401,213 @@ class DiffScopeTests(CheckDiffTestCase):
 
         self.assertEqual(exit_code, 0)
         self.assertEqual(findings, [])
+
+
+class GitFailureTests(CheckDiffTestCase):
+    def test_unrelated_base_exits_two_instead_of_passing(self):
+        git(self.repository.path, "checkout", "-q", "--orphan", "unrelated")
+        git(self.repository.path, "rm", "-rfq", ".")
+        self.repository.write("other.txt", "other\n")
+        self.repository.commit("unrelated root")
+        git(self.repository.path, "branch", "-f", "base")
+        git(self.repository.path, "checkout", "-q", "main")
+        self.repository.write("app.py", "cfg = 1\n")
+        self.repository.commit("add cfg")
+
+        exit_code, _ = self.repository.check()
+
+        self.assertEqual(exit_code, 2)
+
+    def test_invalid_utf8_line_is_checked_without_crashing(self):
+        (self.repository.path / "app.py").write_bytes(b"cfg = 1  # caf\xe9\n")
+        self.repository.commit("add latin-1 file")
+
+        exit_code, findings = self.repository.check()
+
+        self.assertEqual(exit_code, 1)
+        self.assertFinding(findings, "app.py:1", "naming")
+
+
+class PathTests(CheckDiffTestCase):
+    def test_noprefix_diff_configuration_does_not_hide_files(self):
+        git(self.repository.path, "config", "diff.noprefix", "true")
+        self.repository.write("app.py", "cfg = 1\n")
+        self.repository.commit("add cfg")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:1", "naming")
+
+    def test_path_with_space_is_checked(self):
+        self.repository.write("my app.py", "cfg = 1\n")
+        self.repository.commit("add cfg")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "my app.py:1", "naming")
+
+    def test_non_ascii_path_is_checked(self):
+        self.repository.write("caf\u00e9.py", "cfg = 1\n")
+        self.repository.commit("add cfg")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "caf\u00e9.py:1", "naming")
+
+    def test_added_line_starting_with_plus_signs_keeps_its_file(self):
+        self.repository.write("notes.md", "one\n++ We leverage it.\n")
+        self.repository.commit("add notes")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "notes.md:2", "plain-language")
+
+    def test_untracked_file_is_checked(self):
+        self.repository.write("draft.md", "A seamless setup.\n")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "draft.md:1", "plain-language")
+
+    def test_run_from_subdirectory_checks_the_whole_repository(self):
+        self.repository.write("src/app.py", "x = 1\n")
+        self.repository.commit("add src")
+        self.repository.write("draft.md", "A seamless setup.\n")
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT), "base"],
+            cwd=self.repository.path / "src",
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertIn("draft.md:1: plain-language:", result.stdout)
+
+    def test_unchecked_file_type_is_named_on_stderr(self):
+        self.repository.write("schema.proto", "message Totals {}\n")
+        self.repository.commit("add schema")
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT), "base"],
+            cwd=self.repository.path,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertIn("schema.proto", result.stderr)
+
+
+class DocumentationCommentTests(CheckDiffTestCase):
+    def test_go_doc_comment_above_declaration_is_not_comment_form(self):
+        self.repository.write(
+            "totals.go",
+            "package totals\n\n// Sum adds the values.\n// It returns zero for an empty slice.\n"
+            "// It never panics.\nfunc Sum(values []int) int { return 0 }\n",
+        )
+        self.repository.commit("add sum")
+
+        _, findings = self.repository.check()
+
+        self.assertNoFinding(findings, "comment-form")
+
+    def test_jsdoc_and_rust_doc_blocks_are_not_comment_form(self):
+        self.repository.write(
+            "totals.js",
+            "/**\n * Adds the values.\n * @param values numbers\n */\nfunction sum(values) {}\n",
+        )
+        self.repository.write(
+            "totals.rs",
+            "/// Adds the values.\n/// Returns zero.\n/// Never panics.\nfn sum() {}\n",
+        )
+        self.repository.commit("add sum")
+
+        _, findings = self.repository.check()
+
+        self.assertNoFinding(findings, "comment-form")
+
+    def test_pointer_dereference_is_code(self):
+        self.repository.write("buffer.c", "void reset(int *ptr) {\n    *ptr = 0;\n}\n")
+        self.repository.commit("add reset")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "buffer.c:2", "naming")
+
+    def test_python_docstring_is_prose(self):
+        self.repository.write(
+            "app.py",
+            'def load():\n    """Load the cfg file.\n\n    We utilize a cache.\n    """\n',
+        )
+        self.repository.commit("add load")
+
+        _, findings = self.repository.check()
+
+        self.assertNoFinding(findings, "naming")
+        self.assertFinding(findings, "app.py:4", "plain-language")
+
+
+class CommentRunTests(CheckDiffTestCase):
+    def test_line_added_to_existing_two_line_comment_is_reported(self):
+        self.repository.write("app.py", "# one\n# two\nx = 1\n")
+        self.repository.commit("add constant")
+        git(self.repository.path, "branch", "-f", "base")
+        self.repository.write("app.py", "# one\n# two\n# three\nx = 1\n")
+        self.repository.commit("extend comment")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:3", "comment-form")
+
+    def test_trailing_comment_without_space_is_checked(self):
+        self.repository.write("app.py", "x = 1 #see #12\n")
+        self.repository.write("app.js", "run(); //we leverage it\n")
+        self.repository.commit("add code")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:1", "issue-reference")
+        self.assertFinding(findings, "app.js:1", "plain-language")
+
+
+class LanguageCoverageTests(CheckDiffTestCase):
+    def test_typescript_module_test_file_is_checked_for_flakiness(self):
+        self.repository.write("tests/a.test.mts", "await sleep(1);\n")
+        self.repository.commit("add test")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "tests/a.test.mts:1", "flakiness")
+
+    def test_capitalized_tests_directory_is_a_test_path(self):
+        self.repository.write("Tests/WorkerTests.swift", "sleep(1)\n")
+        self.repository.commit("add test")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "Tests/WorkerTests.swift:1", "flakiness")
+
+    def test_sql_dockerfile_and_php_comments_are_checked(self):
+        self.repository.write("query.sql", "-- see #12\nSELECT 1;\n")
+        self.repository.write("Dockerfile", "# see #13\nFROM scratch\n")
+        self.repository.write("index.php", "<?php\n# see #14\n")
+        self.repository.commit("add files")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "query.sql:1", "issue-reference")
+        self.assertFinding(findings, "Dockerfile:1", "issue-reference")
+        self.assertFinding(findings, "index.php:2", "issue-reference")
+
+    def test_every_banned_word_in_standards_is_checked(self):
+        self.repository.write(
+            "README.md", "# Project\n\nBegin here.\n\nNotes concerning setup.\n"
+        )
+        self.repository.commit("document setup")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "README.md:3", "plain-language")
+        self.assertFinding(findings, "README.md:5", "plain-language")
 
 
 if __name__ == "__main__":

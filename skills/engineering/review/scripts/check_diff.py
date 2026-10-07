@@ -4,24 +4,30 @@
 Usage: check_diff.py <base>
 
 Compares the working tree (committed, uncommitted, and untracked files) with
-the merge base of <base> and HEAD. Prints one finding per line as
-`path:line: check: detail` or `commit <sha>: check: detail`. Exits 0 with no
-findings, 1 with findings, and 2 when <base> does not resolve.
+the merge base of <base> and HEAD, from the repository root whatever the
+current directory. Prints one finding per line as `path:line: check: detail`
+or `commit <sha>: check: detail`, and names files of unchecked types on
+stderr. Exits 0 with no findings, 1 with findings, and 2 when it cannot run.
 """
 
+from __future__ import annotations
+
+import os
 import re
 import subprocess
 import sys
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import PurePosixPath
 
-HASH_COMMENT = ("#",)
-SLASH_COMMENT = ("//",)
-DASH_COMMENT = ("--",)
+HASH = ("#",)
+SLASH = ("//",)
+DASH = ("--",)
 COMMENT_MARKERS = {
     **dict.fromkeys(
         [
             ".py",
+            ".pyi",
             ".sh",
             ".bash",
             ".zsh",
@@ -32,9 +38,9 @@ COMMENT_MARKERS = {
             ".yml",
             ".toml",
             ".cfg",
-            ".ini",
-        ],
-        HASH_COMMENT,
+        ]
+        + [".ini", ".tf"],
+        HASH,
     ),
     **dict.fromkeys(
         [
@@ -44,10 +50,14 @@ COMMENT_MARKERS = {
             ".cjs",
             ".ts",
             ".tsx",
+            ".mts",
+            ".cts",
             ".go",
             ".rs",
             ".java",
             ".kt",
+        ]
+        + [
             ".kts",
             ".swift",
             ".c",
@@ -58,18 +68,21 @@ COMMENT_MARKERS = {
             ".cs",
             ".scala",
             ".dart",
-        ],
-        SLASH_COMMENT,
+        ]
+        + [".gradle", ".vue", ".svelte"],
+        SLASH,
     ),
-    **dict.fromkeys([".sql", ".lua", ".hs"], DASH_COMMENT),
+    **dict.fromkeys([".sql", ".lua", ".hs"], DASH),
     ".php": ("//", "#"),
 }
-COMMENT_MARKERS_BY_NAME = {"Dockerfile": HASH_COMMENT, "Makefile": HASH_COMMENT}
+COMMENT_MARKERS_BY_NAME = {"Dockerfile": HASH, "Makefile": HASH}
+PYTHON_SUFFIXES = {".py", ".pyi"}
 PROSE_SUFFIXES = {".md", ".markdown", ".rst", ".txt", ".adoc"}
 
 TEST_PATH = re.compile(
     r"(^|/)(tests?|__tests__|spec)/"
-    r"|(^|/)test_[^/]*\.py$|_test\.(py|go)$|\.(test|spec)\.[cm]?[jt]sx?$"
+    r"|(^|/)test_[^/]*\.py$|_test\.(py|go)$|\.(test|spec)\.[cm]?[jt]sx?$",
+    re.IGNORECASE,
 )
 FLAKY_PATTERNS = [
     (
@@ -96,42 +109,24 @@ FLAKY_PATTERNS = [
 ]
 
 ABBREVIATIONS = {
-    "cfg",
-    "conf",
-    "idx",
-    "cnt",
-    "msg",
-    "msgs",
-    "btn",
-    "usr",
-    "pwd",
-    "tmp",
-    "arr",
-    "obj",
-    "num",
-    "nums",
-    "resp",
-    "req",
-    "ctx",
-    "buf",
-    "ptr",
-    "mgr",
-    "svc",
-    "calc",
-    "samps",
-}
+    "cfg", "conf", "idx", "cnt", "msg", "msgs", "btn", "usr", "pwd", "tmp", "arr", "obj",
+    "num", "nums", "resp", "req", "ctx", "buf", "ptr", "mgr", "svc", "calc", "samps",
+}  # fmt: skip
+# Names a framework fixes, which the author cannot rename.
+FRAMEWORK_NAMES = {"tmp_path", "tmp_path_factory", "tmpdir", "tmpdir_factory"}
 IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 CAMEL_BOUNDARY = re.compile(r"(?<=[a-z0-9])(?=[A-Z])")
 STRING_LITERAL = re.compile(r"\"(?:\\.|[^\"\\])*\"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`")
 FILE_PATH = re.compile(r"[\w.~-]*(?:/[\w.-]+)+/?")
-# Names a framework fixes, which the author cannot rename.
-FRAMEWORK_NAMES = {"tmp_path", "tmp_path_factory", "tmpdir", "tmpdir_factory"}
+KEYWORD_ARGUMENT = re.compile(r"(?<=[(,])\s*[A-Za-z_]\w*\s*=(?!=)")
+DEFINITION = re.compile(r"^\s*(async\s+)?(def|function|fn|func)\b")
+GO_DECLARATION = re.compile(r"^\s*(func|type|var|const|package)\b")
 
 EXAMPLE_IN_COMMENT = re.compile(r"\be\.g\.|\bfor (example|instance)\b", re.IGNORECASE)
 ISSUE_REFERENCE = re.compile(r"(?<![\w&])#[0-9]+\b|/issues/[0-9]+|/pull/[0-9]+")
 BANNED_PROSE = re.compile(
-    r"\b(utili[sz](e|es|ed|ing|ation)|leverag(e|es|ed|ing)|facilitat(e|es|ed|ing)|"
-    r"prior to|subsequent to|commenc(e|es|ed|ing)|initiat(e|es|ed|ing)|regarding|"
+    r"\b(begin|commenc(e|es|ed|ing)|initiat(e|es|ed|ing)|utili[sz](e|es|ed|ing|ation)|"
+    r"leverag(e|es|ed|ing)|facilitat(e|es|ed|ing)|prior to|subsequent to|regarding|concerning|"
     r"obtain(s|ed|ing)?|acquir(e|es|ed|ing)|demonstrat(e|es|ed|ing)|additionally|"
     r"furthermore|moreover|seamless(ly)?|robust|powerful|effortless(ly)?|cutting-edge|"
     r"world-class|next-generation|revolutionary)\b",
@@ -146,67 +141,153 @@ AGENT_CO_AUTHOR = re.compile(
 GENERATED_NOTE = re.compile(r"\bgenerated (with|by)\b", re.IGNORECASE)
 
 
+class GitError(Exception):
+    pass
+
+
 @dataclass
-class AddedLine:
-    path: str
-    number: int
-    text: str
+class SourceLine:
+    """One line of a file: `kind` is code, comment, docstring, or string."""
+
+    kind: str
+    code: str = ""
+    comment: str | None = None
 
 
 def git(*arguments):
-    return subprocess.run(
-        ["git", *arguments], capture_output=True, text=True, check=False
+    result = subprocess.run(
+        ["git", "-c", "core.quotePath=false", *arguments],
+        capture_output=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
     )
+    if result.returncode != 0:
+        raise GitError(f"git {' '.join(arguments)}: {result.stderr.strip()}")
+    return result.stdout
 
 
-def added_lines(merge_base):
-    diff = git("diff", "--no-color", "--no-ext-diff", "--unified=0", merge_base).stdout
+def added_line_numbers(merge_base):
+    """Map each changed path to the line numbers the change adds."""
+    added = defaultdict(set)
+    diff = git(
+        "diff", "--no-color", "--no-ext-diff", "--unified=0",
+        "--src-prefix=a/", "--dst-prefix=b/", merge_base,
+    )  # fmt: skip
     path = None
     number = 0
+    previous = ""
     for line in diff.splitlines():
-        if line.startswith("+++ "):
-            path = None if line == "+++ /dev/null" else line[len("+++ b/") :]
+        if line.startswith("+++ ") and previous.startswith("--- "):
+            target = line[len("+++ ") :].rstrip("\t")
+            path = None if target == "/dev/null" else target[len("b/") :]
         elif line.startswith("@@"):
             number = int(re.match(r"@@ -\S+ \+(\d+)", line).group(1))
         elif line.startswith("+") and path is not None:
-            yield AddedLine(path, number, line[1:])
+            added[path].add(number)
             number += 1
-    untracked = git("ls-files", "--others", "--exclude-standard", "-z").stdout
-    for path in filter(None, untracked.split("\0")):
-        try:
-            with open(path, encoding="utf-8") as handle:
-                for number, text in enumerate(handle.read().splitlines(), start=1):
-                    yield AddedLine(path, number, text)
-        except (UnicodeDecodeError, OSError):
-            continue
+        previous = line
+    for path in filter(
+        None, git("ls-files", "--others", "--exclude-standard", "-z").split("\0")
+    ):
+        added[path] = None
+    return added
 
 
-def comment_markers(path):
+def read_lines(path):
+    try:
+        with open(path, encoding="utf-8", errors="replace") as handle:
+            return handle.read().splitlines()
+    except OSError:
+        return []
+
+
+def mask_strings(text):
+    return STRING_LITERAL.sub(lambda literal: "x" * len(literal.group(0)), text)
+
+
+def classify(path, lines, markers):
     pure_path = PurePosixPath(path)
-    return COMMENT_MARKERS.get(pure_path.suffix.lower()) or COMMENT_MARKERS_BY_NAME.get(
-        pure_path.name
-    )
-
-
-def split_comment(text, markers):
-    """Return (code with string contents masked, comment, whole_line) for one line."""
-    stripped = text.strip()
-    if markers == SLASH_COMMENT and stripped.startswith(("/*", "*")):
-        return "", stripped.lstrip("/*").strip(), True
-    for marker in markers:
-        if stripped.startswith(marker) and not stripped.startswith("#!"):
-            return "", stripped[len(marker) :].strip(), True
-    masked = STRING_LITERAL.sub(lambda literal: "x" * len(literal.group(0)), text)
-    for marker in markers:
-        trailing = re.search(rf"\s{re.escape(marker)}\s", masked)
+    python = pure_path.suffix.lower() in PYTHON_SUFFIXES
+    block_comments = "//" in markers
+    classified = []
+    triple_delimiter = None
+    triple_kind = None
+    block_kind = None
+    for text in lines:
+        stripped = text.strip()
+        if triple_delimiter:
+            classified.append(SourceLine(triple_kind, comment=stripped))
+            if triple_delimiter in text:
+                triple_delimiter = None
+            continue
+        if block_kind:
+            classified.append(
+                SourceLine(block_kind, comment=stripped.lstrip("*").strip())
+            )
+            if "*/" in text:
+                block_kind = None
+            continue
+        if python and stripped[:3] in ('"""', "'''"):
+            delimiter = stripped[:3]
+            if delimiter not in stripped[3:]:
+                triple_delimiter, triple_kind = delimiter, "docstring"
+            classified.append(SourceLine("docstring", comment=stripped.strip("\"' ")))
+            continue
+        if block_comments and stripped.startswith("/*"):
+            kind = "docstring" if stripped.startswith("/**") else "comment"
+            if "*/" not in stripped[2:]:
+                block_kind = kind
+            classified.append(SourceLine(kind, comment=stripped.strip("/* ")))
+            continue
+        if block_comments and stripped.startswith(("///", "//!")):
+            classified.append(SourceLine("docstring", comment=stripped[3:].strip()))
+            continue
+        marker = next((m for m in markers if stripped.startswith(m)), None)
+        if marker and not stripped.startswith("#!"):
+            classified.append(
+                SourceLine("comment", comment=stripped[len(marker) :].strip())
+            )
+            continue
+        masked = mask_strings(text)
+        if python:
+            for delimiter in ('"""', "'''"):
+                if masked.count(delimiter) % 2 == 1:
+                    triple_delimiter, triple_kind = delimiter, "string"
+        trailing = None
+        for marker in markers:
+            trailing = re.search(rf"\s{re.escape(marker)}", masked)
+            if trailing:
+                break
         if trailing:
-            return masked[: trailing.start()], text[trailing.end() :].strip(), False
-    return masked, None, False
+            classified.append(
+                SourceLine(
+                    "code", masked[: trailing.start()], text[trailing.end() :].strip()
+                )
+            )
+        else:
+            classified.append(SourceLine("code", masked))
+    if pure_path.suffix.lower() == ".go":
+        mark_go_doc_comments(lines, classified)
+    return classified
+
+
+def mark_go_doc_comments(lines, classified):
+    run_start = None
+    for index, line in enumerate(classified):
+        if line.kind == "comment":
+            run_start = index if run_start is None else run_start
+            continue
+        if run_start is not None and GO_DECLARATION.match(lines[index]):
+            for doc_index in range(run_start, index):
+                classified[doc_index].kind = "docstring"
+        run_start = None
 
 
 def abbreviation_in(code):
-    code = FILE_PATH.sub("", STRING_LITERAL.sub("", code))
-    for identifier in IDENTIFIER.findall(code):
+    if not DEFINITION.match(code):
+        code = KEYWORD_ARGUMENT.sub("", code)
+    for identifier in IDENTIFIER.findall(FILE_PATH.sub("", code)):
         if identifier in FRAMEWORK_NAMES:
             continue
         if re.match(r"n_[a-z]", identifier):
@@ -218,57 +299,97 @@ def abbreviation_in(code):
     return None
 
 
-def line_findings(lines):
+def comment_findings(location, comment, check_examples):
     findings = []
-    comment_run = []
-    for line in lines:
-        location = f"{line.path}:{line.number}"
-        markers = comment_markers(line.path)
-        suffix = PurePosixPath(line.path).suffix.lower()
+    if check_examples and EXAMPLE_IN_COMMENT.search(comment):
+        findings.append(f"{location}: comment-form: example in comment")
+    if ISSUE_REFERENCE.search(comment):
+        findings.append(f"{location}: issue-reference: {comment}")
+    banned = BANNED_PROSE.search(comment)
+    if banned:
+        findings.append(f"{location}: plain-language: `{banned.group(0)}`")
+    return findings
 
-        if markers:
-            code, comment, whole_line = split_comment(line.text, markers)
-            if (
-                whole_line
-                and comment_run
-                and comment_run[-1].path == line.path
-                and comment_run[-1].number == line.number - 1
-            ):
-                comment_run.append(line)
-            else:
-                comment_run = [line] if whole_line else []
-            if len(comment_run) == 3:
-                findings.append(
-                    f"{location}: comment-form: third consecutive comment line"
-                )
-            if TEST_PATH.search(line.path):
+
+def comment_run_findings(path, classified, added):
+    findings = []
+    index = 0
+    while index < len(classified):
+        if classified[index].kind != "comment":
+            index += 1
+            continue
+        end = index
+        while end < len(classified) and classified[end].kind == "comment":
+            end += 1
+        run_numbers = set(range(index + 1, end + 1))
+        if end - index >= 3 and run_numbers & added:
+            findings.append(
+                f"{path}:{index + 3}: comment-form: comment of {end - index} lines"
+            )
+        index = end
+    return findings
+
+
+def source_findings(path, lines, added, markers):
+    classified = classify(path, lines, markers)
+    findings = comment_run_findings(path, classified, added)
+    test_file = TEST_PATH.search(path)
+    for number in sorted(added):
+        if number > len(classified):
+            continue
+        line = classified[number - 1]
+        location = f"{path}:{number}"
+        if line.kind == "code":
+            if test_file:
                 for name, pattern in FLAKY_PATTERNS:
-                    if pattern.search(code):
+                    if pattern.search(line.code):
                         findings.append(
-                            f"{location}: flakiness: {name}: {line.text.strip()}"
+                            f"{location}: flakiness: {name}: {lines[number - 1].strip()}"
                         )
-            abbreviation = abbreviation_in(code)
+            abbreviation = abbreviation_in(line.code)
             if abbreviation:
                 findings.append(
                     f"{location}: naming: abbreviated identifier `{abbreviation}`"
                 )
-            if comment:
-                if EXAMPLE_IN_COMMENT.search(comment):
-                    findings.append(f"{location}: comment-form: example in comment")
-                if ISSUE_REFERENCE.search(comment):
-                    findings.append(f"{location}: issue-reference: {comment}")
-                banned = BANNED_PROSE.search(comment)
-                if banned:
-                    findings.append(f"{location}: plain-language: `{banned.group(0)}`")
-        elif suffix in PROSE_SUFFIXES:
-            banned = BANNED_PROSE.search(line.text)
-            if banned:
-                findings.append(f"{location}: plain-language: `{banned.group(0)}`")
+        if line.comment and line.kind != "string":
+            findings += comment_findings(
+                location, line.comment, line.kind != "docstring"
+            )
     return findings
 
 
+def prose_findings(path, lines, added):
+    findings = []
+    for number in sorted(added):
+        if number <= len(lines):
+            banned = BANNED_PROSE.search(lines[number - 1])
+            if banned:
+                findings.append(f"{path}:{number}: plain-language: `{banned.group(0)}`")
+    return findings
+
+
+def file_findings(added_by_path):
+    findings = []
+    unchecked = []
+    for path, added in sorted(added_by_path.items()):
+        lines = read_lines(path)
+        if added is None:
+            added = set(range(1, len(lines) + 1))
+        pure_path = PurePosixPath(path)
+        markers = COMMENT_MARKERS.get(
+            pure_path.suffix.lower()
+        ) or COMMENT_MARKERS_BY_NAME.get(pure_path.name)
+        if markers:
+            findings += source_findings(path, lines, added, markers)
+        elif pure_path.suffix.lower() in PROSE_SUFFIXES:
+            findings += prose_findings(path, lines, added)
+        elif lines:
+            unchecked.append(path)
+    return findings, unchecked
+
+
 def commit_findings(merge_base):
-    log = git("log", "--format=%H%x00%B%x1e", f"{merge_base}..HEAD").stdout
+    log = git("log", "--format=%H%x00%B%x1e", f"{merge_base}..HEAD")
     findings = []
     for record in filter(str.strip, log.split("\x1e")):
         sha, _, body = record.strip().partition("\0")
@@ -282,12 +403,17 @@ def main(arguments):
     if len(arguments) != 1:
         print(__doc__.strip().splitlines()[2], file=sys.stderr)
         return 2
-    base = arguments[0]
-    if git("rev-parse", "--verify", "--quiet", f"{base}^{{commit}}").returncode != 0:
-        print(f"check_diff: cannot resolve base `{base}`", file=sys.stderr)
+    try:
+        os.chdir(git("rev-parse", "--show-toplevel").strip())
+        git("rev-parse", "--verify", "--quiet", f"{arguments[0]}^{{commit}}")
+        merge_base = git("merge-base", arguments[0], "HEAD").strip()
+        findings, unchecked = file_findings(added_line_numbers(merge_base))
+        findings += commit_findings(merge_base)
+    except GitError as error:
+        print(f"check_diff: {error}", file=sys.stderr)
         return 2
-    merge_base = git("merge-base", base, "HEAD").stdout.strip()
-    findings = line_findings(added_lines(merge_base)) + commit_findings(merge_base)
+    for path in unchecked:
+        print(f"check_diff: not checked (unknown file type): {path}", file=sys.stderr)
     for finding in findings:
         print(finding)
     return 1 if findings else 0
