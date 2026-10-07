@@ -1,6 +1,6 @@
 ---
 name: standards
-description: Shared engineering standards for documentation, naming, testing, branch and issue hygiene, pull requests and commits, and interactive or autonomous runs. Read when writing project artifacts or when another skill references standards.
+description: Shared engineering standards for documentation, naming, test-first testing, branch and issue hygiene, pull requests and commits, and interactive or autonomous runs. Read when writing project artifacts or code, or when another skill references standards.
 ---
 
 # standards
@@ -8,6 +8,9 @@ description: Shared engineering standards for documentation, naming, testing, br
 The single source of truth for the compliance rules the engineering skills share: house policy, not structural judgment (`design` covers structure).
 `spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-issue`, `open-pr`, `mermaid`, `design`, `tdd`, and `triage` reference this document instead of restating it.
 Each rule is policy; the referencing skill supplies the procedure that applies it.
+
+This file holds the rules for prose, artifacts, and workflow.
+The rules for code (comments, docstrings, identifiers, and test-first testing) are in `CODING-STANDARDS.md` next to this file. Read it before writing or reviewing code.
 
 ## Artifact audience
 
@@ -70,13 +73,7 @@ Skip the pass when the draft is well inside its budget, such as a sixty-word PR 
 - Do not add repo layouts to documentation.
 - In prose markdown (docs, READMEs, plans, design docs), use semantic line breaks: one sentence per line, no hard-wrapping. Code, tables, and code blocks are exempt.
 - Prefer mermaid to ASCII diagrams unless mermaid cannot express the diagram or the user asks otherwise. Draft mermaid with the `mermaid` skill's render-and-refine procedure.
-- A comment carries a fact the code cannot state: a non-obvious constraint, a reason, a subtlety, or an external contract the code must match. Delete comments that narrate what the code does.
-- For each comment, name the fact it carries and check whether the code on the lines it describes already states it. Delete the comment when the fact is unnamed, the code states it, or you cannot decide.
-- Limit inline comments to two lines and never add an example. A comment that needs an example or a third line means the code needs fixing.
-- A docstring states what the thing does, then parameters, return, and raises, in the language's standard format (PEP 257 or Google style for Python). Nothing else belongs in it.
-- Keep a docstring summary to one line. Add a body only when a caller cannot use the thing correctly without it. A docstring that walks through the implementation, enumerates edge cases, or argues for the design is over budget at any length.
-- Omit parameters the signature and types already state. "path: str, the path as a string" carries no fact.
-- Module-level documentation is exempt from the two-line inline cap. The present-tense and no-narrative rules still apply.
+- What a code comment or docstring may contain is in `CODING-STANDARDS.md`.
 
 ### Precision
 
@@ -107,18 +104,11 @@ These apply to any document a person reads.
 - End a sentence on its claim. A consequence that matters gets its own sentence with its mechanism, never a trailing "-ing" clause that grades the sentence before it.
 - Bold a term once, where it is defined. A list item is a sentence, never a `**Bold term:** explanation` pair.
 
-## Naming and ubiquitous language
+## Ubiquitous language
 
-- Name identifiers with full words, never abbreviations or truncations: `configuration` not `cfg`, `index` not `idx`, `sample_count` not `n_samps`. Domain acronyms the glossary records (`mz`, `xic`, `ms2`) are names and stay verbatim.
 - Each repo, or bounded context within it, keeps a glossary of domain terms, by default `docs/UBIQUITOUS-LANGUAGE.md`, under version control.
 - Read the relevant glossary before naming anything and use its terms verbatim in code (types, functions, endpoints, tables, tests) and prose (commits, PRs, docs). Never coin a synonym for a term the glossary defines.
 - Extend the glossary in the same change when implementation forces a new domain term or exposes a stale entry.
-
-## Testing
-
-- Weight tests toward E2E over narrow unit tests. Exercise the functionality as a user does, through the real entry point (CLI, endpoint, UI flow).
-- A bug fix carries a regression test built from the reproduction.
-- Flakiness is a defect. Do not use unseeded randomness, real clocks, order-dependent tests, or un-stubbed network calls.
 
 ## Branch hygiene
 

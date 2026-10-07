@@ -6,7 +6,9 @@ description: Use after code changes or when writing documentation or comments. A
 # doc-audit
 
 Documentation and comments describe the current code in present tense, never a change narrative (how it used to work, what changed, which ticket motivated it).
-The style rules are in `standards` under "Documentation and comments": present tense, the decision-history exception, no repo layouts, semantic line breaks, comments that carry a fact, two-line inline comments without examples, plain language, and mermaid over ASCII.
+The style rules are in `standards`.
+Its `SKILL.md` holds present tense, the decision-history exception, no repo layouts, semantic line breaks, plain language, and mermaid over ASCII.
+Its `CODING-STANDARDS.md` holds comments that carry a fact, two-line inline comments without examples, and the docstring rules.
 
 ## Procedure
 

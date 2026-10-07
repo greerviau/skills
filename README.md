@@ -62,12 +62,12 @@ Each category below separates the two.
 
 #### Model-invoked
 
-- [standards](skills/engineering/standards/SKILL.md) - the house rules the other engineering skills enforce: artifact audience and length, documentation and plain-language style, naming, testing, branch, issue, and PR hygiene, and the interactive and autonomous interaction contract.
+- [standards](skills/engineering/standards/SKILL.md) - the house rules the other engineering skills enforce: artifact audience and length, documentation and plain-language style, ubiquitous language, branch, issue, and PR hygiene, and the interactive and autonomous interaction contract. Its [CODING-STANDARDS.md](skills/engineering/standards/CODING-STANDARDS.md) holds the rules for code: comments, docstrings, identifiers, and test-first testing.
 - [design](skills/engineering/design/SKILL.md) - vocabulary for structural judgment (module depth, information hiding, seam placement, error-condition elimination, navigability), so a structural claim can be cited.
 - [open-issue](skills/engineering/open-issue/SKILL.md) - issue conventions: checks for duplicates, honors the repo's issue template, writes a descriptive title and a short problem, reproduction, and acceptance-criteria body, and labels from `gh label list`.
-- [dev-workflow](skills/engineering/dev-workflow/SKILL.md) - the development loop for a GitHub repo: an issue before code, an isolated worktree, local validation, an evergreen PR that closes the issue, CI to green, and cleanup.
+- [dev-workflow](skills/engineering/dev-workflow/SKILL.md) - the development loop for a GitHub repo: an issue before code, an isolated worktree, test-first building, local validation, an evergreen PR that closes the issue, CI to green, and cleanup.
 - [open-pr](skills/engineering/open-pr/SKILL.md) - writes the `feat(...)` or `fix(...)` title and an evergreen body (problem, changes, testing, additional testing, regressions) with no AI attribution or volatile details, then opens the PR.
-- [tdd](skills/engineering/tdd/SKILL.md) - the test-first loop: pick the seam, write the failing test, confirm it fails for the right reason, write the minimum code to pass, and refactor under green.
+- [tdd](skills/engineering/tdd/SKILL.md) - the test-first loop every behavior change runs: pick the seam, write the failing test, confirm it fails for the right reason, write the minimum code to pass, and refactor under green.
 - [tech-research](skills/engineering/tech-research/SKILL.md) - answers a question about third-party or external behavior from a source hierarchy (installed source and tests, vendor docs for the pinned version, specs and RFCs, release notes and issue trackers) and writes a version-pinned findings file with a citation and confidence level per claim.
 - [dep-upgrade](skills/engineering/dep-upgrade/SKILL.md) - upgrades Python dependencies with uv, reviews the lockfile diff, moves git-sourced internal packages to the same tag, and verifies the downstream suite.
 - [debug](skills/engineering/debug/SKILL.md) - reproduces a bug end to end as a user hits it before forming a fix hypothesis, then localizes and confirms the root cause.
