@@ -47,4 +47,4 @@ An API fact belongs to a version, not to the library. Record the checked version
 ## Related skills
 
 - This skill answers questions about third-party or external behavior, such as what a library does or what an RFC requires. `spec` discovers scope in this repo's own code. "How does this dependency behave" is `tech-research`, and "where in our code does this belong" is `spec`.
-- The output is a findings file, not a code change. `spec` or any other caller cites the file instead of re-deriving the answer.
+- The output is a findings file, not a code change. A caller quotes the claims it depends on, with their citations, instead of re-deriving the answer.

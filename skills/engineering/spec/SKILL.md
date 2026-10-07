@@ -92,7 +92,7 @@ Cover these at the density a reviewer needs:
 
 Hold it to the spec budget in *Artifact audience* (`standards`). Cut detail a reviewer cannot act on.
 
-Write in the glossary's terms and refer to the glossary instead of defining terms inline.
+Write in the glossary's terms. When a glossary exists, refer to it instead of defining terms inline.
 
 ### 6. Save the spec and update the glossary
 

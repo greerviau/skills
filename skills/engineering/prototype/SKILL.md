@@ -26,7 +26,7 @@ The result records evidence and a decision. It does not create a feature branch.
    Stop when the pre-set decision criterion is met or the evidence cannot distinguish the options.
 6. Write the result: question, assumption, setup, observations, limitations, answer, and recommended next step.
    Write "unknown" when the evidence does not answer the question.
-   Save it outside the spike workspace, or in a user-requested decision record that contains no disposable source.
+   Save it where *Artifact location* (`standards`) puts a prototype result, never inside the spike workspace. A decision record contains no disposable source.
 7. Discard the spike. Delete the disposable workspace and verify the original checkout has no source or configuration changes from the experiment.
    Never commit, push, open a pull request, merge, or copy spike source into a production directory.
    When no user can answer, stop here instead of expanding the spike into implementation.
