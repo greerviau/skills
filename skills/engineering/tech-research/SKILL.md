@@ -40,7 +40,7 @@ An API fact belongs to a version, not to the library. Record the checked version
 1. Find the pinned version of whatever is in question before reading anything else. When the question is ambiguous (which library, which version, which reading) and no user can answer (`standards`), research the most likely reading, record the assumption in the findings file, and proceed.
 2. When the question splits into independent sub-questions (several APIs, several libraries, a question plus its edge cases), fan them out to subagents, one per sub-question, each returning sourced findings for its slice. Otherwise work directly.
 3. For each sub-question, start at the top of the hierarchy and stop at the first rank that answers it with confidence.
-4. Write the findings file in `docs/analysis/` by default, named in kebab-case with a date prefix, such as `2026-07-30-websocket-reconnect-backoff.md` (the convention `spec` uses for `docs/plans/`). Put the checked version at the top, with one claim per line or bullet, each with its citation and confidence.
+4. Write the findings file in the location *Artifact location* (`standards`) gives for research findings, named in kebab-case with a date prefix, such as `2026-07-30-websocket-reconnect-backoff.md`. Put the checked version at the top, with one claim per line or bullet, each with its citation and confidence.
    The file is a reference: claims, citations, confidence. Leave out any narrative of the search and any conclusions section that restates a claim.
 5. Report the file path instead of restating the findings in conversation.
 

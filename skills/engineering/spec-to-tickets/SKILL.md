@@ -88,7 +88,7 @@ Do not use a `- [ ] #123` task list in the parent body. It creates no parent/chi
 
 ## Idempotency
 
-After creating issues, write a "Tickets" section into the spec doc listing each work item with its issue URL.
+After creating issues, write a "Tickets" section into the spec doc listing each work item with its issue URL. A spec in the OS temporary directory (*Artifact location* in `standards`) gets the section too, and the issues remain the durable record.
 On a re-run, read that section first, skip work items that already have an issue (or offer to update them), and create only the new ones. This prevents duplicate issues when a spec is ticketed twice.
 
 ## Scope
