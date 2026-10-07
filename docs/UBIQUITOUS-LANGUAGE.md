@@ -54,6 +54,10 @@ One entry per term, short and precise.
 - **disposition**: whether an inbound item is ready, needs information, duplicates existing work, is out of scope, is deferred, or is already resolved.
 - **work type**: the action an agent takes for an inbound item: implement, review, investigate, answer, or close.
 
+## spec (skills/engineering/spec, skills/engineering/spec-to-tickets)
+
+- **work item**: one entry in a spec's "Work items" list, naming what it changes and the outcome that shows it is done, sized so one PR lands it. `spec-to-tickets` files each work item as at most one issue.
+
 ## lit-research (skills/research/lit-research)
 
 - **canonical record**: the normalized paper representation all sources map into, keyed by DOI (source-native id when no DOI exists). The record dataclass in `scripts/common.py` implements it.

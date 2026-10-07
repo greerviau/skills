@@ -1,28 +1,23 @@
 ---
 name: spec
-description: Turn a raw request into a reviewed implementation plan and human-facing spec.
+description: Turn a raw request into a reviewed, human-facing spec broken into work items.
 disable-model-invocation: true
 ---
 
 # spec
 
-Run `/spec` to turn a raw request (a feature, bug fix, pipeline, or infrastructure change, in one file or many repos) into a reviewed plan.
-This skill plans and does not build. It writes the spec, the implementation plan, and the ubiquitous-language glossary updates. Implementation starts after the user reviews the spec and chooses to execute.
+Run `/spec` to turn a raw request (a feature, bug fix, pipeline, or infrastructure change, in one file or many repos) into a reviewed spec.
+This skill plans and does not build. It writes the spec and the ubiquitous-language glossary updates. Implementation starts after the user reviews the spec.
 
-## Two artifacts, two readers
-
-The spec and the implementation plan have different readers, so they are separate files (*Artifact audience* in `standards`).
-
-- The implementation plan is agent-facing. It states what to change and in what order, naming files, symbols, and commands, at whatever length precision needs. Write it first: writing per-symbol steps against the real code exposes cases the code cannot support, and those change what the spec says.
-- The spec is human-facing. It states what, why, what "done" means, and what is out of scope, in one to two screens, linking to the plan for detail. It is derived from the plan and carries the review gate. The reviewer does not read the plan.
+The spec is human-facing (*Artifact audience* in `standards`). It states what, why, what "done" means, what is out of scope, and the work items that deliver it.
+It does not carry step-level detail (files to edit, order of edits, commands). Whoever implements a work item works that out against the code as it is then.
 
 ## Principles
 
 - Find the real code, call sites, and conventions before designing. Never plan against assumed structure.
 - Fan discovery out to `Explore` subagents and keep only distilled findings (paths, symbols, code shape) in your context. Do not read whole files when a subagent can return the relevant excerpts.
 - Size the spec to the request's scope. A one-file bug fix gets a short spec and a cross-repo pipeline gets a thorough one. A spec grows because it covers more decisions, not because it explains each at more length.
-- The plan is a contract. Someone should be able to execute it without re-deriving scope, so name specific files, functions, and steps.
-- Revise the spec and plan together. Feedback that changes the approach changes the plan, and a spec revised alone leaves the executor working from steps the review never covered.
+- Every decision in the spec holds against the real code. Implementation decides how to make each change, never whether the approach is possible.
 - Use the domain's ubiquitous language in the spec, conversation, and code, as recorded in the repo's glossary.
 
 ## The ubiquitous-language glossary
@@ -30,7 +25,7 @@ The spec and the implementation plan have different readers, so they are separat
 The core rule (read the glossary, use its terms verbatim, extend it when a term settles or goes stale) is in `standards`. While specing:
 
 - Read the glossaries for the affected contexts before the interview and use their terms exactly.
-- Extend them as the interview and exploration settle new terms or reveal stale entries, confirming definitions with the user. Glossary updates ship with the plan.
+- Extend them as the interview and exploration settle new terms or reveal stale entries, confirming definitions with the user. Glossary updates ship with the spec.
 
 Layout (an existing location or convention overrides these defaults): one `docs/UBIQUITOUS-LANGUAGE.md` at the repo root with one entry per term (term, precise meaning, and where useful the code artifacts that embody it).
 A large repo with distinct bounded contexts gives each context its own `UBIQUITOUS-LANGUAGE.md`; the root glossary maps them and records cross-context name mismatches.
@@ -55,45 +50,34 @@ Before designing, ask the user (via `AskUserQuestion`) about whichever of these 
 - Design forks: where exploration found a real fork, which way to go.
 - Terminology: domain terms the request uses ambiguously or the glossary does not cover. These become glossary entries.
 
-Keep asking until the answers stop changing the plan, and record them in the spec.
+Keep asking until the answers stop changing the spec, and record them in it.
 When no user can answer (`standards`), resolve what exploration can, take the most defensible call on the rest, and record each assumption under "Risks and open questions".
 Questions the user cannot answer better than exploration can go in the open-questions section.
 
 ### 3. Explore to discover scope
 
-Map the real code the request touches: repos, files and symbols, existing conventions, and risks.
+Map the real code the request touches: repos, subsystems, entry points, existing conventions, and risks.
 
 - Use `Explore` subagents for breadth: locate files, entry points, call sites, tests, config, and existing patterns. Launch independent searches in parallel and ask for paths and short excerpts, not whole files.
 - Check whether the request implies changes in more than one repo (a shared library and its consumers, infra and its service) and explore each.
-- For bug fixes, identify how to reproduce end to end as a user hits it. The plan's first step is reproduction.
-- Note the test framework, lint setup, layout, and naming so the plan fits the codebase.
+- For bug fixes, identify how to reproduce end to end as a user hits it. The first work item starts with that reproduction.
+- Note how the change can be proven end to end with the repo's existing tests or entry points.
 
-Keep a running list: primary repo, other affected repos, key files and symbols, new or corrected glossary terms, open questions.
+Keep a running list: primary repo, other affected repos, key subsystems, new or corrected glossary terms, open questions.
 If exploration surfaces a new fork, return to the user before designing past it. When no user can answer, settle it in step 4 and record it as an assumption.
 
-### 4. Choose the approach
+### 4. Choose the approach and check it against the code
 
 Pick the approach. Where the user has not settled a design fork, pick the option that best fits quality, correctness, and the structural standard in `design`, and record each rejected option with the reason it lost. Do not present a menu.
 
-Settle this before detailed writing. Once a long plan exists against one architecture, the spec derived from it rationalizes that architecture, and reopening an alternative means rewriting the plan.
+Then check each decision against the code it depends on.
+Read the signatures, call sites, and input shapes involved, and confirm the code supports the decision: the function takes the argument the approach passes, the component accepts the input the new flow produces, the schema has the field the change reads.
+Send the reads to `Explore` subagents and ask for the exact signatures and excerpts.
 
-### 5. Write the implementation plan
+A failed check is a finding. Change the approach, add a prerequisite work item, or record it under "Risks and open questions".
+If it contradicts something the user settled in the interview, return to them before writing the spec. When no user can answer, take the most defensible call and record it as an assumption.
 
-Turn the approach into the agent-facing plan, grounded in the real code, per *Artifact audience* in `standards`:
-
-- An ordered list of steps, each naming the exact files and symbols it touches and what changes there. For bugs, step 1 is reproduction.
-- For each step, the command that verifies it (the repo's real test, lint, or run command).
-- The conventions the executor would otherwise rediscover: test framework and layout, fixture patterns, config locations, call sites to update.
-- Anything exploration left unverified, marked as such.
-
-Writing the steps is a second discovery pass. It surfaces cases discovery missed, such as a function that cannot take the argument the approach assumed or a component that raises on an input the new flow produces.
-Treat each as a finding. Fold it into the plan as a prerequisite phase or a changed step, and carry it into the spec's requirements and risks. If it contradicts something the user settled in the interview, return to them before deriving the spec.
-
-Run the concision pass (`standards`) over the plan. Its never-cut-a-fact floor protects the executor's detail, so expect few cuts.
-
-Write the plan to a scratch or git-ignored path, named for the request in kebab-case, date-prefixed, with an `-implementation` suffix, such as `<scratch>/2026-07-07-fix-xic-shard-lookup-implementation.md`. It is an input to one execution; the spec is what survives.
-
-### 6. Derive the spec from the plan
+### 5. Write the spec
 
 Cover these at the density a reviewer needs:
 
@@ -101,14 +85,15 @@ Cover these at the density a reviewer needs:
 - Requirements: outcome, success criteria, scope boundaries, and constraints from the interview.
 - Scope: repos and subsystems affected, with cross-repo coordination called out.
 - Approach: the key decisions, and for each real fork, why this option over the alternative. Skip forks that were never close.
-- Testing strategy: how the change is proven end to end, in a sentence or two. Commands belong in the plan.
-- Risks and open questions: anything that could invalidate the approach or needs a user decision, including what writing the plan surfaced. State uncertainty plainly.
+- Work items: an ordered list, one line per item, each naming what it changes and the outcome that shows it is done. Size each so one PR lands it, and state dependencies between items and across repos. A one-file bug fix is one work item.
+- Testing strategy: how the change is proven end to end, in a sentence or two.
+- Risks and open questions: anything that could invalidate the approach or needs a user decision, including what the check in step 4 surfaced. State uncertainty plainly.
 
-Hold it to one to two screens by linking to the plan: link the plan as a whole, and anchor each spec section to the plan headings it summarizes (scope to the step list, a risk to the step it threatens).
+Hold it to the spec budget in *Artifact audience* (`standards`). Cut detail a reviewer cannot act on.
 
 Write in the glossary's terms and refer to the glossary instead of defining terms inline.
 
-### 7. Save the spec and update the glossary
+### 6. Save the spec and update the glossary
 
 Run the concision pass (`standards`) over the draft and apply what it returns.
 
@@ -116,14 +101,15 @@ Write the spec to a `.md` file with the Write tool. Use an explicit location or 
 
 Write new or corrected glossary entries to the appropriate `UBIQUITOUS-LANGUAGE.md` files, creating them (and the root map for multi-context repos) if needed, following the scoping rules above.
 
-Report the file paths (spec, plan, any glossary file) with a one-line description each. Do not paste their contents into the conversation.
+Report the file paths (spec and any glossary file) with a one-line description each. Do not paste their contents into the conversation.
 
-### 8. Ask the user to review the spec
+### 7. Ask the user to review the spec
 
 Say where the spec is and ask how to proceed:
 
-- Execute: start implementing from the plan written in step 5.
-- Iterate: refine the spec with the user, revise the plan wherever the change reaches it, and present again.
+- Ticket: the user files the work items as GitHub Issues, with `/spec-to-tickets` if installed.
+- Implement: build the work items in order, reading the code each one touches before editing it.
+- Iterate: refine the spec with the user and present again.
 
 Stop for the answer.
-When no user can answer, the review gate stays open (`standards`): report the spec path, the plan path, and the recorded assumptions, and stop without executing.
+When no user can answer, the review gate stays open (`standards`): report the spec path and the recorded assumptions, and stop without executing.
