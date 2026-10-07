@@ -610,5 +610,138 @@ class LanguageCoverageTests(CheckDiffTestCase):
         self.assertFinding(findings, "README.md:5", "plain-language")
 
 
+class LexingTests(CheckDiffTestCase):
+    def test_multi_line_python_string_is_not_code_or_docstring(self):
+        self.repository.write(
+            "app.py",
+            'SQL = """\n# e.g. a select\ncfg = 1\n"""\n\n\ndef run():\n    idx = 1\n    return idx\n',
+        )
+        self.repository.commit("add query")
+
+        _, findings = self.repository.check()
+
+        self.assertNoFinding(findings, "comment-form")
+        self.assertFalse(
+            [line for line in findings if line.startswith("app.py:3:")], findings
+        )
+        self.assertFinding(findings, "app.py:8", "naming")
+
+    def test_prefixed_and_dedented_python_strings_are_strings(self):
+        self.repository.write(
+            "tests/test_render.py",
+            'import textwrap\n\nEXPECTED = textwrap.dedent(f"""\n    cfg = {1}\n    """)\nidx = 2\n',
+        )
+        self.repository.commit("add render test")
+
+        _, findings = self.repository.check()
+
+        self.assertFalse([line for line in findings if ":4:" in line], findings)
+        self.assertFinding(findings, "tests/test_render.py:6", "naming")
+
+    def test_comment_without_space_before_hash_is_a_comment(self):
+        self.repository.write("app.py", "y = 2# e.g. four\n")
+        self.repository.commit("add constant")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:1", "comment-form")
+
+    def test_line_numbers_survive_form_feed(self):
+        self.repository.write("app.py", "x = 1\n\x0c\n# e.g. this\n")
+        self.repository.commit("add constant")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:3", "comment-form")
+
+    def test_multi_line_template_literal_is_not_code(self):
+        self.repository.write("app.js", "const page = `\n// e.g. a heading\n`;\n")
+        self.repository.commit("add page")
+
+        _, findings = self.repository.check()
+
+        self.assertNoFinding(findings, "comment-form")
+
+    def test_go_comment_inside_function_body_is_a_comment(self):
+        self.repository.write(
+            "app.go",
+            "package app\n\nfunc run() {\n\t// e.g. inner\n\tvar x = 1\n\t_ = x\n}\n",
+        )
+        self.repository.commit("add run")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.go:4", "comment-form")
+
+    def test_block_comment_delimiters_do_not_count_as_comment_lines(self):
+        self.repository.write("app.c", "/*\n * One line of prose.\n */\nint x = 1;\n")
+        self.repository.commit("add constant")
+
+        _, findings = self.repository.check()
+
+        self.assertNoFinding(findings, "comment-form")
+
+
+class IdentifierScopeTests(CheckDiffTestCase):
+    def test_tuple_assignment_target_is_an_identifier(self):
+        self.repository.write("app.py", "a, idx = 1, 2\n")
+        self.repository.commit("add constants")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:1", "naming")
+
+    def test_keyword_argument_on_its_own_line_of_a_call_is_not_reported(self):
+        self.repository.write(
+            "app.py", "loader = DataLoader(\n    dataset,\n    num_workers=4,\n)\n"
+        )
+        self.repository.commit("add loader")
+
+        _, findings = self.repository.check()
+
+        self.assertNoFinding(findings, "naming")
+
+    def test_division_is_not_a_path(self):
+        self.repository.write("app.py", "ratio = total/cnt\n")
+        self.repository.commit("add ratio")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:1", "naming")
+
+
+class DiffHeaderTests(CheckDiffTestCase):
+    def test_path_git_quotes_is_checked(self):
+        self.repository.write('q"t.py', "cfg = 1\n")
+        self.repository.commit("add quoted file")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, 'q"t.py:1', "naming")
+
+    def test_added_line_that_looks_like_a_header_pair_keeps_its_file(self):
+        self.repository.write("a.sql", "-- old\nSELECT 1;\n")
+        self.repository.commit("add query")
+        git(self.repository.path, "branch", "-f", "base")
+        self.repository.write("a.sql", "++ b/zz.sql\nSELECT 1;\n-- e.g. here\n")
+        self.repository.commit("edit query")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "a.sql:3", "comment-form")
+
+    def test_unknown_base_error_names_the_cause(self):
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT), "no-such-ref"],
+            cwd=self.repository.path,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertRegex(result.stderr, r"no-such-ref.*\S+$")
+        self.assertNotRegex(result.stderr.strip(), r":\s*$")
+
+
 if __name__ == "__main__":
     unittest.main()

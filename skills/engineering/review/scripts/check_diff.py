@@ -12,10 +12,12 @@ stderr. Exits 0 with no findings, 1 with findings, and 2 when it cannot run.
 
 from __future__ import annotations
 
+import io
 import os
 import re
 import subprocess
 import sys
+import tokenize
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import PurePosixPath
@@ -25,56 +27,19 @@ SLASH = ("//",)
 DASH = ("--",)
 COMMENT_MARKERS = {
     **dict.fromkeys(
-        [
-            ".py",
-            ".pyi",
-            ".sh",
-            ".bash",
-            ".zsh",
-            ".rb",
-            ".pl",
-            ".r",
-            ".yaml",
-            ".yml",
-            ".toml",
-            ".cfg",
-        ]
-        + [".ini", ".tf"],
+        [".py", ".pyi", ".sh", ".bash", ".zsh", ".rb", ".pl", ".r", ".yaml", ".yml", ".toml",
+         ".cfg", ".ini", ".tf"],
         HASH,
     ),
     **dict.fromkeys(
-        [
-            ".js",
-            ".jsx",
-            ".mjs",
-            ".cjs",
-            ".ts",
-            ".tsx",
-            ".mts",
-            ".cts",
-            ".go",
-            ".rs",
-            ".java",
-            ".kt",
-        ]
-        + [
-            ".kts",
-            ".swift",
-            ".c",
-            ".h",
-            ".cc",
-            ".cpp",
-            ".hpp",
-            ".cs",
-            ".scala",
-            ".dart",
-        ]
-        + [".gradle", ".vue", ".svelte"],
+        [".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".mts", ".cts", ".go", ".rs", ".java",
+         ".kt", ".kts", ".swift", ".c", ".h", ".cc", ".cpp", ".hpp", ".cs", ".scala", ".dart",
+         ".gradle", ".vue", ".svelte"],
         SLASH,
     ),
     **dict.fromkeys([".sql", ".lua", ".hs"], DASH),
     ".php": ("//", "#"),
-}
+}  # fmt: skip
 COMMENT_MARKERS_BY_NAME = {"Dockerfile": HASH, "Makefile": HASH}
 PYTHON_SUFFIXES = {".py", ".pyi"}
 PROSE_SUFFIXES = {".md", ".markdown", ".rst", ".txt", ".adoc"}
@@ -116,11 +81,8 @@ ABBREVIATIONS = {
 FRAMEWORK_NAMES = {"tmp_path", "tmp_path_factory", "tmpdir", "tmpdir_factory"}
 IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 CAMEL_BOUNDARY = re.compile(r"(?<=[a-z0-9])(?=[A-Z])")
-STRING_LITERAL = re.compile(r"\"(?:\\.|[^\"\\])*\"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`")
-FILE_PATH = re.compile(r"[\w.~-]*(?:/[\w.-]+)+/?")
-KEYWORD_ARGUMENT = re.compile(r"(?<=[(,])\s*[A-Za-z_]\w*\s*=(?!=)")
-DEFINITION = re.compile(r"^\s*(async\s+)?(def|function|fn|func)\b")
-GO_DECLARATION = re.compile(r"^\s*(func|type|var|const|package)\b")
+FILE_PATH = re.compile(r"(?<![\w)\]])(?:~|\.{1,2})?/[\w.-]+(?:/[\w.-]+)*/?")
+GO_DECLARATION = re.compile(r"^(func|type|var|const|package)\b")
 
 EXAMPLE_IN_COMMENT = re.compile(r"\be\.g\.|\bfor (example|instance)\b", re.IGNORECASE)
 ISSUE_REFERENCE = re.compile(r"(?<![\w&])#[0-9]+\b|/issues/[0-9]+|/pull/[0-9]+")
@@ -147,7 +109,7 @@ class GitError(Exception):
 
 @dataclass
 class SourceLine:
-    """One line of a file: `kind` is code, comment, docstring, or string."""
+    """One line of a file: `kind` is code, comment, docstring, or string. String contents in `code` are masked."""
 
     kind: str
     code: str = ""
@@ -167,8 +129,27 @@ def git(*arguments):
     return result.stdout
 
 
+def unquote_path(quoted):
+    """Undo git's C-style quoting of a path: `"b/q\\"t.py"` becomes `b/q"t.py`."""
+    escapes = {"n": b"\n", "t": b"\t", '"': b'"', "\\": b"\\"}
+    raw = bytearray()
+    body = quoted[1:-1]
+    index = 0
+    while index < len(body):
+        if body[index] == "\\" and re.match(r"[0-7]{3}", body[index + 1 : index + 4]):
+            raw.append(int(body[index + 1 : index + 4], 8))
+            index += 4
+        elif body[index] == "\\" and index + 1 < len(body):
+            raw += escapes.get(body[index + 1], body[index + 1].encode())
+            index += 2
+        else:
+            raw += body[index].encode()
+            index += 1
+    return raw.decode("utf-8", errors="replace")
+
+
 def added_line_numbers(merge_base):
-    """Map each changed path to the line numbers the change adds."""
+    """Map each changed path to the line numbers the change adds, or None for a new untracked file."""
     added = defaultdict(set)
     diff = git(
         "diff", "--no-color", "--no-ext-diff", "--unified=0",
@@ -176,99 +157,218 @@ def added_line_numbers(merge_base):
     )  # fmt: skip
     path = None
     number = 0
-    previous = ""
-    for line in diff.splitlines():
-        if line.startswith("+++ ") and previous.startswith("--- "):
+    in_header = False
+    for line in diff.split("\n"):
+        if line.startswith("diff --git "):
+            in_header = True
+        elif in_header and line.startswith("+++ "):
             target = line[len("+++ ") :].rstrip("\t")
+            if target.startswith('"'):
+                target = unquote_path(target)
             path = None if target == "/dev/null" else target[len("b/") :]
         elif line.startswith("@@"):
+            in_header = False
             number = int(re.match(r"@@ -\S+ \+(\d+)", line).group(1))
-        elif line.startswith("+") and path is not None:
+        elif not in_header and line.startswith("+") and path is not None:
             added[path].add(number)
             number += 1
-        previous = line
-    for path in filter(
-        None, git("ls-files", "--others", "--exclude-standard", "-z").split("\0")
-    ):
+    untracked = git("ls-files", "--others", "--exclude-standard", "-z")
+    for path in filter(None, untracked.split("\0")):
         added[path] = None
     return added
 
 
 def read_lines(path):
+    """Split on newlines only, as git counts lines. Returns None for an unreadable file."""
     try:
-        with open(path, encoding="utf-8", errors="replace") as handle:
-            return handle.read().splitlines()
+        with open(path, encoding="utf-8", errors="replace", newline="") as handle:
+            text = handle.read()
     except OSError:
-        return []
-
-
-def mask_strings(text):
-    return STRING_LITERAL.sub(lambda literal: "x" * len(literal.group(0)), text)
+        return None
+    lines = [line.rstrip("\r") for line in text.split("\n")]
+    return lines[:-1] if lines and lines[-1] == "" else lines
 
 
 def classify(path, lines, markers):
     pure_path = PurePosixPath(path)
-    python = pure_path.suffix.lower() in PYTHON_SUFFIXES
-    block_comments = "//" in markers
-    classified = []
-    triple_delimiter = None
-    triple_kind = None
-    block_kind = None
-    for text in lines:
-        stripped = text.strip()
-        if triple_delimiter:
-            classified.append(SourceLine(triple_kind, comment=stripped))
-            if triple_delimiter in text:
-                triple_delimiter = None
-            continue
-        if block_kind:
-            classified.append(
-                SourceLine(block_kind, comment=stripped.lstrip("*").strip())
-            )
-            if "*/" in text:
-                block_kind = None
-            continue
-        if python and stripped[:3] in ('"""', "'''"):
-            delimiter = stripped[:3]
-            if delimiter not in stripped[3:]:
-                triple_delimiter, triple_kind = delimiter, "docstring"
-            classified.append(SourceLine("docstring", comment=stripped.strip("\"' ")))
-            continue
-        if block_comments and stripped.startswith("/*"):
-            kind = "docstring" if stripped.startswith("/**") else "comment"
-            if "*/" not in stripped[2:]:
-                block_kind = kind
-            classified.append(SourceLine(kind, comment=stripped.strip("/* ")))
-            continue
-        if block_comments and stripped.startswith(("///", "//!")):
-            classified.append(SourceLine("docstring", comment=stripped[3:].strip()))
-            continue
-        marker = next((m for m in markers if stripped.startswith(m)), None)
-        if marker and not stripped.startswith("#!"):
-            classified.append(
-                SourceLine("comment", comment=stripped[len(marker) :].strip())
-            )
-            continue
-        masked = mask_strings(text)
-        if python:
-            for delimiter in ('"""', "'''"):
-                if masked.count(delimiter) % 2 == 1:
-                    triple_delimiter, triple_kind = delimiter, "string"
-        trailing = None
-        for marker in markers:
-            trailing = re.search(rf"\s{re.escape(marker)}", masked)
-            if trailing:
-                break
-        if trailing:
-            classified.append(
-                SourceLine(
-                    "code", masked[: trailing.start()], text[trailing.end() :].strip()
-                )
-            )
-        else:
-            classified.append(SourceLine("code", masked))
+    if pure_path.suffix.lower() in PYTHON_SUFFIXES:
+        try:
+            return lex_python(lines)
+        except (tokenize.TokenError, SyntaxError):
+            pass
+    classified = lex_generic(lines, markers)
     if pure_path.suffix.lower() == ".go":
         mark_go_doc_comments(lines, classified)
+    return classified
+
+
+def lex_python(lines):
+    """Classify Python lines with tokenize, masking strings and keyword-argument names."""
+    code = [list(line) for line in lines]
+    comments = [None] * len(lines)
+    kinds = ["code"] * len(lines)
+    tokens = list(
+        tokenize.generate_tokens(io.StringIO("\n".join(lines) + "\n").readline)
+    )
+    fstring_start = getattr(tokenize, "FSTRING_START", None)
+    fstring_end = getattr(tokenize, "FSTRING_END", None)
+    trivia = {tokenize.NL, tokenize.COMMENT}
+    statement_starts = {
+        tokenize.NEWLINE,
+        tokenize.INDENT,
+        tokenize.DEDENT,
+        tokenize.ENCODING,
+    }
+
+    def significant(index, step):
+        index += step
+        while 0 <= index < len(tokens) and tokens[index].type in trivia:
+            index += step
+        return tokens[index] if 0 <= index < len(tokens) else None
+
+    def apply_string(first, last, start_index, end_index):
+        before, after = significant(start_index, -1), significant(end_index, 1)
+        docstring = (before is None or before.type in statement_starts) and (
+            after is None or after.type in (tokenize.NEWLINE, tokenize.ENDMARKER)
+        )
+        (start_row, start_column), (end_row, end_column) = first.start, last.end
+        for row in range(start_row, end_row + 1):
+            if row > len(lines):
+                break
+            line_index = row - 1
+            if docstring:
+                kinds[line_index] = "docstring"
+                comments[line_index] = lines[line_index].strip().strip("\"'rRbBuUfF ")
+                code[line_index] = []
+                continue
+            if start_row < row < end_row:
+                kinds[line_index] = "string"
+                code[line_index] = []
+                continue
+            low = start_column if row == start_row else 0
+            high = end_column if row == end_row else len(code[line_index])
+            for column in range(low, min(high, len(code[line_index]))):
+                code[line_index][column] = "x"
+
+    brackets = []
+    fstring_stack = []
+    for index, token in enumerate(tokens):
+        if fstring_start is not None and token.type == fstring_start:
+            fstring_stack.append(index)
+            continue
+        if fstring_stack:
+            if token.type == fstring_end:
+                start_index = fstring_stack.pop()
+                if not fstring_stack:
+                    apply_string(tokens[start_index], token, start_index, index)
+            continue
+        if token.type == tokenize.STRING:
+            apply_string(token, token, index, index)
+        elif token.type == tokenize.COMMENT:
+            row, column = token.start
+            if row == 1 and token.string.startswith("#!"):
+                code[0] = []
+                continue
+            comments[row - 1] = token.string.lstrip("#").strip()
+            del code[row - 1][column:]
+            if not "".join(code[row - 1]).strip():
+                kinds[row - 1] = "comment"
+        elif token.type == tokenize.OP and token.string in "([{":
+            before = significant(index, -1)
+            two_before = significant(index - 1, -1) if before else None
+            definition = bool(before and two_before and two_before.string == "def")
+            brackets.append((token.string, definition))
+        elif token.type == tokenize.OP and token.string in ")]}" and brackets:
+            brackets.pop()
+        elif token.type == tokenize.NAME and brackets and brackets[-1] == ("(", False):
+            after = significant(index, 1)
+            if after is not None and after.string == "=":
+                row, column = token.start
+                for offset in range(column, token.end[1]):
+                    code[row - 1][offset] = " "
+    return [
+        SourceLine(kind, "".join(characters), comment)
+        for kind, characters, comment in zip(kinds, code, comments)
+    ]
+
+
+def lex_generic(lines, markers):
+    """Classify lines of a C-like, hash-comment, or dash-comment language."""
+    block_comments = "//" in markers
+    quotes = "\"'`" if block_comments else "\"'"
+    classified = []
+    block_kind = None
+    open_backtick = False
+    for row, text in enumerate(lines):
+        code = []
+        parts = []
+        kind = None
+        all_string = open_backtick
+        index = 0
+        if row == 0 and text.startswith("#!"):
+            classified.append(SourceLine("code"))
+            continue
+        while index < len(text):
+            if block_kind:
+                kind = kind or block_kind
+                close = text.find("*/", index)
+                stop = len(text) if close == -1 else close
+                parts.append(text[index:stop].strip().lstrip("*").strip())
+                index = stop if close == -1 else close + 2
+                if close != -1:
+                    block_kind = None
+                continue
+            if open_backtick:
+                close = re.search(r"(?<!\\)`", text[index:])
+                stop = len(text) if close is None else index + close.end()
+                code.append("x" * (stop - index))
+                index = stop
+                if close is not None:
+                    open_backtick = False
+                continue
+            character = text[index]
+            all_string = False
+            if block_comments and text.startswith("/*", index):
+                block_kind = (
+                    "docstring"
+                    if text.startswith("/**", index)
+                    and not text.startswith("/**/", index)
+                    else "comment"
+                )
+                index += 3 if block_kind == "docstring" else 2
+                continue
+            marker = next((m for m in markers if text.startswith(m, index)), None)
+            if marker == "#" and index > 0 and not text[index - 1].isspace():
+                marker = None
+            if marker:
+                rest = text[index + len(marker) :]
+                doc = marker == "//" and rest[:1] in ("/", "!")
+                parts.append(rest[1:].strip() if doc else rest.strip())
+                kind = kind or ("docstring" if doc else "comment")
+                break
+            if character in quotes:
+                if character == "`":
+                    open_backtick = True
+                    code.append("x")
+                    index += 1
+                    continue
+                close = re.search(rf"(?<!\\){re.escape(character)}", text[index + 1 :])
+                stop = len(text) if close is None else index + 1 + close.end()
+                code.append("x" * (stop - index))
+                index = stop
+                continue
+            code.append(character)
+            index += 1
+        if block_kind and not text:
+            kind = block_kind
+        code_text = "".join(code)
+        comment = " ".join(part for part in parts if part).strip()
+        if all_string and text:
+            classified.append(SourceLine("string"))
+        elif code_text.strip() or kind is None:
+            classified.append(SourceLine("code", code_text, comment or None))
+        else:
+            classified.append(SourceLine(kind, "", comment))
     return classified
 
 
@@ -285,8 +385,6 @@ def mark_go_doc_comments(lines, classified):
 
 
 def abbreviation_in(code):
-    if not DEFINITION.match(code):
-        code = KEYWORD_ARGUMENT.sub("", code)
     for identifier in IDENTIFIER.findall(FILE_PATH.sub("", code)):
         if identifier in FRAMEWORK_NAMES:
             continue
@@ -312,6 +410,7 @@ def comment_findings(location, comment, check_examples):
 
 
 def comment_run_findings(path, classified, added):
+    """Report a run of comment lines holding three or more lines of prose."""
     findings = []
     index = 0
     while index < len(classified):
@@ -321,10 +420,10 @@ def comment_run_findings(path, classified, added):
         end = index
         while end < len(classified) and classified[end].kind == "comment":
             end += 1
-        run_numbers = set(range(index + 1, end + 1))
-        if end - index >= 3 and run_numbers & added:
+        prose_rows = [row for row in range(index, end) if classified[row].comment]
+        if len(prose_rows) >= 3 and set(range(index + 1, end + 1)) & added:
             findings.append(
-                f"{path}:{index + 3}: comment-form: comment of {end - index} lines"
+                f"{path}:{prose_rows[2] + 1}: comment-form: comment of {len(prose_rows)} lines"
             )
         index = end
     return findings
@@ -373,6 +472,9 @@ def file_findings(added_by_path):
     unchecked = []
     for path, added in sorted(added_by_path.items()):
         lines = read_lines(path)
+        if lines is None:
+            unchecked.append(path)
+            continue
         if added is None:
             added = set(range(1, len(lines) + 1))
         pure_path = PurePosixPath(path)
@@ -405,7 +507,7 @@ def main(arguments):
         return 2
     try:
         os.chdir(git("rev-parse", "--show-toplevel").strip())
-        git("rev-parse", "--verify", "--quiet", f"{arguments[0]}^{{commit}}")
+        git("rev-parse", "--verify", f"{arguments[0]}^{{commit}}")
         merge_base = git("merge-base", arguments[0], "HEAD").strip()
         findings, unchecked = file_findings(added_line_numbers(merge_base))
         findings += commit_findings(merge_base)
@@ -413,7 +515,10 @@ def main(arguments):
         print(f"check_diff: {error}", file=sys.stderr)
         return 2
     for path in unchecked:
-        print(f"check_diff: not checked (unknown file type): {path}", file=sys.stderr)
+        print(
+            f"check_diff: not checked (unknown type or unreadable): {path}",
+            file=sys.stderr,
+        )
     for finding in findings:
         print(finding)
     return 1 if findings else 0
