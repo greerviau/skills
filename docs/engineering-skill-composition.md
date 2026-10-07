@@ -52,6 +52,7 @@ Skills left out of the graph:
 - `standards` and `design` are model-invoked policy references and never workflow steps, so an edge from each node would repeat one fact. Nearly every skill above reads `standards`. `spec`, `refactor`, `review`, and `tdd` read `design`. `perf` does not read it, because a benchmark guards `perf` instead of a structural judgment.
 - `mermaid` is invoked by nearly every skill that writes a diagram, so drawing it would clutter the graph.
 - `handoff` hands off to nothing, and nothing hands off to it.
+- `retro` reads a session log and proposes edits to `standards`, `review`, other skills, and the global `CLAUDE.md`. Accepted edits land through `dev-workflow`, but only after the user picks them, so it has no runtime hand-off.
 - `prototype` produces design evidence, discards its source, and hands no code to another skill.
 - `improve-codebase-architecture` produces a report and waits for the user to select a candidate. It has no runtime hand-off.
 - `triage` produces an agent-ready brief for a fleet-style runner and does not feed another skill directly.
@@ -85,6 +86,7 @@ Three skills are both entry points and components, and their back edges are omit
 | `dev-workflow` | model | Entry - lands code changes | Any request to write and land code in a GitHub repo | invokes `open-issue`, `tdd` (builds each behavior change test-first), `doc-audit`, `run`, `review` (from a subagent, before publishing), and `open-pr` |
 | `review` | model | Entry - gate | Changes need checking before they land, including `dev-workflow`'s self-review step | reports only; findings go to `dev-workflow` to apply |
 | `handoff` | user | Entry - utility | A conversation needs compacting for another agent to continue | none (produces a document) |
+| `retro` | user | Entry - retrospective | A finished session went worse than it should have | `dev-workflow` (lands the candidates the user accepts) |
 | `open-issue` | model | Component | `dev-workflow` reaches its issue-first step, `spec-to-tickets` files a work item, or an issue is opened standalone | none |
 | `open-pr` | model | Component | `dev-workflow` reaches its PR step, or a PR is opened standalone | none |
 | `doc-audit` | model | Component | `dev-workflow` validates, or docs and comments are written standalone | none |

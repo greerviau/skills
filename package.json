@@ -31,6 +31,7 @@
     "./skills/engineering/doc-audit",
     "./skills/engineering/standards",
     "./skills/engineering/handoff",
+    "./skills/engineering/retro",
     "./skills/engineering/mermaid",
     "./skills/engineering/design",
     "./skills/engineering/improve-codebase-architecture",
