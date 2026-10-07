@@ -28,7 +28,7 @@ Read the whole spec, judge its scope, and pick one shape:
 - A few flat issues: a handful of independent work items with no coordinating parent, created as siblings.
 - Parent plus sub-issues: a large or multi-part spec (cross-file, cross-repo, staged rollout). The parent or epic captures the whole and each child captures one work item.
 
-The signal is the spec's structure: the number of distinct work items under "Scope" and "Approach", whether it spans repos, and whether the steps have an ordering or dependencies a parent would coordinate.
+The signal is the spec's structure: the number of entries under "Work items", whether it spans repos, and whether the items have an ordering or dependencies a parent would coordinate.
 Propose the shape with your reasoning. Decide a small or large spec without asking. When the weight is on the boundary (for example, three to five items that could be flat siblings or a small epic), present the candidates and let the user choose.
 
 ## Creating the issues
@@ -51,7 +51,7 @@ Pass `--repo <owner/repo>` when filing against a repo other than the working dir
 
 ### Linking the spec
 
-An issue references the spec only as a URL every reader of the issue can open. Link the human-facing spec and never the implementation plan, which lives at a scratch or git-ignored path and has no URL.
+An issue references the spec only as a URL every reader of the issue can open.
 
 Verify the URL against the repo that holds the spec:
 

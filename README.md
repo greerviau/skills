@@ -55,7 +55,7 @@ Each category below separates the two.
 #### User-invoked
 
 - [improve-codebase-architecture](skills/engineering/improve-codebase-architecture/SKILL.md) - scans a codebase for evidence-backed structural opportunities and ranks them in an HTML report before implementation.
-- [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed plan. It interviews the user, explores the code, settles the approach, maintains the repo's ubiquitous-language glossary, writes an agent-facing implementation plan, and derives the short human-facing spec that carries the review gate.
+- [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed spec. It interviews the user, explores the code, settles the approach and checks each decision against the code, maintains the repo's ubiquitous-language glossary, and writes a short human-facing spec whose work items become tickets.
 - [spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md) - turns a reviewed spec into GitHub Issues. It picks a single-issue, flat, or parent-with-sub-issues shape from the spec's scope, files each issue through `open-issue`, and records the issue URLs in the spec so re-runs do not duplicate.
 - [triage](skills/engineering/triage/SKILL.md) - classifies an inbound GitHub issue or pull request and produces an agent-ready brief with evidence, scope, acceptance criteria, and verification.
 - [handoff](skills/engineering/handoff/SKILL.md) - compacts the current conversation into a handoff document for another agent.

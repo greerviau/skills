@@ -25,8 +25,8 @@ flowchart LR
     openissue[open-issue]
     openpr[open-pr]
 
-    spec -->|reviewed plan| s2t
-    spec -->|reviewed plan| devworkflow
+    spec -->|reviewed spec| s2t
+    spec -->|reviewed spec| devworkflow
     spec -->|open question| techresearch
     s2t -->|GitHub issues| devworkflow
     s2t -->|per-issue authoring| openissue
@@ -69,7 +69,7 @@ Two skills are both entry points and components, and their back edges are omitte
 | Skill | Invocation | Role | Lands on it when | Hands off to |
 | --- | --- | --- | --- | --- |
 | `triage` | user | Entry - inbound intake | An inbound GitHub issue or pull request needs a category, disposition, and agent-ready brief | none (a fleet-style runner consumes the brief) |
-| `spec` | user | Entry - planning | A request needs scoping into a reviewed plan before building | `spec-to-tickets` (to file issues) or `dev-workflow` (to execute) |
+| `spec` | user | Entry - planning | A request needs scoping into a reviewed spec before building | `spec-to-tickets` (to file issues) or `dev-workflow` (to execute) |
 | `spec-to-tickets` | user | Entry - ticketing | A reviewed spec should become GitHub Issues | `open-issue` (writes and files each one), then `dev-workflow` (executes each issue) |
 | `tech-research` | model | Entry - research | A technical question needs a sourced, version-pinned answer about third-party or external behavior | none (produces a findings file); `spec` cites it instead of re-deriving |
 | `dep-upgrade` | model | Entry - dependency maintenance | A uv-managed Python project needs a dependency, lockfile, or git-sourced internal tag upgraded | `dev-workflow` (lands the verified dependency change) |
