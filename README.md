@@ -59,7 +59,7 @@ Each category below separates the two.
 - [spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md) - turns a reviewed spec into GitHub Issues. It picks a single-issue, flat, or parent-with-sub-issues shape from the spec's scope, files each issue through `open-issue`, and records the issue URLs in the spec so re-runs do not duplicate.
 - [triage](skills/engineering/triage/SKILL.md) - classifies an inbound GitHub issue or pull request and produces an agent-ready brief with evidence, scope, acceptance criteria, and verification.
 - [handoff](skills/engineering/handoff/SKILL.md) - compacts the current conversation into a handoff document for another agent.
-- [retro](skills/engineering/retro/SKILL.md) - reads a finished session's log for the moments the agent struggled and proposes fixes that hold in any repo: a rule in the global standards, a check in `review`, a skill edit, or a cut from the global `CLAUDE.md`. Adapted from Matt Pocock's `retro`.
+- [retro](skills/engineering/retro/SKILL.md) - reads a finished session's log for the moments the agent struggled and proposes fixes that hold in any repo: a rule in the global standards, a check in `review`, a skill edit, or a cut from the global `CLAUDE.md`.
 
 #### Model-invoked
 

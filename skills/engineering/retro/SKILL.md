@@ -102,7 +102,3 @@ The checkout is the directory where `git remote get-url origin` names `greerviau
    Changes to the skills repo land through an issue, a branch, and a PR (the `dev-workflow` skill, if you use it).
    Edit the global `CLAUDE.md` directly after showing the user the diff.
    Tell the user that installed skills pick up a merged change only after the plugin or skill install is updated.
-
-## Credits
-
-Adapted from `retro` in [mattpocock/skills](https://github.com/mattpocock/skills), Copyright (c) 2026 Matt Pocock, used under the MIT License in `LICENSE` next to this file.
