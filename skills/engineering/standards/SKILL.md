@@ -6,7 +6,7 @@ description: Shared engineering standards for documentation, naming, test-first 
 # standards
 
 The single source of truth for the compliance rules the engineering skills share: house policy, not structural judgment (`design` covers structure).
-`spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-issue`, `open-pr`, `mermaid`, `design`, `tdd`, and `triage` reference this document instead of restating it.
+`spec`, `dev-workflow`, `review`, `doc-audit`, `refactor`, `debug`, `open-issue`, `open-pr`, `mermaid`, `design`, `tdd`, `triage`, and `retro` reference this document instead of restating it.
 Each rule is policy; the referencing skill supplies the procedure that applies it.
 
 This file holds the rules for prose, artifacts, and workflow.
