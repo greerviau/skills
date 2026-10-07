@@ -13,7 +13,7 @@ Work starts from an issue (`standards`, issue hygiene).
 Before writing code, ask the user whether to open one. The `open-issue` skill, if you use it, writes and files it.
 Skip the ask when an issue already covers the work (the user pointed at one, or a ticketing run filed it) or the change is trivial (a typo, a one-line fix).
 When no user can answer (`standards`, interaction mode), file the issue instead of asking.
-Carry the issue number to step 7 so the PR closes it.
+Carry the issue number to step 8 so the PR closes it.
 
 ## 2. Set up an isolated workspace
 
@@ -53,20 +53,32 @@ Before publishing, audit every comment line the change adds and every documentat
 
 The step closes with a stated result: what the audit covered and what it updated. A step with no stated result has not run.
 
-## 6. Publish
+## 6. Review the diff
 
-Push the branch once steps 4 and 5 pass.
+Commit the change, then review the branch diff against `origin/<default-branch>` from a subagent that did not write the change. Pass it the base ref and the issue from step 1, and leave out the conversation that produced the change.
+The subagent runs the `review` skill, if you use it. Otherwise it checks the diff against `standards`, its `CODING-STANDARDS.md`, and the issue's acceptance criteria.
+Run the review inline when no subagent is available.
 
-## 7. Open a PR
+Fix every finding in the change on this branch, then rerun steps 4 and 5.
+Reject a finding only when it misreads the change's intent, and state the reason in the step's result.
+A finding outside the change goes on its own branch (`standards`, branch hygiene).
+
+The step closes with a stated result: the findings, what was fixed, and what was rejected and why. A step with no stated result has not run.
+
+## 7. Publish
+
+Push the branch once steps 4, 5, and 6 pass.
+
+## 8. Open a PR
 
 Open the PR per the `open-pr` skill, passing it the issue from step 1 so the body carries a closing reference.
-Do not stop after opening the PR. Wait for CI in step 8.
+Do not stop after opening the PR. Wait for CI in step 9.
 
-## 8. Watch CI
+## 9. Watch CI
 
 Wait for CI to finish. On failure, investigate, fix, and push until it passes.
 
-## 9. Keep the worktree and watch the PR
+## 10. Keep the worktree and watch the PR
 
 Keep the worktree while the PR is open. It holds the branch, build cache, and environment, and recreating it for each round of feedback is slow.
 
@@ -76,11 +88,11 @@ Keep the worktree while the PR is open. It holds the branch, build cache, and en
     sleep 60
   done
   ```
-- Handle feedback (PR comments or the live session) in the worktree: fix, revalidate (steps 4-8), push, and let the watcher keep waiting.
+- Handle feedback (PR comments or the live session) in the worktree: fix, revalidate (steps 4-9), push, and let the watcher keep waiting.
 
 When no user can answer, watch the PR through merge or CI under a bounded timeout, record the final PR state, and go to cleanup.
 
-## 10. Cleanup
+## 11. Cleanup
 
 Clean up only when the PR is merged, closed without merging, or the user says to wrap up. An opened PR or green CI is not a reason. Remove the worktree and its local branch:
 

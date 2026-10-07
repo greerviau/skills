@@ -56,9 +56,10 @@ Skills left out of the graph:
 - `improve-codebase-architecture` produces a report and waits for the user to select a candidate. It has no runtime hand-off.
 - `triage` produces an agent-ready brief for a fleet-style runner and does not feed another skill directly.
 
-Two skills are both entry points and components, and their back edges are omitted to keep the graph acyclic:
+Three skills are both entry points and components, and their back edges are omitted to keep the graph acyclic:
 
 - `tdd` hands a change to `dev-workflow`, and `dev-workflow` runs `tdd` as its build step for every behavior change.
+- `review` hands findings to `dev-workflow`, and `dev-workflow` runs `review` from a subagent as its self-review step before publishing.
 - `tech-research` is an entry point `spec` reaches at an open question, and `spec` cites its findings file instead of re-deriving the answer.
 
 ## Roles
@@ -81,8 +82,8 @@ Two skills are both entry points and components, and their back edges are omitte
 | `perf` | model | Entry - optimization | A change needs to get faster, cheaper, or higher-throughput, and the improvement must be proven with a before/after measurement | `dev-workflow` (lands the measured change) |
 | `prototype` | model | Entry - design spike | A design question needs evidence from a disposable implementation | none (produces a decision record and discards the spike) |
 | `improve-codebase-architecture` | user | Entry - architecture scan | A codebase needs structural opportunities identified and ranked before implementation | none (produces a visual report and waits for candidate selection) |
-| `dev-workflow` | model | Entry - lands code changes | Any request to write and land code in a GitHub repo | invokes `open-issue`, `tdd` (builds each behavior change test-first), `doc-audit`, `run`, and `open-pr` |
-| `review` | model | Entry - gate | Changes need checking before they land | reports only; findings go to `dev-workflow` to apply |
+| `dev-workflow` | model | Entry - lands code changes | Any request to write and land code in a GitHub repo | invokes `open-issue`, `tdd` (builds each behavior change test-first), `doc-audit`, `run`, `review` (from a subagent, before publishing), and `open-pr` |
+| `review` | model | Entry - gate | Changes need checking before they land, including `dev-workflow`'s self-review step | reports only; findings go to `dev-workflow` to apply |
 | `handoff` | user | Entry - utility | A conversation needs compacting for another agent to continue | none (produces a document) |
 | `open-issue` | model | Component | `dev-workflow` reaches its issue-first step, `spec-to-tickets` files a work item, or an issue is opened standalone | none |
 | `open-pr` | model | Component | `dev-workflow` reaches its PR step, or a PR is opened standalone | none |
@@ -105,7 +106,7 @@ Two skills are both entry points and components, and their back edges are omitte
   - `review` reports and does not apply.
   - `tech-research` answers a question and does not build.
   - `spec` plans and does not build.
-- Components are leaves, except `tdd`. `open-issue`, `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and do not hand off further. `tdd` is invoked by a `dev-workflow` step the same way, but as an entry point it hands back to `dev-workflow` instead of terminating there.
+- Components are leaves, except `tdd` and `review`. `open-issue`, `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and do not hand off further. `tdd` and `review` are each invoked by a `dev-workflow` step the same way, but as entry points they hand back to `dev-workflow` (the built change, the findings) instead of terminating there.
 - Delegation to a subagent is not a hand-off. `doc-audit` (its language check) and `mermaid` (its render loop) hand work to a subagent, and both stay leaves.
 - `standards` and `design` are policy references and never numbered steps. `standards` holds compliance rules (prose and workflow in `SKILL.md`, code in `CODING-STANDARDS.md`) and `design` holds structural vocabulary.
 - `merge-conflict` completes the active merge or rebase, then returns to `dev-workflow` for remaining validation, publication, or PR lifecycle work.
