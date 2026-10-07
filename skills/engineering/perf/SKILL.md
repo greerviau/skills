@@ -17,7 +17,7 @@ This is a benchmark-guarded pass, separate from a one-off timing in a shell.
 2. Build the harness and take a baseline. The harness is reproducible, committed to the repo, and cheap to re-run. A one-off `time` in a shell does not count, because it cannot be re-run unchanged later.
 3. Profile before hypothesizing. Find the bottleneck with a profiler, tracer, or instrumentation before touching code, even when reading the code makes it look obvious.
 4. Change one thing per measurement cycle, so the delta is attributable. Keep the existing test suite green throughout, which catches a change that altered behavior along with speed. A change that breaks a test is a bug or feature change: flag it and land it on its own branch.
-5. Re-measure on the step 2 harness and report before/after numbers with the workload named. For a one-off optimization, put the report in the PR body. When the harness will be re-run for future changes, put it in a dated kebab-case file under `docs/analysis/` (the convention `spec` and `tech-research` use) so the numbers outlive the PR.
+5. Re-measure on the step 2 harness and report before/after numbers with the workload named. For a one-off optimization, put the report in the PR body. When the harness will be re-run for future changes, put the report where *Artifact location* (`standards`) puts a performance report.
 6. Commit the harness, so the next regression is detectable against the same baseline. Land the change as you normally do (the `dev-workflow` skill, if you use it).
 
 This skill owns latency, throughput, and cost. `debug` owns wrong or crashing behavior.

@@ -89,7 +89,12 @@ Do not use a `- [ ] #123` task list in the parent body. It creates no parent/chi
 ## Idempotency
 
 After creating issues, write a "Tickets" section into the spec doc listing each work item with its issue URL.
-On a re-run, read that section first, skip work items that already have an issue (or offer to update them), and create only the new ones. This prevents duplicate issues when a spec is ticketed twice.
+On a re-run, read that section first, skip work items that already have an issue (or offer to update them), and create only the new ones.
+When the spec or its Tickets section is gone (a spec in the OS temporary directory does not survive a reboot), search the repo's issues for each work item before filing it:
+
+```bash
+gh issue list --search "<work item key terms>" --state all --limit 20
+```
 
 ## Scope
 

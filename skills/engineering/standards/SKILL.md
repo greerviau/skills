@@ -1,6 +1,6 @@
 ---
 name: standards
-description: Shared engineering standards for documentation, naming, test-first testing, branch and issue hygiene, pull requests and commits, and interactive or autonomous runs. Read when writing project artifacts or code, or when another skill references standards.
+description: Shared engineering standards for documentation, naming, test-first testing, where skills save their documents, branch and issue hygiene, pull requests and commits, and interactive or autonomous runs. Read when writing project artifacts or code, or when another skill references standards.
 ---
 
 # standards
@@ -106,9 +106,35 @@ These apply to any document a person reads.
 
 ## Ubiquitous language
 
-- Each repo, or bounded context within it, keeps a glossary of domain terms, by default `docs/UBIQUITOUS-LANGUAGE.md`, under version control.
-- Read the relevant glossary before naming anything and use its terms verbatim in code (types, functions, endpoints, tables, tests) and prose (commits, PRs, docs). Never coin a synonym for a term the glossary defines.
-- Extend the glossary in the same change when implementation forces a new domain term or exposes a stale entry.
+- A repo, or a bounded context within it, may keep a glossary of domain terms, by default `docs/UBIQUITOUS-LANGUAGE.md`. Whether a skill creates one where none exists follows *Artifact location*.
+- Use one term per domain concept, the same in code (types, functions, endpoints, tables, tests) and prose (commits, PRs, docs). When a glossary exists, read it before naming anything, use its terms verbatim, and never coin a synonym for a term it defines.
+- Extend an existing glossary in the same change when implementation forces a new domain term or exposes a stale entry.
+
+## Artifact location
+
+The git setting `skills.artifacts` decides whether skills save their documents into the project repo.
+Read it from the repo the work is in:
+
+```bash
+git config --get skills.artifacts
+```
+
+The value is `off` or `repo`, and `off` is the default.
+Treat any other value as unset.
+A repo-local value overrides a global one, so a user can set `git config --global skills.artifacts off` and opt single repos in with `git config --local skills.artifacts repo`.
+When the setting is unset, ask the user once which value to use, then offer to save the answer with `git config --local skills.artifacts <value>`.
+When no user can answer, use `off` and record the assumption in the run's output.
+
+| Artifact | `off` | `repo` |
+| --- | --- | --- |
+| Spec (`spec`) | The OS temporary directory | `docs/plans/<date>-<name>.md` in the primary repo |
+| Research findings (`tech-research`) | The OS temporary directory. An issue or PR that depends on a finding quotes the claim and its citation | `docs/analysis/<date>-<name>.md` |
+| Performance report a re-run harness will update (`perf`) | The PR body | `docs/analysis/<date>-<name>.md` |
+| Prototype result (`prototype`) | The OS temporary directory | A decision record the user names |
+| Glossary (`spec`, any skill that names a domain term) | Read and extend an existing glossary. Never create one | Create `docs/UBIQUITOUS-LANGUAGE.md` when none exists, and extend it |
+
+Resolve the OS temporary directory from `$TMPDIR`, falling back to `/tmp` on Unix-like systems and `%TEMP%` on Windows.
+A location the user names for one run overrides the table.
 
 ## Branch hygiene
 

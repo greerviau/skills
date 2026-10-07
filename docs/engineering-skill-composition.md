@@ -61,7 +61,7 @@ Three skills are both entry points and components, and their back edges are omit
 
 - `tdd` hands a change to `dev-workflow`, and `dev-workflow` runs `tdd` as its build step for every behavior change.
 - `review` hands findings to `dev-workflow`, and `dev-workflow` runs `review` from a subagent as its self-review step before publishing.
-- `tech-research` is an entry point `spec` reaches at an open question, and `spec` cites its findings file instead of re-deriving the answer.
+- `tech-research` is an entry point `spec` reaches at an open question, and `spec` quotes the findings it depends on instead of re-deriving the answer.
 
 ## Roles
 
@@ -73,7 +73,7 @@ Three skills are both entry points and components, and their back edges are omit
 | `triage` | user | Entry - inbound intake | An inbound GitHub issue or pull request needs a category, disposition, and agent-ready brief | none (a fleet-style runner consumes the brief) |
 | `spec` | user | Entry - planning | A request needs scoping into a reviewed spec before building | `spec-to-tickets` (to file issues) or `dev-workflow` (to execute) |
 | `spec-to-tickets` | user | Entry - ticketing | A reviewed spec should become GitHub Issues | `open-issue` (writes and files each one), then `dev-workflow` (executes each issue) |
-| `tech-research` | model | Entry - research | A technical question needs a sourced, version-pinned answer about third-party or external behavior | none (produces a findings file); `spec` cites it instead of re-deriving |
+| `tech-research` | model | Entry - research | A technical question needs a sourced, version-pinned answer about third-party or external behavior | none (produces a findings file); `spec` quotes its claims instead of re-deriving |
 | `dep-upgrade` | model | Entry - dependency maintenance | A uv-managed Python project needs a dependency, lockfile, or git-sourced internal tag upgraded | `dev-workflow` (lands the verified dependency change) |
 | `tdd` | model | Entry - test-first loop | Code behavior is built or changed, including `dev-workflow`'s build step, or a request is explicitly test-first ("TDD this", "write the test first", "red, green, refactor") | `dev-workflow` (lands the test-driven change) |
 | `debug` | model | Entry - diagnosis | Something is broken and the cause is unknown | `dev-workflow` (lands the fix as a regression-tested change) |

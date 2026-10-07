@@ -26,8 +26,9 @@ The core rule (read the glossary, use its terms verbatim, extend it when a term 
 
 - Read the glossaries for the affected contexts before the interview and use their terms exactly.
 - Extend them as the interview and exploration settle new terms or reveal stale entries, confirming definitions with the user. Glossary updates ship with the spec.
+- Create a glossary where none exists only when *Artifact location* (`standards`) says `repo`. Otherwise record new terms in the spec's own text.
 
-Layout (an existing location or convention overrides these defaults): one `docs/UBIQUITOUS-LANGUAGE.md` at the repo root with one entry per term (term, precise meaning, and where useful the code artifacts that embody it).
+Layout for a new glossary (an existing location or convention overrides these defaults): one `docs/UBIQUITOUS-LANGUAGE.md` at the repo root with one entry per term (term, precise meaning, and where useful the code artifacts that embody it).
 A large repo with distinct bounded contexts gives each context its own `UBIQUITOUS-LANGUAGE.md`; the root glossary maps them and records cross-context name mismatches.
 Scope entries to the repo, not the spec: no per-spec section and no planning status like *(planned)*. Group only by where in the repo the term belongs, and define in present tense.
 Add a term when it names a domain concept people could misunderstand, not for every variable or utility.
@@ -91,15 +92,15 @@ Cover these at the density a reviewer needs:
 
 Hold it to the spec budget in *Artifact audience* (`standards`). Cut detail a reviewer cannot act on.
 
-Write in the glossary's terms and refer to the glossary instead of defining terms inline.
+Write in the glossary's terms. When a glossary exists, refer to it instead of defining terms inline.
 
 ### 6. Save the spec and update the glossary
 
 Run the concision pass (`standards`) over the draft and apply what it returns.
 
-Write the spec to a `.md` file with the Write tool. Use an explicit location or standing convention if there is one; otherwise `docs/plans/` in the primary repo. Name it in kebab-case with a date prefix, such as `2026-07-07-fix-xic-shard-lookup.md`.
+Write the spec to a `.md` file with the Write tool, in the location *Artifact location* (`standards`) gives for a spec. Name it in kebab-case with a date prefix, such as `2026-07-07-fix-xic-shard-lookup.md`.
 
-Write new or corrected glossary entries to the appropriate `UBIQUITOUS-LANGUAGE.md` files, creating them (and the root map for multi-context repos) if needed, following the scoping rules above.
+Write new or corrected glossary entries to the existing `UBIQUITOUS-LANGUAGE.md` files. Create missing ones (and the root map for multi-context repos) only under `repo`, following the scoping rules above.
 
 Report the file paths (spec and any glossary file) with a one-line description each. Do not paste their contents into the conversation.
 

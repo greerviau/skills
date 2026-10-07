@@ -55,7 +55,7 @@ Each category below separates the two.
 #### User-invoked
 
 - [improve-codebase-architecture](skills/engineering/improve-codebase-architecture/SKILL.md) - scans a codebase for evidence-backed structural opportunities and ranks them in an HTML report before implementation.
-- [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed spec. It interviews the user, explores the code, settles the approach and checks each decision against the code, maintains the repo's ubiquitous-language glossary, and writes a short human-facing spec whose work items become tickets.
+- [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed spec. It interviews the user, explores the code, settles the approach and checks each decision against the code, extends the repo's ubiquitous-language glossary, and writes a short human-facing spec whose work items become tickets.
 - [spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md) - turns a reviewed spec into GitHub Issues. It picks a single-issue, flat, or parent-with-sub-issues shape from the spec's scope, files each issue through `open-issue`, and records the issue URLs in the spec so re-runs do not duplicate.
 - [triage](skills/engineering/triage/SKILL.md) - classifies an inbound GitHub issue or pull request and produces an agent-ready brief with evidence, scope, acceptance criteria, and verification.
 - [handoff](skills/engineering/handoff/SKILL.md) - compacts the current conversation into a handoff document for another agent.
@@ -63,7 +63,7 @@ Each category below separates the two.
 
 #### Model-invoked
 
-- [standards](skills/engineering/standards/SKILL.md) - the house rules the other engineering skills enforce: artifact audience and length, documentation and plain-language style, ubiquitous language, branch, issue, and PR hygiene, and the interactive and autonomous interaction contract. Its [CODING-STANDARDS.md](skills/engineering/standards/CODING-STANDARDS.md) holds the rules for code: comments, docstrings, identifiers, and test-first testing.
+- [standards](skills/engineering/standards/SKILL.md) - the house rules the other engineering skills enforce: artifact audience and length, documentation and plain-language style, ubiquitous language, where skills save their documents (the `skills.artifacts` git setting, `off` by default), branch, issue, and PR hygiene, and the interactive and autonomous interaction contract. Its [CODING-STANDARDS.md](skills/engineering/standards/CODING-STANDARDS.md) holds the rules for code: comments, docstrings, identifiers, and test-first testing.
 - [design](skills/engineering/design/SKILL.md) - vocabulary for structural judgment (module depth, information hiding, seam placement, error-condition elimination, navigability), so a structural claim can be cited.
 - [open-issue](skills/engineering/open-issue/SKILL.md) - issue conventions: checks for duplicates, honors the repo's issue template, writes a descriptive title and a short problem, reproduction, and acceptance-criteria body, and labels from `gh label list`.
 - [dev-workflow](skills/engineering/dev-workflow/SKILL.md) - the development loop for a GitHub repo: an issue before code, an isolated worktree, test-first building, local validation, a review of the diff before publishing, an evergreen PR that closes the issue, CI to green, and cleanup.
