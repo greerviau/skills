@@ -1,6 +1,6 @@
 ---
 name: debug
-description: Use when something is broken and the cause is unknown: a failing test, a crash, wrong output, a user-reported bug. Reproduces the bug end-to-end the way a user hits it before forming any fix hypothesis, localizes the root cause, and proves it with the reproduction. Trigger on "why is this failing", "reproduce this bug", "track down", "debug this", "what's causing", "it's broken when".
+description: Use when something is broken and the cause is unknown (a failing test, a crash, wrong output, a user-reported bug). Reproduces the bug end-to-end the way a user hits it before forming any fix hypothesis, localizes the root cause, and proves it with the reproduction. Trigger on "why is this failing", "reproduce this bug", "track down", "debug this", "what's causing", "it's broken when".
 ---
 
 # debug
