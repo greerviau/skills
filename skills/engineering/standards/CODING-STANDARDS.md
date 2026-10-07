@@ -6,6 +6,7 @@ They apply in every repo.
 
 General rules go under their topic heading.
 A rule that holds only for one language goes under a `## <Language>` heading.
+`review`'s `scripts/check_diff.py`, if you use it, checks the mechanical rules here: abbreviated identifiers, comment form, issue references, and flaky test patterns.
 
 ## Comments and docstrings
 

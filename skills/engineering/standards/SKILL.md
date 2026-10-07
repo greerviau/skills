@@ -93,6 +93,8 @@ These apply to any document a person reads.
 
 ### Plain language
 
+`review`'s `scripts/check_diff.py`, if you use it, flags the banned words below in added prose and comments, and agent attribution in commit messages.
+
 - Use the short common word: start (not begin, commence, initiate), use (not utilize, leverage), help (not facilitate), before (not prior to), after (not subsequent to), about (not regarding, concerning), get (not obtain, acquire), show (not demonstrate), also (not additionally, furthermore, moreover).
 - No marketing adjectives: seamless, robust, powerful, cutting-edge, effortless, world-class, next-generation, revolutionary.
 - Use active voice with the actor named and a verb for the action: "the parser reads the file" and "analyze the log", not "the file is read by the parser" or "perform an analysis of the log".

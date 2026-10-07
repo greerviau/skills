@@ -73,7 +73,7 @@ Each category below separates the two.
 - [debug](skills/engineering/debug/SKILL.md) - reproduces a bug end to end as a user hits it before forming a fix hypothesis, then localizes and confirms the root cause.
 - [flake-hunt](skills/engineering/flake-hunt/SKILL.md) - investigates intermittent, order-dependent, seed-dependent, and CI-only test failures with fixed-count reruns, base-versus-change comparison, seed and order bisection, and a bounded quarantine policy.
 - [merge-conflict](skills/engineering/merge-conflict/SKILL.md) - resolves merge and rebase conflicts from both sides' intent, reruns the repository checks, and completes the operation.
-- [review](skills/engineering/review/SKILL.md) - reviews a diff, branch, or PR against the engineering standards (lint, tests, flakiness, correctness, structure) and the originating spec or issue when one can be found, and flags incidental defects.
+- [review](skills/engineering/review/SKILL.md) - reviews a diff, branch, or PR against the engineering standards (lint, tests, flakiness, correctness, structure) and the originating spec or issue when one can be found, and flags incidental defects. A bundled script runs the mechanical checks over the added lines.
 - [refactor](skills/engineering/refactor/SKILL.md) - improves code structure without changing behavior, guarded by an unchanged test suite, and adds characterization tests first when coverage is thin.
 - [perf](skills/engineering/perf/SKILL.md) - measure-first optimization: a numeric target, a baseline and profile from a reproducible harness, one change at a time, and a before/after report from the same harness.
 - [prototype](skills/engineering/prototype/SKILL.md) - answers a design question with a throwaway spike whose source is discarded.
