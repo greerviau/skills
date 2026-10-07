@@ -148,11 +148,22 @@ def unquote_path(quoted):
     return raw.decode("utf-8", errors="replace")
 
 
+def diff_path(target):
+    target = target.rstrip("\t")
+    if target.startswith('"'):
+        target = unquote_path(target)
+    return None if target == "/dev/null" else target[len("b/") :]
+
+
 def added_line_numbers(merge_base):
-    """Map each changed path to the line numbers the change adds, or None for a new untracked file."""
+    """Map each changed path to the line numbers the change adds.
+
+    A new untracked file maps to None. Files git diffs as binary are returned separately.
+    """
     added = defaultdict(set)
+    binary = []
     diff = git(
-        "diff", "--no-color", "--no-ext-diff", "--unified=0",
+        "diff", "--no-color", "--no-ext-diff", "--no-textconv", "--unified=0",
         "--src-prefix=a/", "--dst-prefix=b/", merge_base,
     )  # fmt: skip
     path = None
@@ -162,10 +173,13 @@ def added_line_numbers(merge_base):
         if line.startswith("diff --git "):
             in_header = True
         elif in_header and line.startswith("+++ "):
-            target = line[len("+++ ") :].rstrip("\t")
-            if target.startswith('"'):
-                target = unquote_path(target)
-            path = None if target == "/dev/null" else target[len("b/") :]
+            path = diff_path(line[len("+++ ") :])
+        elif in_header and line.startswith("Binary files "):
+            target = diff_path(
+                re.match(r"Binary files .* and (.*) differ$", line).group(1)
+            )
+            if target:
+                binary.append(target)
         elif line.startswith("@@"):
             in_header = False
             number = int(re.match(r"@@ -\S+ \+(\d+)", line).group(1))
@@ -175,7 +189,7 @@ def added_line_numbers(merge_base):
     untracked = git("ls-files", "--others", "--exclude-standard", "-z")
     for path in filter(None, untracked.split("\0")):
         added[path] = None
-    return added
+    return added, binary
 
 
 def read_lines(path):
@@ -194,9 +208,9 @@ def classify(path, lines, markers):
     if pure_path.suffix.lower() in PYTHON_SUFFIXES:
         try:
             return lex_python(lines)
-        except (tokenize.TokenError, SyntaxError):
+        except Exception:  # noqa: BLE001, S110 - tokenize raises many types on malformed input
             pass
-    classified = lex_generic(lines, markers)
+    classified = lex_generic(lines, markers, pure_path.suffix.lower())
     if pure_path.suffix.lower() == ".go":
         mark_go_doc_comments(lines, classified)
     return classified
@@ -220,15 +234,38 @@ def lex_python(lines):
         tokenize.ENCODING,
     }
 
-    def significant(index, step):
+    def significant_index(index, step):
         index += step
         while 0 <= index < len(tokens) and tokens[index].type in trivia:
             index += step
-        return tokens[index] if 0 <= index < len(tokens) else None
+        return index if 0 <= index < len(tokens) else None
+
+    def significant(index, step):
+        found = significant_index(index, step)
+        return None if found is None else tokens[found]
+
+    def logical_line_head(index):
+        while index > 0 and tokens[index - 1].type not in statement_starts:
+            index -= 1
+        while tokens[index].type in trivia:
+            index += 1
+        return tokens[index]
+
+    def opens_body(token_index):
+        """A `:` ending a def or class header, which a one-line docstring may follow."""
+        token = tokens[token_index]
+        head = logical_line_head(token_index)
+        return token.string == ":" and head.string in ("def", "class", "async")
 
     def apply_string(first, last, start_index, end_index):
-        before, after = significant(start_index, -1), significant(end_index, 1)
-        docstring = (before is None or before.type in statement_starts) and (
+        before_index = significant_index(start_index, -1)
+        after = significant(end_index, 1)
+        statement = (
+            before_index is None
+            or tokens[before_index].type in statement_starts
+            or opens_body(before_index)
+        )
+        docstring = statement and (
             after is None or after.type in (tokenize.NEWLINE, tokenize.ENDMARKER)
         )
         (start_row, start_column), (end_row, end_column) = first.start, last.end
@@ -237,9 +274,18 @@ def lex_python(lines):
                 break
             line_index = row - 1
             if docstring:
-                kinds[line_index] = "docstring"
-                comments[line_index] = lines[line_index].strip().strip("\"'rRbBuUfF ")
-                code[line_index] = []
+                low = start_column if row == start_row else 0
+                high = end_column if row == end_row else len(lines[line_index])
+                prose = lines[line_index][low:high].strip()
+                if row == start_row:
+                    prose = re.sub(r"^[rRbBuUfF]{0,2}(\"\"\"|\'\'\'|\"|\')", "", prose)
+                if row == end_row:
+                    prose = re.sub(r"(\"\"\"|\'\'\'|\"|\')$", "", prose)
+                comments[line_index] = prose.strip()
+                del code[line_index][low:high]
+                if not "".join(code[line_index]).strip():
+                    kinds[line_index] = "docstring"
+                    code[line_index] = []
                 continue
             if start_row < row < end_row:
                 kinds[line_index] = "string"
@@ -252,6 +298,8 @@ def lex_python(lines):
 
     brackets = []
     fstring_stack = []
+    definition_depth = None
+    lambda_depth = None
     for index, token in enumerate(tokens):
         if fstring_start is not None and token.type == fstring_start:
             fstring_stack.append(index)
@@ -273,14 +321,29 @@ def lex_python(lines):
             del code[row - 1][column:]
             if not "".join(code[row - 1]).strip():
                 kinds[row - 1] = "comment"
+        elif token.type == tokenize.NAME and token.string == "def":
+            definition_depth = len(brackets)
+        elif token.type == tokenize.NAME and token.string == "lambda":
+            lambda_depth = len(brackets)
+        elif (
+            token.type == tokenize.OP
+            and token.string == ":"
+            and lambda_depth == len(brackets)
+        ):
+            lambda_depth = None
         elif token.type == tokenize.OP and token.string in "([{":
-            before = significant(index, -1)
-            two_before = significant(index - 1, -1) if before else None
-            definition = bool(before and two_before and two_before.string == "def")
+            definition = token.string == "(" and definition_depth == len(brackets)
+            if definition:
+                definition_depth = None
             brackets.append((token.string, definition))
         elif token.type == tokenize.OP and token.string in ")]}" and brackets:
             brackets.pop()
-        elif token.type == tokenize.NAME and brackets and brackets[-1] == ("(", False):
+        elif (
+            token.type == tokenize.NAME
+            and brackets
+            and brackets[-1] == ("(", False)
+            and lambda_depth is None
+        ):
             after = significant(index, 1)
             if after is not None and after.string == "=":
                 row, column = token.start
@@ -292,10 +355,58 @@ def lex_python(lines):
     ]
 
 
-def lex_generic(lines, markers):
+def string_end(text, start, quote, escapes):
+    """Index just past the quote closing the string opened at `start`, or None if the line ends first."""
+    index = start + 1
+    while index < len(text):
+        if escapes and text[index] == "\\":
+            index += 2
+            continue
+        if text[index] == quote:
+            return index + 1
+        index += 1
+    return None
+
+
+def regex_end(text, start):
+    """Index just past a JavaScript regex literal opened at `start`, or None if `/` is division."""
+    before = text[:start].rstrip()
+    if before and before[-1] not in "(,=:[!&|?{};":
+        return None
+    index = start + 1
+    in_class = False
+    while index < len(text):
+        character = text[index]
+        if character == "\\":
+            index += 2
+            continue
+        if character == "[":
+            in_class = True
+        elif character == "]":
+            in_class = False
+        elif character == "/" and not in_class:
+            return index + 1
+        index += 1
+    return None
+
+
+def lex_generic(lines, markers, suffix):
     """Classify lines of a C-like, hash-comment, or dash-comment language."""
     block_comments = "//" in markers
     quotes = "\"'`" if block_comments else "\"'"
+    # Go raw strings and single quotes in shell, SQL, YAML, and TOML take no escapes.
+    backtick_escapes = suffix != ".go"
+    single_quote_escapes = block_comments
+    javascript = suffix in {
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".cjs",
+        ".ts",
+        ".tsx",
+        ".mts",
+        ".cts",
+    }
     classified = []
     block_kind = None
     open_backtick = False
@@ -319,8 +430,8 @@ def lex_generic(lines, markers):
                     block_kind = None
                 continue
             if open_backtick:
-                close = re.search(r"(?<!\\)`", text[index:])
-                stop = len(text) if close is None else index + close.end()
+                close = string_end(text, index - 1, "`", backtick_escapes)
+                stop = len(text) if close is None else close
                 code.append("x" * (stop - index))
                 index = stop
                 if close is not None:
@@ -346,14 +457,21 @@ def lex_generic(lines, markers):
                 parts.append(rest[1:].strip() if doc else rest.strip())
                 kind = kind or ("docstring" if doc else "comment")
                 break
+            if javascript and character == "/":
+                close = regex_end(text, index)
+                if close is not None:
+                    code.append("x" * (close - index))
+                    index = close
+                    continue
             if character in quotes:
                 if character == "`":
                     open_backtick = True
                     code.append("x")
                     index += 1
                     continue
-                close = re.search(rf"(?<!\\){re.escape(character)}", text[index + 1 :])
-                stop = len(text) if close is None else index + 1 + close.end()
+                escapes = character == '"' or single_quote_escapes
+                close = string_end(text, index, character, escapes)
+                stop = len(text) if close is None else close
                 code.append("x" * (stop - index))
                 index = stop
                 continue
@@ -467,9 +585,9 @@ def prose_findings(path, lines, added):
     return findings
 
 
-def file_findings(added_by_path):
+def file_findings(added_by_path, binary):
     findings = []
-    unchecked = []
+    unchecked = list(binary)
     for path, added in sorted(added_by_path.items()):
         lines = read_lines(path)
         if lines is None:
@@ -509,7 +627,7 @@ def main(arguments):
         os.chdir(git("rev-parse", "--show-toplevel").strip())
         git("rev-parse", "--verify", f"{arguments[0]}^{{commit}}")
         merge_base = git("merge-base", arguments[0], "HEAD").strip()
-        findings, unchecked = file_findings(added_line_numbers(merge_base))
+        findings, unchecked = file_findings(*added_line_numbers(merge_base))
         findings += commit_findings(merge_base)
     except GitError as error:
         print(f"check_diff: {error}", file=sys.stderr)

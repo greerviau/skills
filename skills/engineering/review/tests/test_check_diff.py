@@ -743,5 +743,150 @@ class DiffHeaderTests(CheckDiffTestCase):
         self.assertNotRegex(result.stderr.strip(), r":\s*$")
 
 
+class EscapeTests(CheckDiffTestCase):
+    def test_escaped_backslash_closes_template_literal(self):
+        self.repository.write(
+            "app.js", "const s = `C:\\\\`;\nconst tmp_cnt = 1; // regarding\n"
+        )
+        self.repository.commit("add path")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.js:2", "naming")
+        self.assertFinding(findings, "app.js:2", "plain-language")
+
+    def test_escaped_backslash_closes_double_quoted_string(self):
+        self.repository.write(
+            "app.js", 'const s = "a\\\\"; const tmp_cnt = 1; // regarding\n'
+        )
+        self.repository.commit("add string")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.js:1", "naming")
+        self.assertFinding(findings, "app.js:1", "plain-language")
+
+    def test_go_raw_string_has_no_escapes(self):
+        self.repository.write(
+            "app.go", "package app\n\nvar s = `\\`\nvar tmpCnt = 1 // regarding\n"
+        )
+        self.repository.commit("add raw string")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.go:4", "naming")
+
+    def test_shell_single_quote_has_no_escapes(self):
+        self.repository.write("run.sh", "sep='\\'; tmp_cnt=1 # regarding\n")
+        self.repository.commit("add separator")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "run.sh:1", "plain-language")
+
+    def test_regex_literal_with_backtick_is_not_a_template(self):
+        self.repository.write(
+            "app.js", "const tick = /`/;\nconst tmp_cnt = 1; // regarding\n"
+        )
+        self.repository.commit("add regex")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.js:2", "naming")
+        self.assertFinding(findings, "app.js:2", "plain-language")
+
+
+class PythonDocstringEdgeTests(CheckDiffTestCase):
+    def test_docstring_prose_keeps_its_first_and_last_letters(self):
+        self.repository.write(
+            "app.py",
+            'def run():\n    """Utilize the buffer."""\n\n\ndef stop():\n    """Regarding stop."""\n',
+        )
+        self.repository.commit("add functions")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:2", "plain-language")
+        self.assertFinding(findings, "app.py:6", "plain-language")
+
+    def test_one_line_definition_docstring_is_prose(self):
+        self.repository.write(
+            "app.py",
+            'def run(): "Utilize the buffer."\n\n\nclass Job: "Regarding jobs."\n',
+        )
+        self.repository.commit("add definitions")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:1", "plain-language")
+        self.assertFinding(findings, "app.py:4", "plain-language")
+
+    def test_tokenize_failure_falls_back_instead_of_crashing(self):
+        (self.repository.path / "app.py").write_bytes(
+            b"x = 1  # a\r\xc3\xa9\ncfg = 2\n"
+        )
+        self.repository.commit("add odd file")
+
+        exit_code, findings = self.repository.check()
+
+        self.assertEqual(exit_code, 1)
+        self.assertFinding(findings, "app.py:2", "naming")
+
+
+class PythonKeywordEdgeTests(CheckDiffTestCase):
+    def test_lambda_default_inside_call_is_reported(self):
+        self.repository.write("app.py", "items.sort(key=lambda tmp_cnt=1: 0)\n")
+        self.repository.commit("add sort")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:1", "naming")
+
+    def test_generic_function_parameter_is_reported(self):
+        self.repository.write(
+            "app.py", "def first[T](tmp_cnt=1):\n    return tmp_cnt\n"
+        )
+        self.repository.commit("add generic")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:1", "naming")
+
+
+class GitAttributeTests(CheckDiffTestCase):
+    def test_textconv_does_not_shift_line_numbers(self):
+        self.repository.write("app.py", "x = 1\n")
+        self.repository.commit("add constant")
+        git(self.repository.path, "branch", "-f", "base")
+        (self.repository.path / ".git" / "info").mkdir(exist_ok=True)
+        (self.repository.path / ".git" / "info" / "attributes").write_text(
+            "*.py diff=doubled\n"
+        )
+        git(self.repository.path, "config", "diff.doubled.textconv", "sed p")
+        self.repository.write("app.py", "x = 1\ncfg = 2\n")
+        self.repository.commit("add cfg")
+
+        _, findings = self.repository.check()
+
+        self.assertFinding(findings, "app.py:2", "naming")
+
+    def test_file_git_treats_as_binary_is_named_on_stderr(self):
+        (self.repository.path / ".git" / "info").mkdir(exist_ok=True)
+        (self.repository.path / ".git" / "info" / "attributes").write_text(
+            "b.py -diff\n"
+        )
+        self.repository.write("b.py", "msg_cnt = 1\n")
+        self.repository.commit("add b")
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT), "base"],
+            cwd=self.repository.path,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertIn("b.py", result.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()
