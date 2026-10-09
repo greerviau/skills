@@ -17,7 +17,7 @@ The user decides what stays. Every judgment call goes to them, and anything ambi
 
 ## How memory is stored
 
-One directory per project: `~/.claude/projects/<slug>/memory/`, where `<slug>` is the project's working directory with `/` replaced by `-`.
+One directory per project: `~/.claude/projects/<slug>/memory/`, where `<slug>` is the project's resolved working directory with every character that is not a letter or digit replaced by `-` (`/Users/me/.worktrees/fix_v2` becomes `-Users-me--worktrees-fix-v2`).
 Only the directory matching a session's working directory is loaded, so the same fact often exists in several projects, and a fact filed under one project is invisible to the others.
 
 Each memory is one file holding one fact:

@@ -83,22 +83,56 @@ def unquote(value: str) -> str:
     return value
 
 
-def slug_to_path(slug: str) -> Path | None:
-    """Resolve a project slug to a directory, disambiguating dashes by what exists on disk."""
-    parts = [p for p in slug.split("-") if p]
+def path_to_slug(path: str) -> str:
+    """Claude Code's project slug: the resolved working directory with every non-alphanumeric character as `-`."""
+    return re.sub(r"[^A-Za-z0-9]", "-", path)
 
-    def walk(base: Path, rest: list[str]) -> Path | None:
+
+def logged_project(project_dir: Path) -> Path | None:
+    """The working directory a session log in this project directory records, if any."""
+    for log in sorted(project_dir.glob("*.jsonl"), key=lambda p: p.stat().st_mtime, reverse=True):
+        with log.open(encoding="utf-8", errors="replace") as handle:
+            for line in handle:
+                try:
+                    cwd = json.loads(line).get("cwd")
+                except (json.JSONDecodeError, AttributeError):
+                    continue
+                if cwd and path_to_slug(cwd) == project_dir.name:
+                    return Path(cwd)
+    return None
+
+
+def slug_to_path(slug: str) -> Path | None:
+    """Resolve a slug by walking the filesystem, matching each directory name by its slug form."""
+
+    def walk(base: Path, rest: str) -> Path | None:
         if not rest:
             return base
-        for take in range(len(rest), 0, -1):
-            candidate = base / "-".join(rest[:take])
-            if candidate.is_dir():
-                hit = walk(candidate, rest[take:])
-                if hit is not None:
-                    return hit
+        try:
+            entries = [entry for entry in base.iterdir() if entry.is_dir()]
+        except OSError:
+            return None
+        # Exact names first. A case-insensitive filesystem (macOS by default) also accepts a slug
+        # recorded with different casing, so try those second.
+        for exact in (True, False):
+            for entry in entries:
+                piece = "-" + path_to_slug(entry.name)
+                head = rest[: len(piece)] if exact else rest[: len(piece)].lower()
+                if head != (piece if exact else piece.lower()):
+                    continue
+                if len(rest) == len(piece) or rest[len(piece)] == "-":
+                    hit = walk(entry, rest[len(piece) :])
+                    if hit is not None:
+                        return hit
         return None
 
-    return walk(Path("/"), parts)
+    return walk(Path("/"), slug)
+
+
+def project_path(project_dir: Path) -> Path | None:
+    """The project directory a memory directory belongs to, or None when it no longer exists."""
+    project = logged_project(project_dir) or slug_to_path(project_dir.name)
+    return project if project is not None and project.is_dir() else None
 
 
 @dataclass
@@ -205,7 +239,7 @@ def check_references(mem: Memory, names: set[str], roots: list[Path]) -> None:
 
 def scan_dir(memory_dir: Path) -> tuple[list[Memory], list[str], Path | None]:
     slug = memory_dir.parent.name
-    project = slug_to_path(slug)
+    project = project_path(memory_dir.parent)
     files = sorted(p for p in memory_dir.glob("*.md") if p.name != "MEMORY.md")
     memories = [parse_memory(p, slug, project) for p in files]
     names = {m.path.stem for m in memories}
@@ -305,7 +339,7 @@ def main() -> int:
 
     dirs = sorted(p for p in PROJECTS_ROOT.glob("*/memory") if p.is_dir())
     if args.project:
-        wanted = [w.strip("/").replace("/", "-").lower() for w in args.project]
+        wanted = [path_to_slug(w.rstrip("/")).lower() for w in args.project]
         dirs = [d for d in dirs if any(w in d.parent.name.lower() for w in wanted)]
     dirs = [d for d in dirs if any(d.glob("*.md"))]
     if not dirs:
