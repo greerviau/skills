@@ -4,7 +4,6 @@ import tempfile
 import unittest
 from pathlib import Path
 
-
 SCRIPT = Path(__file__).parents[1] / "scripts" / "doc_review.py"
 spec = importlib.util.spec_from_file_location("doc_review", SCRIPT)
 doc_review = importlib.util.module_from_spec(spec)
@@ -66,3 +65,37 @@ class DocumentFormatTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class OutputLocationTests(unittest.TestCase):
+    def run_review(self, document, *arguments):
+        import subprocess
+        import sys
+
+        return subprocess.run(
+            [sys.executable, str(SCRIPT), str(document), "--no-open", "--timeout", "1", *arguments],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+    def test_default_output_goes_to_the_temporary_directory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            document = Path(directory) / "spec.md"
+            document.write_text("# Spec\n")
+
+            result = self.run_review(document)
+
+            announced = Path(result.stdout.split("the comments land in ")[1].strip())
+            self.assertEqual(announced.parent, Path(tempfile.gettempdir()).resolve())
+            self.assertEqual(sorted(path.name for path in Path(directory).iterdir()), ["spec.md"])
+
+    def test_out_flag_still_chooses_the_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            document = Path(directory) / "spec.md"
+            document.write_text("# Spec\n")
+            chosen = Path(directory) / "comments.json"
+
+            result = self.run_review(document, "--out", str(chosen))
+
+            self.assertIn(f"the comments land in {chosen.resolve()}", result.stdout)

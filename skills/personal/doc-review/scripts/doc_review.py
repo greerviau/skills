@@ -11,6 +11,8 @@ Serves a local review page, blocks until the reviewer clicks "Send to agent" (or
 Usage:
   uv run doc_review.py <document> [--out PATH] [--port N] [--no-open] [--timeout SECONDS]
 
+Without --out, the comments go to the OS temp directory, never next to the document.
+
 The document can be Markdown, plain text, HTML, PDF, or DOCX.
 
 A finished review exits 0 whether or not it produced comments; `status` in the JSON says which.
@@ -20,12 +22,14 @@ Exit codes: 0 review finished, 3 timed out, 4 aborted.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html.parser
 import json
 import mimetypes
 import os
 import socket
 import sys
+import tempfile
 import threading
 import time
 import webbrowser
@@ -68,7 +72,7 @@ def make_md():
     options = {"highlight": highlight_code}
     try:
         md = MarkdownIt("gfm-like", options)
-    except Exception:
+    except ImportError:
         md = MarkdownIt("commonmark", options).enable(["table", "strikethrough"])
     for module, plugin in (
         ("mdit_py_plugins.front_matter", "front_matter_plugin"),
@@ -76,9 +80,9 @@ def make_md():
     ):
         try:
             mod = __import__(module, fromlist=[plugin])
-            md.use(getattr(mod, plugin))
-        except Exception:
-            pass
+        except ImportError:
+            continue
+        md.use(getattr(mod, plugin))
     return md
 
 
@@ -355,10 +359,18 @@ def summarize(result: dict) -> None:
         print(f"    comment: {comment['body']}\n")
 
 
+def default_output(doc: Path) -> Path:
+    """The comments file in the OS temp directory, unique per document path."""
+    digest = hashlib.sha256(str(doc).encode()).hexdigest()[:8]
+    return Path(tempfile.gettempdir()) / f"{doc.name}-{digest}.review.json"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("document", type=Path, help="markdown, text, HTML, PDF, or DOCX file to review")
-    parser.add_argument("--out", type=Path, help="where to write the comments JSON (default: <document>.review.json)")
+    parser.add_argument(
+        "--out", type=Path, help="where to write the comments JSON (default: <name>-<hash>.review.json in the OS temp directory)"
+    )
     parser.add_argument("--port", type=int, default=8787, help="port to serve on (default: 8787, falling back to any free port)")
     parser.add_argument("--no-open", action="store_true", help="print the URL instead of opening a browser")
     parser.add_argument("--timeout", type=float, default=0, help="give up after N seconds (default: wait forever)")
@@ -370,7 +382,7 @@ def main() -> int:
     if not doc.is_file():
         print(f"error: no such file: {doc}", file=sys.stderr)
         return EXIT_ABORTED
-    out = (args.out or doc.with_suffix(doc.suffix + ".review.json")).expanduser().resolve()
+    out = (args.out or default_output(doc)).expanduser().resolve()
     out.parent.mkdir(parents=True, exist_ok=True)
 
     session = Session(doc, out)

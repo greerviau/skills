@@ -37,7 +37,7 @@ The process exits when they click send, which returns control to you.
 
 Flags:
 
-- `--out PATH`: the comments file (default `<document>.review.json`).
+- `--out PATH`: the comments file (default `<name>-<hash>.review.json` in the OS temp directory, so the review leaves nothing in the document's repo). The script prints the path.
 - `--port N`: default 8787, falling back to any free port. Keep the default unless it is taken, because the reviewer's saved drafts are scoped to the origin and a new port loses them.
 - `--no-open`: print the URL instead of opening a browser.
 - `--timeout SECONDS`: give up waiting after this long.
