@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # /// script
 # requires-python = ">=3.11"
 # dependencies = ["markdown-it-py[linkify]>=3.0", "mdit-py-plugins>=0.4", "Pygments>=2.17"]
@@ -24,10 +23,12 @@ from __future__ import annotations
 import argparse
 import hashlib
 import html.parser
+import importlib.util
 import json
 import mimetypes
 import os
 import socket
+import stat
 import sys
 import tempfile
 import threading
@@ -70,9 +71,9 @@ def make_md():
     from markdown_it import MarkdownIt
 
     options = {"highlight": highlight_code}
-    try:
+    if importlib.util.find_spec("linkify_it"):
         md = MarkdownIt("gfm-like", options)
-    except ImportError:
+    else:
         md = MarkdownIt("commonmark", options).enable(["table", "strikethrough"])
     for module, plugin in (
         ("mdit_py_plugins.front_matter", "front_matter_plugin"),
@@ -360,16 +361,24 @@ def summarize(result: dict) -> None:
 
 
 def default_output(doc: Path) -> Path:
-    """The comments file in the OS temp directory, unique per document path."""
+    """The comments file in a private per-user directory under the OS temp directory, unique per document path."""
+    directory = Path(tempfile.gettempdir()) / f"doc-review-{os.getuid()}"
+    directory.mkdir(mode=0o700, exist_ok=True)
+    info = directory.lstat()
+    # A shared /tmp lets another user pre-create this name, so refuse anything this user does not own.
+    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid():
+        raise OSError(f"refusing to write review comments under {directory}: not a directory this user owns")
+    if stat.S_IMODE(info.st_mode) != 0o700:
+        directory.chmod(0o700)
     digest = hashlib.sha256(str(doc).encode()).hexdigest()[:8]
-    return Path(tempfile.gettempdir()) / f"{doc.name}-{digest}.review.json"
+    return directory / f"{doc.name}-{digest}.review.json"
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("document", type=Path, help="markdown, text, HTML, PDF, or DOCX file to review")
     parser.add_argument(
-        "--out", type=Path, help="where to write the comments JSON (default: <name>-<hash>.review.json in the OS temp directory)"
+        "--out", type=Path, help="where to write the comments JSON (default: <name>-<hash>.review.json in a private OS temp directory)"
     )
     parser.add_argument("--port", type=int, default=8787, help="port to serve on (default: 8787, falling back to any free port)")
     parser.add_argument("--no-open", action="store_true", help="print the URL instead of opening a browser")
