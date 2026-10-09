@@ -109,21 +109,26 @@ def slug_to_path(slug: str) -> Path | None:
         if not rest:
             return base
         try:
-            entries = [entry for entry in base.iterdir() if entry.is_dir()]
+            names = [entry.name for entry in base.iterdir()]
         except OSError:
             return None
-        # Exact names first. A case-insensitive filesystem (macOS by default) also accepts a slug
-        # recorded with different casing, so try those second.
-        for exact in (True, False):
-            for entry in entries:
-                piece = "-" + path_to_slug(entry.name)
-                head = rest[: len(piece)] if exact else rest[: len(piece)].lower()
-                if head != (piece if exact else piece.lower()):
-                    continue
-                if len(rest) == len(piece) or rest[len(piece)] == "-":
-                    hit = walk(entry, rest[len(piece) :])
-                    if hit is not None:
-                        return hit
+        candidates = []
+        for name in names:
+            piece = "-" + path_to_slug(name)
+            if len(rest) > len(piece) and rest[len(piece)] != "-":
+                continue
+            head = rest[: len(piece)]
+            if head == piece:
+                candidates.append((0, -len(piece), name, piece))
+            elif head.lower() == piece.lower():
+                # A case-insensitive filesystem (macOS by default) accepts a slug recorded with other casing.
+                candidates.append((1, -len(piece), name, piece))
+        for _, _, name, piece in sorted(candidates):
+            entry = base / name
+            if entry.is_dir():
+                hit = walk(entry, rest[len(piece) :])
+                if hit is not None:
+                    return hit
         return None
 
     return walk(Path("/"), slug)
@@ -328,6 +333,14 @@ def duplicate_pairs(memories: list[Memory]) -> tuple[list[str], list[str]]:
     return identical, similar
 
 
+def project_matches(slug: str, wanted: str) -> bool:
+    """An existing path selects exactly its own project. Anything else matches as a slug substring."""
+    path = Path(wanted).expanduser()
+    if path.exists():
+        return slug == path_to_slug(str(path.resolve()))
+    return path_to_slug(wanted.rstrip("/")).lower() in slug.lower()
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--project", action="append", default=[],
@@ -339,8 +352,7 @@ def main() -> int:
 
     dirs = sorted(p for p in PROJECTS_ROOT.glob("*/memory") if p.is_dir())
     if args.project:
-        wanted = [path_to_slug(w.rstrip("/")).lower() for w in args.project]
-        dirs = [d for d in dirs if any(w in d.parent.name.lower() for w in wanted)]
+        dirs = [d for d in dirs if any(project_matches(d.parent.name, w) for w in args.project)]
     dirs = [d for d in dirs if any(d.glob("*.md"))]
     if not dirs:
         print("no memory directories with content found")

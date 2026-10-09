@@ -1,3 +1,4 @@
+import importlib.util
 import json
 import os
 import re
@@ -96,6 +97,42 @@ class ProjectResolutionTests(MemoryScanTestCase):
 
         self.assertIn("resolve to no directory", self.scan())
 
+    def test_longest_matching_name_wins_when_a_slug_is_ambiguous(self):
+        (self.root / "code" / "a" / "b").mkdir(parents=True)
+        project = self.root / "code" / "a-b"
+        self.add_project(project, with_log=False)
+
+        self.assertResolved(self.scan(), project)
+
+
+class WalkCostTests(unittest.TestCase):
+    def test_missing_deep_path_lists_each_directory_at_most_twice(self):
+        spec = importlib.util.spec_from_file_location("memory_scan", SCRIPT)
+        memory_scan = importlib.util.module_from_spec(spec)
+        sys.modules["memory_scan"] = memory_scan
+        self.addCleanup(sys.modules.pop, "memory_scan", None)
+        spec.loader.exec_module(memory_scan)
+        with tempfile.TemporaryDirectory() as directory:
+            deep = Path(directory).resolve()
+            for name in "abcdefghijkl":
+                deep = deep / name
+            deep.mkdir(parents=True)
+            calls = []
+            real_iterdir = Path.iterdir
+
+            def counting_iterdir(path):
+                calls.append(path)
+                return real_iterdir(path)
+
+            Path.iterdir = counting_iterdir
+            try:
+                result = memory_scan.slug_to_path(memory_scan.path_to_slug(str(deep / "gone")))
+            finally:
+                Path.iterdir = real_iterdir
+
+        self.assertIsNone(result)
+        self.assertLessEqual(len(calls), 2 * len(deep.parts), len(calls))
+
 
 class ProjectFilterTests(MemoryScanTestCase):
     def test_project_flag_accepts_a_path_with_dots(self):
@@ -108,6 +145,24 @@ class ProjectFilterTests(MemoryScanTestCase):
 
         self.assertIn("1 memories across 1 project(s)", output, output)
         self.assertResolved(output, wanted)
+
+
+    def test_project_dot_selects_the_current_directory(self):
+        wanted = self.root / "code" / "wanted"
+        self.add_project(wanted)
+        self.add_project(self.root / "code" / "other")
+
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT), "--project", "."],
+            capture_output=True,
+            text=True,
+            check=False,
+            cwd=wanted,
+            env={**os.environ, "HOME": str(self.home)},
+        )
+
+        self.assertIn("1 memories across 1 project(s)", result.stdout, result.stdout)
+        self.assertResolved(result.stdout, wanted)
 
 
 if __name__ == "__main__":
