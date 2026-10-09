@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # /// script
 # requires-python = ">=3.11"
 # dependencies = ["markdown-it-py[linkify]>=3.0", "mdit-py-plugins>=0.4", "Pygments>=2.17"]
@@ -11,6 +10,8 @@ Serves a local review page, blocks until the reviewer clicks "Send to agent" (or
 Usage:
   uv run doc_review.py <document> [--out PATH] [--port N] [--no-open] [--timeout SECONDS]
 
+Without --out, the comments go to the OS temp directory, never next to the document.
+
 The document can be Markdown, plain text, HTML, PDF, or DOCX.
 
 A finished review exits 0 whether or not it produced comments; `status` in the JSON says which.
@@ -20,12 +21,16 @@ Exit codes: 0 review finished, 3 timed out, 4 aborted.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html.parser
+import importlib.util
 import json
 import mimetypes
 import os
 import socket
+import stat
 import sys
+import tempfile
 import threading
 import time
 import webbrowser
@@ -66,9 +71,9 @@ def make_md():
     from markdown_it import MarkdownIt
 
     options = {"highlight": highlight_code}
-    try:
+    if importlib.util.find_spec("linkify_it"):
         md = MarkdownIt("gfm-like", options)
-    except Exception:
+    else:
         md = MarkdownIt("commonmark", options).enable(["table", "strikethrough"])
     for module, plugin in (
         ("mdit_py_plugins.front_matter", "front_matter_plugin"),
@@ -76,9 +81,9 @@ def make_md():
     ):
         try:
             mod = __import__(module, fromlist=[plugin])
-            md.use(getattr(mod, plugin))
-        except Exception:
-            pass
+        except ImportError:
+            continue
+        md.use(getattr(mod, plugin))
     return md
 
 
@@ -355,10 +360,26 @@ def summarize(result: dict) -> None:
         print(f"    comment: {comment['body']}\n")
 
 
+def default_output(doc: Path) -> Path:
+    """The comments file in a private per-user directory under the OS temp directory, unique per document path."""
+    directory = Path(tempfile.gettempdir()) / f"doc-review-{os.getuid()}"
+    directory.mkdir(mode=0o700, exist_ok=True)
+    info = directory.lstat()
+    # A shared /tmp lets another user pre-create this name, so refuse anything this user does not own.
+    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid():
+        raise OSError(f"refusing to write review comments under {directory}: not a directory this user owns")
+    if stat.S_IMODE(info.st_mode) != 0o700:
+        directory.chmod(0o700)
+    digest = hashlib.sha256(str(doc).encode()).hexdigest()[:8]
+    return directory / f"{doc.name}-{digest}.review.json"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("document", type=Path, help="markdown, text, HTML, PDF, or DOCX file to review")
-    parser.add_argument("--out", type=Path, help="where to write the comments JSON (default: <document>.review.json)")
+    parser.add_argument(
+        "--out", type=Path, help="where to write the comments JSON (default: <name>-<hash>.review.json in a private OS temp directory)"
+    )
     parser.add_argument("--port", type=int, default=8787, help="port to serve on (default: 8787, falling back to any free port)")
     parser.add_argument("--no-open", action="store_true", help="print the URL instead of opening a browser")
     parser.add_argument("--timeout", type=float, default=0, help="give up after N seconds (default: wait forever)")
@@ -370,7 +391,7 @@ def main() -> int:
     if not doc.is_file():
         print(f"error: no such file: {doc}", file=sys.stderr)
         return EXIT_ABORTED
-    out = (args.out or doc.with_suffix(doc.suffix + ".review.json")).expanduser().resolve()
+    out = (args.out or default_output(doc)).expanduser().resolve()
     out.parent.mkdir(parents=True, exist_ok=True)
 
     session = Session(doc, out)
