@@ -1,6 +1,6 @@
 ---
 name: open-pr
-description: Use when opening or writing a pull request. Produces a concise conventional-commit title and evergreen body with problem, changes, testing, additional testing, and regressions.
+description: Use when opening or writing a pull request. Produces a concise conventional-commit title and evergreen body with problem, changes, evidence, additional testing, and regressions.
 ---
 
 # open-pr
@@ -17,11 +17,12 @@ Write a pull request's title and body, then create it. This skill is the single 
 4. Write an evergreen body with these sections, following the repo's PR template where one exists:
    - Problem / request: the problem or requested feature, and what this PR does about it. State the goal separately only when the scope is deliberately narrower or broader than the problem, or the goal is not obvious.
    - Changes: a concise summary of what was done.
-   - Testing: how it was tested. For a behavior change, name a test that failed before the change and its failure message.
+   - Evidence: show a concise before and after that supports the change. For a visual change, include before-and-after screenshots when the app can be run and captured. For other changes, show the exact test or command result that demonstrates the behavior; for behavior changes, include a test that failed before and passes after when available. Link or attach the output when the PR host supports it.
    - Additional testing required: what a reviewer or QA should still exercise.
    - Regressions: known or potential regressions to watch for.
+   If evidence cannot be captured, state what blocked it and give the strongest available verification result. Do not claim verification you did not perform.
 5. Keep it short. The body is human-facing, so hold it to the budget and cuts in *Artifact audience* (`standards`):
-   - Write one or two sentences per section. Changes may be a bullet list with one line per meaningful change, grouped instead of file by file.
+   - Write one or two sentences per section. Keep evidence to the smallest useful screenshot, test result, or command output. Changes may be a bullet list with one line per meaningful change, grouped instead of file by file.
    - Cut what the diff already shows: file walkthroughs, function signatures, line counts, quoted code.
    - Link to the spec or issue for a design decision or migration that needs depth.
 6. Keep it evergreen per the PR and commit hygiene rules in `standards`: accurate as the branch changes, no AI attribution, no volatile details such as version bumps.
