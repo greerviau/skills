@@ -59,11 +59,11 @@ Each category below separates the two.
 - [spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md) - turns a reviewed spec into GitHub Issues. It picks a single-issue, flat, or parent-with-sub-issues shape from the spec's scope, files each issue through `open-issue`, and records the issue URLs in the spec so re-runs do not duplicate.
 - [triage](skills/engineering/triage/SKILL.md) - classifies an inbound GitHub issue or pull request and produces an agent-ready brief with evidence, scope, acceptance criteria, and verification.
 - [handoff](skills/engineering/handoff/SKILL.md) - compacts the current conversation into a handoff document for another agent.
-- [retro](skills/engineering/retro/SKILL.md) - reads a finished session's log and proposes repo coding-standard updates or shared skill changes; accepted changes go through the corresponding repo's PR.
+- [retro](skills/engineering/retro/SKILL.md) - reads a finished session's log and proposes project coding-standard updates or shared skill changes; `skills.artifacts` controls whether project rules stay local or go through a repo PR.
 
 #### Model-invoked
 
-- [standards](skills/engineering/standards/SKILL.md) - the shared house rules the other engineering skills enforce, including artifact style, ubiquitous language, branch and PR hygiene, and interaction mode. Its [CODING-STANDARDS.md](skills/engineering/standards/CODING-STANDARDS.md) is the starter set; a repo's root `CODING-STANDARDS.md` is the editable project copy reviewed and shared with the code.
+- [standards](skills/engineering/standards/SKILL.md) - the shared house rules the other engineering skills enforce, including artifact style, ubiquitous language, branch and PR hygiene, and interaction mode. Its [CODING-STANDARDS.md](skills/engineering/standards/CODING-STANDARDS.md) is the starter set; `skills.artifacts` chooses whether project rules stay in Git metadata or live in the repo for review and sharing.
 - [design](skills/engineering/design/SKILL.md) - vocabulary for structural judgment (module depth, information hiding, seam placement, error-condition elimination, navigability), so a structural claim can be cited.
 - [open-issue](skills/engineering/open-issue/SKILL.md) - issue conventions: checks for duplicates, honors the repo's issue template, writes a descriptive title and a short problem, reproduction, and acceptance-criteria body, and labels from `gh label list`.
 - [dev-workflow](skills/engineering/dev-workflow/SKILL.md) - the development loop for a GitHub repo: an issue before code, an isolated worktree, test-first building, local validation, a review of the diff before publishing, an evergreen PR that closes the issue, CI to green, and cleanup.

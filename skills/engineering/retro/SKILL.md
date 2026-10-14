@@ -12,19 +12,25 @@ It applies only the candidates the user accepts.
 
 ## Targets
 
+Read `skills.artifacts` from the current repo and follow *Artifact location* in `standards`.
+When it is `repo`, project coding rules target `<repo-root>/CODING-STANDARDS.md`.
+When it is `off`, project coding rules target `<git-common-dir>/skills/CODING-STANDARDS.md`.
+When it is unset, ask which setting to use per *Artifact location*; when no user can answer, use `off`.
+
 Route each candidate to one of these targets:
 
-- `<repo>/CODING-STANDARDS.md`, for a coding rule specific to the repo.
+- The selected project coding standards file, for a coding rule specific to the repo.
 - `skills/engineering/standards/CODING-STANDARDS.md`, for a coding rule that should apply to every user and repo.
 - `skills/engineering/standards/SKILL.md`, for a rule about prose, artifacts, or workflow.
 - The mechanical-check table in `skills/engineering/review/SKILL.md`, for a rule a grep can check.
 - Any other skill in the skills repo, when its procedure caused the failure.
 
 The shipped `skills/engineering/standards/CODING-STANDARDS.md` is the starter set.
-When the repo file does not exist and the user accepts a repo-specific coding rule, copy the starter to the repo root before applying the candidate.
+When the selected project file does not exist and the user accepts a repo-specific coding rule, copy the starter to that path before applying the candidate.
+Create the selected file's parent directory before copying the starter.
 When the starter is not available in the current installation, ask the user to install `standards` or provide the starter path; when no user can answer, report the accepted candidate and leave it unapplied.
-Keep repo-specific rules in the repo file; route a rule that should apply to every user and repo to the shipped starter.
-Resolve the repo root with `git rev-parse --show-toplevel`.
+Keep repo-specific rules in the selected project file; route a rule that should apply to every user and repo to the shipped starter.
+Resolve the repo root with `git rev-parse --show-toplevel` and the Git common directory with `git rev-parse --path-format=absolute --git-common-dir`.
 
 Edit shared skill files only in the skills repo's source checkout, never in an installed copy.
 Locate the checkout only when the user accepts a shared skill change; it is the directory where `git remote get-url origin` names `greerviau/skills`.
@@ -82,7 +88,7 @@ Check the session's working directory and its parent, and ask for the path when 
 
 3. Route each moment to one target.
    - A fixed pattern a grep can find goes to `review`'s mechanical-check table as a row with its grep.
-   - A repo-specific judgment call goes to the current repo's `CODING-STANDARDS.md`.
+   - A repo-specific judgment call goes to the active project standards file selected by `skills.artifacts`.
    - A coding rule that should apply to every user and repo goes to the shipped `CODING-STANDARDS.md`.
    - A shared judgment call about prose or workflow goes to `standards/SKILL.md`.
    - A lesson that applies across repos and changes a skill's procedure goes to that skill's source in the skills checkout.
@@ -105,8 +111,9 @@ Check the session's working directory and its parent, and ask for the path when 
    When no user can answer, stop after the report. `retro` never applies its own candidates.
 
 7. Apply accepted candidates.
-   Apply repo-specific coding-rule changes to the current repo's `CODING-STANDARDS.md`; show the diff.
-   Include the repo standards change in a PR for that repo. Use its open PR when one covers the session; otherwise follow its issue, branch, and PR workflow.
-   Make shared skill changes in the skills checkout on a branch, then open a PR that contains them.
+   Apply repo-specific coding-rule changes to the selected project file; show the diff.
+   When `skills.artifacts` is `repo`, include the standards change in that repo's PR. Use its open PR when one covers the session; otherwise follow its issue, branch, and PR workflow.
+   When `skills.artifacts` is `off`, keep the change in the Git common directory and tell the user it remains local to this clone.
+   Make universal coding-rule changes to the shipped starter and shared skill changes in the skills checkout on a branch, then open a PR that contains them.
    Do not leave an accepted shared skill change only in a local checkout.
    Tell the user that shared skill changes reach installed copies only after the plugin or skill install is updated.

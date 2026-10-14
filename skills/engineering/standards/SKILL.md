@@ -11,13 +11,15 @@ Each rule is policy; the referencing skill supplies the procedure that applies i
 
 This file holds the rules for prose, artifacts, and workflow.
 The shipped `CODING-STANDARDS.md` is the starter set for code (comments, docstrings, identifiers, and testing).
-Read the current repo's root `CODING-STANDARDS.md` before writing or reviewing code when it exists; it is the repo's active set and may differ from the starter.
-When the repo has no coding standards file, use the shipped starter.
-The repo file starts as a copy of the shipped starter, then evolves with the project through reviewed changes.
-Resolve the repo root with `git rev-parse --show-toplevel`.
+Read the active coding standards file before writing or reviewing code.
+The `skills.artifacts` setting selects its location: the repo root when set to `repo`, or the Git common directory when set to `off`.
+When the selected file does not exist, use the shipped starter.
+The selected file starts as a copy of the shipped starter, then evolves with the project.
+Resolve the repo root with `git rev-parse --show-toplevel` and the Git common directory with `git rev-parse --path-format=absolute --git-common-dir`.
 In other skills, a reference to `CODING-STANDARDS.md` means the active set described here unless it explicitly names the shipped starter.
 Use `retro` to propose standards changes and apply only the candidates the user accepts.
-Changes to the repo file belong in that repo's PR; changes to the shipped starter belong in the skills source checkout and its PR.
+With `skills.artifacts=repo`, changes to the repo root file belong in that repo's PR.
+With `off`, the Git common directory copy stays local; changes to the shipped starter belong in the skills source checkout and its PR.
 
 ## Artifact audience
 
@@ -139,6 +141,7 @@ When no user can answer, use `off` and record the assumption in the run's output
 | Performance report a re-run harness will update (`perf`) | The PR body | `docs/analysis/<date>-<name>.md` |
 | Prototype result (`prototype`) | The OS temporary directory | A decision record the user names |
 | Glossary (`spec`, any skill that names a domain term) | Read and extend an existing glossary. Never create one | Create `docs/UBIQUITOUS-LANGUAGE.md` when none exists, and extend it |
+| Coding standards (`standards`, `retro`) | `<git-common-dir>/skills/CODING-STANDARDS.md` | `<repo-root>/CODING-STANDARDS.md` |
 
 Resolve the OS temporary directory from `$TMPDIR`, falling back to `/tmp` on Unix-like systems and `%TEMP%` on Windows.
 A location the user names for one run overrides the table.
