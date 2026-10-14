@@ -92,7 +92,7 @@ Three skills are both entry points and components, and their back edges are omit
 | `doc-audit` | model | Component | `dev-workflow` validates, or docs and comments are written standalone | none |
 | `run` | n/a | Component - harness-provided, not a skill in this repo | `dev-workflow` validates a change with a runtime surface | none |
 | `mermaid` | model | Component | Any skill drafts, renders, or refines a diagram in a doc, spec, PR, or ADR | none |
-| `standards` | model | Reference | Any skill applies a house rule. The shipped `CODING-STANDARDS.md` is the coding-rule starter set; `$HOME/CODING-STANDARDS.md`, when present, is the user's active copy | none - read directly |
+| `standards` | model | Reference | Any skill applies a house rule. `$HOME/CODING-STANDARDS.md` is the editable global coding standards file; the shipped `CODING-STANDARDS.md` is its starter | none - read directly |
 | `design` | model | Reference | Any skill judges or explains a structural decision | none - read directly |
 
 ## Composition rules
@@ -110,5 +110,5 @@ Three skills are both entry points and components, and their back edges are omit
   - `spec` plans and does not build.
 - Components are leaves, except `tdd` and `review`. `open-issue`, `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and do not hand off further. `tdd` and `review` are each invoked by a `dev-workflow` step the same way, but as entry points they hand back to `dev-workflow` (the built change, the findings) instead of terminating there.
 - Delegation to a subagent is not a hand-off. `doc-audit` (its language check) and `mermaid` (its render loop) hand work to a subagent, and both stay leaves.
-- `standards` and `design` are policy references and never numbered steps. `standards` holds shared rules (prose and workflow in `SKILL.md`, starter coding rules in `CODING-STANDARDS.md`, active personal coding rules in `$HOME/CODING-STANDARDS.md` when present) and `design` holds structural vocabulary.
+- `standards` and `design` are policy references and never numbered steps. `standards` holds shared rules (prose and workflow in `SKILL.md`, starter coding rules in `CODING-STANDARDS.md`, active global coding rules in `$HOME/CODING-STANDARDS.md`) and `design` holds structural vocabulary.
 - `merge-conflict` completes the active merge or rebase, then returns to `dev-workflow` for remaining validation, publication, or PR lifecycle work.

@@ -63,7 +63,7 @@ Each category below separates the two.
 
 #### Model-invoked
 
-- [standards](skills/engineering/standards/SKILL.md) - the shared house rules the other engineering skills enforce, including artifact style, ubiquitous language, branch and PR hygiene, and interaction mode. Its [CODING-STANDARDS.md](skills/engineering/standards/CODING-STANDARDS.md) is the starter set for code; `$HOME/CODING-STANDARDS.md` becomes the user's evolving active copy when created by `retro`.
+- [standards](skills/engineering/standards/SKILL.md) - the shared house rules the other engineering skills enforce, including artifact style, ubiquitous language, branch and PR hygiene, and interaction mode. Its [CODING-STANDARDS.md](skills/engineering/standards/CODING-STANDARDS.md) is the starter set; `$HOME/CODING-STANDARDS.md` is the editable global copy shared across agents and install methods.
 - [design](skills/engineering/design/SKILL.md) - vocabulary for structural judgment (module depth, information hiding, seam placement, error-condition elimination, navigability), so a structural claim can be cited.
 - [open-issue](skills/engineering/open-issue/SKILL.md) - issue conventions: checks for duplicates, honors the repo's issue template, writes a descriptive title and a short problem, reproduction, and acceptance-criteria body, and labels from `gh label list`.
 - [dev-workflow](skills/engineering/dev-workflow/SKILL.md) - the development loop for a GitHub repo: an issue before code, an isolated worktree, test-first building, local validation, a review of the diff before publishing, an evergreen PR that closes the issue, CI to green, and cleanup.

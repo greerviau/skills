@@ -21,13 +21,16 @@ Route each candidate to one of these targets:
 - Any other skill in the skills repo, when its procedure caused the failure.
 
 The shipped `skills/engineering/standards/CODING-STANDARDS.md` is the starter set, not the user's editable standards file.
-When the personal file does not exist and the user accepts a coding-rule candidate, copy the starter file to `$HOME/CODING-STANDARDS.md` before applying the candidate.
+When the global file does not exist and the user accepts a coding-rule candidate, copy the starter from the installed `standards` skill package to `$HOME/CODING-STANDARDS.md` before applying the candidate.
+Find the installed package in the active agent's skill directories, such as `~/.claude/plugins/`, `~/.claude/skills/`, `~/.agents/skills/`, or the current repo's `.claude/skills/` and `.agents/skills/`.
+When multiple copies exist, use the copy that supplied the current `standards` skill; never overwrite an existing global file from an installed copy.
+If no starter copy is installed, ask the user to install `standards` or provide the starter file path; when no user can answer, report the accepted candidate and leave it unapplied.
 Keep personal coding rules in that file; do not add repo-specific rules to the global personal file.
 Drop a repo-specific finding unless it exposes a shared skill failure.
-Route a lesson that should change shared skill behavior to the relevant skill source and publish that change through an issue and PR.
 
-Edit the skills repo's source checkout, never the installed copies under `~/.claude/plugins/`, `~/.claude/skills/`, or `~/.agents/skills/`.
-The checkout is the directory where `git remote get-url origin` names `greerviau/skills`. Check the session's working directory and its parent, and ask for the path when neither matches.
+Edit shared skill files only in the skills repo's source checkout, never in an installed copy.
+Locate the checkout only when the user accepts a shared skill change; it is the directory where `git remote get-url origin` names `greerviau/skills`.
+Check the session's working directory and its parent, and ask for the path when neither matches.
 
 ## Procedure
 
@@ -107,4 +110,5 @@ The checkout is the directory where `git remote get-url origin` names `greerviau
    Apply personal coding-rule changes to `$HOME/CODING-STANDARDS.md`; show the diff.
    Make shared skill changes in the skills checkout on a branch, then open a PR that contains them.
    Do not leave an accepted shared skill change only in a local checkout.
-   Tell the user that installed skills pick up a merged change only after the plugin or skill install is updated.
+   The global standards file is available to every agent using these skills without reinstalling them.
+   Tell the user that shared skill changes reach installed copies only after the plugin or skill install is updated.

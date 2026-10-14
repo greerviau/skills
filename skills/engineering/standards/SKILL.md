@@ -10,9 +10,10 @@ The single source of truth for the compliance rules the engineering skills share
 Each rule is policy; the referencing skill supplies the procedure that applies it.
 
 This file holds the rules for prose, artifacts, and workflow.
-The shipped `CODING-STANDARDS.md` is the starter set of rules for code (comments, docstrings, identifiers, and testing).
-Read it before writing or reviewing code unless `$HOME/CODING-STANDARDS.md` exists, in which case read the personal file as the active set.
-The personal file starts as a copy of the shipped starter and is the user's evolving record of coding preferences.
+`$HOME/CODING-STANDARDS.md` is the user's global, editable coding standards file.
+Read it before writing or reviewing code whenever it exists, regardless of whether the skills came from a Claude plugin or `npx`.
+The shipped `CODING-STANDARDS.md` is the starter set for code (comments, docstrings, identifiers, and testing); read it only when the global file does not exist.
+The global file starts as a copy of the shipped starter and becomes the active set for every agent that reads these standards.
 In other skills, a reference to `CODING-STANDARDS.md` means the active set described here unless it explicitly names the shipped starter.
 Do not edit either file during ordinary coding work; use `retro` to propose personal rule changes and apply only the candidates the user accepts.
 Changes to the shipped starter belong in the skills source checkout and must be published through a PR.
