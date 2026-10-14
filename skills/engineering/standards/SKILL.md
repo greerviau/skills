@@ -10,7 +10,12 @@ The single source of truth for the compliance rules the engineering skills share
 Each rule is policy; the referencing skill supplies the procedure that applies it.
 
 This file holds the rules for prose, artifacts, and workflow.
-The rules for code (comments, docstrings, identifiers, and test-first testing) are in `CODING-STANDARDS.md` next to this file. Read it before writing or reviewing code.
+The shipped `CODING-STANDARDS.md` is the starter set of rules for code (comments, docstrings, identifiers, and testing).
+Read it before writing or reviewing code unless `$HOME/CODING-STANDARDS.md` exists, in which case read the personal file as the active set.
+The personal file starts as a copy of the shipped starter and is the user's evolving record of coding preferences.
+In other skills, a reference to `CODING-STANDARDS.md` means the active set described here unless it explicitly names the shipped starter.
+Do not edit either file during ordinary coding work; use `retro` to propose personal rule changes and apply only the candidates the user accepts.
+Changes to the shipped starter belong in the skills source checkout and must be published through a PR.
 
 ## Artifact audience
 

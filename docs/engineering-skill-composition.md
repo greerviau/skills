@@ -52,7 +52,7 @@ Skills left out of the graph:
 - `standards` and `design` are model-invoked policy references and never workflow steps, so an edge from each node would repeat one fact. Nearly every skill above reads `standards`. `spec`, `refactor`, `review`, and `tdd` read `design`. `perf` does not read it, because a benchmark guards `perf` instead of a structural judgment.
 - `mermaid` is invoked by nearly every skill that writes a diagram, so drawing it would clutter the graph.
 - `handoff` hands off to nothing, and nothing hands off to it.
-- `retro` reads a session log and proposes edits to `standards`, `review`, other skills, and the global `CLAUDE.md`. Accepted edits land through `dev-workflow`, but only after the user picks them, so it has no runtime hand-off.
+- `retro` reads a session log and proposes updates to the user's evolving `$HOME/CODING-STANDARDS.md` or shared skill sources. Accepted personal rules are applied locally; accepted skill changes are published through a PR.
 - `prototype` produces design evidence, discards its source, and hands no code to another skill.
 - `improve-codebase-architecture` produces a report and waits for the user to select a candidate. It has no runtime hand-off.
 - `triage` produces an agent-ready brief for a fleet-style runner and does not feed another skill directly.
@@ -86,13 +86,13 @@ Three skills are both entry points and components, and their back edges are omit
 | `dev-workflow` | model | Entry - lands code changes | Any request to write and land code in a GitHub repo | invokes `open-issue`, `tdd` (builds each behavior change test-first), `doc-audit`, `run`, `review` (from a subagent, before publishing), and `open-pr` |
 | `review` | model | Entry - gate | Changes need checking before they land, including `dev-workflow`'s self-review step | reports only; findings go to `dev-workflow` to apply |
 | `handoff` | user | Entry - utility | A conversation needs compacting for another agent to continue | none (produces a document) |
-| `retro` | user | Entry - retrospective | A finished session went worse than it should have | `dev-workflow` (lands the candidates the user accepts) |
+| `retro` | user | Entry - retrospective | A finished session went worse than it should have | none (applies accepted personal rules locally and publishes accepted shared skill changes through a PR) |
 | `open-issue` | model | Component | `dev-workflow` reaches its issue-first step, `spec-to-tickets` files a work item, or an issue is opened standalone | none |
 | `open-pr` | model | Component | `dev-workflow` reaches its PR step, or a PR is opened standalone | none |
 | `doc-audit` | model | Component | `dev-workflow` validates, or docs and comments are written standalone | none |
 | `run` | n/a | Component - harness-provided, not a skill in this repo | `dev-workflow` validates a change with a runtime surface | none |
 | `mermaid` | model | Component | Any skill drafts, renders, or refines a diagram in a doc, spec, PR, or ADR | none |
-| `standards` | model | Reference | Any skill applies a house rule. `CODING-STANDARDS.md` holds the rules for code | none - read directly |
+| `standards` | model | Reference | Any skill applies a house rule. The shipped `CODING-STANDARDS.md` is the coding-rule starter set; `$HOME/CODING-STANDARDS.md`, when present, is the user's active copy | none - read directly |
 | `design` | model | Reference | Any skill judges or explains a structural decision | none - read directly |
 
 ## Composition rules
@@ -110,5 +110,5 @@ Three skills are both entry points and components, and their back edges are omit
   - `spec` plans and does not build.
 - Components are leaves, except `tdd` and `review`. `open-issue`, `open-pr`, `doc-audit`, `run`, and `mermaid` are invoked by another skill and do not hand off further. `tdd` and `review` are each invoked by a `dev-workflow` step the same way, but as entry points they hand back to `dev-workflow` (the built change, the findings) instead of terminating there.
 - Delegation to a subagent is not a hand-off. `doc-audit` (its language check) and `mermaid` (its render loop) hand work to a subagent, and both stay leaves.
-- `standards` and `design` are policy references and never numbered steps. `standards` holds compliance rules (prose and workflow in `SKILL.md`, code in `CODING-STANDARDS.md`) and `design` holds structural vocabulary.
+- `standards` and `design` are policy references and never numbered steps. `standards` holds shared rules (prose and workflow in `SKILL.md`, starter coding rules in `CODING-STANDARDS.md`, active personal coding rules in `$HOME/CODING-STANDARDS.md` when present) and `design` holds structural vocabulary.
 - `merge-conflict` completes the active merge or rebase, then returns to `dev-workflow` for remaining validation, publication, or PR lifecycle work.
