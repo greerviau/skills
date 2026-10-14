@@ -10,13 +10,14 @@ The single source of truth for the compliance rules the engineering skills share
 Each rule is policy; the referencing skill supplies the procedure that applies it.
 
 This file holds the rules for prose, artifacts, and workflow.
-`$HOME/CODING-STANDARDS.md` is the user's global, editable coding standards file.
-Read it before writing or reviewing code whenever it exists, regardless of whether the skills came from a Claude plugin or `npx`.
-The shipped `CODING-STANDARDS.md` is the starter set for code (comments, docstrings, identifiers, and testing); read it only when the global file does not exist.
-The global file starts as a copy of the shipped starter and becomes the active set for every agent that reads these standards.
+The shipped `CODING-STANDARDS.md` is the starter set for code (comments, docstrings, identifiers, and testing).
+Read the current repo's root `CODING-STANDARDS.md` before writing or reviewing code when it exists; it is the repo's active set and may differ from the starter.
+When the repo has no coding standards file, use the shipped starter.
+The repo file starts as a copy of the shipped starter, then evolves with the project through reviewed changes.
+Resolve the repo root with `git rev-parse --show-toplevel`.
 In other skills, a reference to `CODING-STANDARDS.md` means the active set described here unless it explicitly names the shipped starter.
-Do not edit either file during ordinary coding work; use `retro` to propose personal rule changes and apply only the candidates the user accepts.
-Changes to the shipped starter belong in the skills source checkout and must be published through a PR.
+Use `retro` to propose standards changes and apply only the candidates the user accepts.
+Changes to the repo file belong in that repo's PR; changes to the shipped starter belong in the skills source checkout and its PR.
 
 ## Artifact audience
 

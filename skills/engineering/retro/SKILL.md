@@ -1,32 +1,30 @@
 ---
 name: retro
-description: Review a finished coding session for lessons that should update the user's coding standards or shipped engineering skills.
+description: Review a finished coding session for lessons that should update the repo's coding standards or shipped engineering skills.
 disable-model-invocation: true
 ---
 
 # retro
 
 Run `/retro` after a session that went worse than it should have.
-It reads the session record and proposes changes to the user's evolving coding standards or to a shipped skill when the lesson applies across repos.
+It reads the session record and proposes changes to the current repo's coding standards or to a shipped skill when the lesson applies across repos.
 It applies only the candidates the user accepts.
 
 ## Targets
 
 Route each candidate to one of these targets:
 
-- `$HOME/CODING-STANDARDS.md`, for a user-specific judgment-call rule about code.
+- `<repo>/CODING-STANDARDS.md`, for a coding rule specific to the repo.
 - `skills/engineering/standards/CODING-STANDARDS.md`, for a coding rule that should apply to every user and repo.
 - `skills/engineering/standards/SKILL.md`, for a rule about prose, artifacts, or workflow.
 - The mechanical-check table in `skills/engineering/review/SKILL.md`, for a rule a grep can check.
 - Any other skill in the skills repo, when its procedure caused the failure.
 
-The shipped `skills/engineering/standards/CODING-STANDARDS.md` is the starter set, not the user's editable standards file.
-When the global file does not exist and the user accepts a coding-rule candidate, copy the starter from the installed `standards` skill package to `$HOME/CODING-STANDARDS.md` before applying the candidate.
-Find the installed package in the active agent's skill directories, such as `~/.claude/plugins/`, `~/.claude/skills/`, `~/.agents/skills/`, or the current repo's `.claude/skills/` and `.agents/skills/`.
-When multiple copies exist, use the copy that supplied the current `standards` skill; never overwrite an existing global file from an installed copy.
-If no starter copy is installed, ask the user to install `standards` or provide the starter file path; when no user can answer, report the accepted candidate and leave it unapplied.
-Keep personal coding rules in that file; do not add repo-specific rules to the global personal file.
-Drop a repo-specific finding unless it exposes a shared skill failure.
+The shipped `skills/engineering/standards/CODING-STANDARDS.md` is the starter set.
+When the repo file does not exist and the user accepts a repo-specific coding rule, copy the starter to the repo root before applying the candidate.
+When the starter is not available in the current installation, ask the user to install `standards` or provide the starter path; when no user can answer, report the accepted candidate and leave it unapplied.
+Keep repo-specific rules in the repo file; route a rule that should apply to every user and repo to the shipped starter.
+Resolve the repo root with `git rev-parse --show-toplevel`.
 
 Edit shared skill files only in the skills repo's source checkout, never in an installed copy.
 Locate the checkout only when the user accepts a shared skill change; it is the directory where `git remote get-url origin` names `greerviau/skills`.
@@ -84,12 +82,12 @@ Check the session's working directory and its parent, and ask for the path when 
 
 3. Route each moment to one target.
    - A fixed pattern a grep can find goes to `review`'s mechanical-check table as a row with its grep.
-   - A user-specific judgment call goes to `$HOME/CODING-STANDARDS.md` for code.
+   - A repo-specific judgment call goes to the current repo's `CODING-STANDARDS.md`.
    - A coding rule that should apply to every user and repo goes to the shipped `CODING-STANDARDS.md`.
    - A shared judgment call about prose or workflow goes to `standards/SKILL.md`.
    - A lesson that applies across repos and changes a skill's procedure goes to that skill's source in the skills checkout.
    - A failure a skill's procedure caused goes to that skill.
-   - A moment specific to the session's repo is dropped. Before dropping it, look for a general rule behind it: twenty calls spent finding one repo's entry point becomes a `dev-workflow` step to read the README and build manifest before searching.
+   - Keep a repo-specific lesson when it states a coding rule useful across that repo; drop a one-off finding about the changed code.
 
    Read the target before writing a rule. When an existing rule already covers the moment, the candidate clarifies that rule or the step that should have applied it, and adds no second rule.
 
@@ -99,7 +97,7 @@ Check the session's working directory and its parent, and ask for the path when 
    `grep -l '<rule text>' ~/.claude/projects/*/*.jsonl`. A rule no session has cited since it was added is a deletion candidate.
 
 5. Report the candidates ranked by severity: how much the failure cost in the session, and how often it will recur.
-   For each, give the cited moment, the target file, the exact text to add, change, or delete, and the reason it holds in any repo.
+   For each, give the cited moment, the target file, the exact text to add, change, or delete, and why the rule applies to that repo or across repos.
    End with a "Dropped" list, one line per dropped moment with the reason.
    The report is human-facing (*Artifact audience* in `standards`).
 
@@ -107,8 +105,8 @@ Check the session's working directory and its parent, and ask for the path when 
    When no user can answer, stop after the report. `retro` never applies its own candidates.
 
 7. Apply accepted candidates.
-   Apply personal coding-rule changes to `$HOME/CODING-STANDARDS.md`; show the diff.
+   Apply repo-specific coding-rule changes to the current repo's `CODING-STANDARDS.md`; show the diff.
+   Include the repo standards change in a PR for that repo. Use its open PR when one covers the session; otherwise follow its issue, branch, and PR workflow.
    Make shared skill changes in the skills checkout on a branch, then open a PR that contains them.
    Do not leave an accepted shared skill change only in a local checkout.
-   The global standards file is available to every agent using these skills without reinstalling them.
    Tell the user that shared skill changes reach installed copies only after the plugin or skill install is updated.
