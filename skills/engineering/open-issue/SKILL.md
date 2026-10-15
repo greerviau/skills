@@ -6,7 +6,6 @@ description: Use when filing a GitHub issue, either standalone ("open an issue f
 # open-issue
 
 File a GitHub issue: write its title, body, and labels, then create it.
-This skill is the single source of truth for issue conventions, whether invoked directly, as the issue-first step of `dev-workflow`, or per issue by `spec-to-tickets`.
 
 ## Preflight
 
@@ -26,16 +25,16 @@ This skill is the single source of truth for issue conventions, whether invoked 
 Title: a plain descriptive sentence naming the observed problem or requested change, such as `Worktree is removed while the PR is still open`.
 Use no `feat(...)` prefix and no `[Bug]` tag. The type goes in the label, and conventional-commit form belongs on the commit and PR.
 
-Body: human-facing, held to the budget and cuts in *Artifact audience* (`standards`).
+Body: human-facing and short, about 200 words and rarely over 400. State each fact once and cut what a reviewer cannot act on.
 
 - Problem / request: what is wrong or wanted, and who it affects.
 - Reproduction (bugs): the smallest steps that trigger it, expected versus actual behavior, and the environment.
 - Proposed approach (optional): one or two sentences, only where a direction is already known. Otherwise omit it; the issue states the problem and the spec or PR decides the solution.
-- Acceptance criteria: a numbered list of what must be true to close the issue. Each is concrete and checkable ("works correctly" is not). Use numbers, not checkboxes, because nothing in the workflow ticks a box and numbers let `review`'s conformance pass cite "criterion 3 unmet".
+- Acceptance criteria: a numbered list of what must be true to close the issue. Each is concrete and checkable ("works correctly" is not). Use numbers, not checkboxes, so a review can cite "criterion 3 unmet".
 - Links: the spec doc, related issues, the failing CI run, a log excerpt.
 
 Cut speculation about the cause.
-Use the repo glossary's terms verbatim (`standards`).
+Use the repo glossary's terms verbatim when one exists.
 
 ## Labels
 
@@ -55,8 +54,6 @@ gh label create <name> --color <hex> --description "<description>"
 
 ## Create it
 
-Run the concision pass (`standards`) over the drafted body unless it is well inside the budget, and apply the result. The pass leaves acceptance criteria alone.
-
 ```bash
 gh issue create --title "<title>" --body "<body>" --label "<label>,<label>"
 ```
@@ -65,4 +62,4 @@ Add `--assignee`, `--milestone`, or `--project` when the user names one.
 Report the issue number and URL. The branch and the PR's closing reference need the number.
 
 Create nothing until the user confirms the title, body, and labels.
-When no user can answer (`standards`), file without asking and record any assumption in the issue body.
+When no user can answer, file without asking and record any assumption in the issue body.
