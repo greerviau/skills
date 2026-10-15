@@ -7,8 +7,8 @@ disable-model-invocation: true
 
 # spec-to-tickets
 
-Run `/spec-to-tickets` to turn a reviewed spec (the human-facing markdown a `spec` run produces) into GitHub Issues. It sits between `spec`, which produces the spec, and `dev-workflow`, which executes the work items.
-This skill picks the ticket shape and the breakdown. Each issue is written and filed per `open-issue`.
+Run `/spec-to-tickets` to turn a reviewed spec (the human-facing markdown a `spec` run produces) into GitHub Issues.
+This skill picks the ticket shape and the breakdown, then files each issue.
 
 Issues are external and hard to reverse, and other people see them. Run only on explicit request, and create nothing until the user confirms the proposed breakdown.
 
@@ -33,7 +33,7 @@ Propose the shape with your reasoning. Decide a small or large spec without aski
 
 ## Creating the issues
 
-Write and create each issue per `open-issue`, which owns title, body, and label conventions. This skill owns only the shape and breakdown.
+Each issue has a plain descriptive title, a short body (problem, acceptance criteria, links), and labels read from `gh label list`.
 
 For every shape:
 
@@ -41,7 +41,7 @@ For every shape:
 - An issue links the spec only when the spec is reachable (see Linking the spec).
 - Nothing is created until the user confirms the shape and breakdown.
 
-Without `open-issue`, create each issue with the `gh` CLI:
+Create each issue with the `gh` CLI:
 
 ```bash
 gh issue create --title "<title>" --body "<body>" --label "<label>"
@@ -64,7 +64,7 @@ Any other result means the spec is unreachable: it is outside any repo, uncommit
 
 Never substitute a path for the URL. A filesystem path, a workspace-relative path, a repo-relative path, or a bare filename resolves on one machine and tells other readers nothing.
 
-When the spec is unreachable, omit the reference. The implementer works from the issue's own Problem and Acceptance criteria, which `open-issue` makes self-contained, so a linkless issue is complete.
+When the spec is unreachable, omit the reference. The implementer works from the issue's own Problem and Acceptance criteria, so a linkless issue is complete.
 When you propose the breakdown, say which issues carry a link, so the user sees the reference was decided and not forgotten.
 
 ### Parent and sub-issues
@@ -99,4 +99,4 @@ gh issue list --search "<work item key terms>" --state all --limit 20
 ## Scope
 
 - Never commit, move, or publish the spec to manufacture a URL. Where the spec lives is the user's decision.
-- This skill creates issues and does not execute them. `dev-workflow` executes them and references each issue in its commits and PR.
+- This skill creates issues and does not implement them.

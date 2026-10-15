@@ -54,34 +54,29 @@ Each category below separates the two.
 
 #### User-invoked
 
-- [improve-codebase-architecture](skills/engineering/improve-codebase-architecture/SKILL.md) - scans a codebase for evidence-backed structural opportunities and ranks them in an HTML report before implementation.
-- [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed spec. It interviews the user, explores the code, settles the approach and checks each decision against the code, extends the repo's ubiquitous-language glossary, and writes a short human-facing spec whose work items become tickets.
-- [spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md) - turns a reviewed spec into GitHub Issues. It picks a single-issue, flat, or parent-with-sub-issues shape from the spec's scope, files each issue through `open-issue`, and records the issue URLs in the spec so re-runs do not duplicate.
-- [triage](skills/engineering/triage/SKILL.md) - classifies an inbound GitHub issue or pull request and produces an agent-ready brief with evidence, scope, acceptance criteria, and verification.
+- [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed spec. It interviews the user, explores the code, researches external behavior, checks each decision against the code, extends the repo's `UBIQUITOUS-LANGUAGE.md`, and writes a short human-facing spec whose work items become tickets.
+- [spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md) - turns a reviewed spec into GitHub Issues, choosing a single-issue, flat, or parent-with-sub-issues shape from the spec's scope.
 - [handoff](skills/engineering/handoff/SKILL.md) - compacts the current conversation into a handoff document for another agent.
-- [retro](skills/engineering/retro/SKILL.md) - reads a finished session's log and proposes project coding-standard updates or shared skill changes; `skills.artifacts` controls whether project rules stay local or go through a repo PR.
+- [retro](skills/engineering/retro/SKILL.md) - reads a finished session's log and proposes updates to the repo's or the global `CODING-STANDARDS.md`, or changes to a skill.
 
 #### Model-invoked
 
-- [standards](skills/engineering/standards/SKILL.md) - the shared house rules the other engineering skills enforce, including artifact style, ubiquitous language, branch and PR hygiene, and interaction mode. Its [CODING-STANDARDS.md](skills/engineering/standards/CODING-STANDARDS.md) is the starter set; `skills.artifacts` chooses whether project rules stay in Git metadata or live in the repo for review and sharing.
-- [design](skills/engineering/design/SKILL.md) - vocabulary for structural judgment (module depth, information hiding, seam placement, error-condition elimination, navigability), so a structural claim can be cited.
-- [open-issue](skills/engineering/open-issue/SKILL.md) - issue conventions: checks for duplicates, honors the repo's issue template, writes a descriptive title and a short problem, reproduction, and acceptance-criteria body, and labels from `gh label list`.
-- [dev-workflow](skills/engineering/dev-workflow/SKILL.md) - the development loop for a GitHub repo: an issue before code, an isolated worktree, test-first building, local validation, a review of the diff before publishing, an evergreen PR that closes the issue, CI to green, and cleanup.
-- [open-pr](skills/engineering/open-pr/SKILL.md) - writes the `feat(...)` or `fix(...)` title and an evergreen body (problem, changes, evidence, additional testing, regressions) with no AI attribution or volatile details, then opens the PR.
+- [implement](skills/engineering/implement/SKILL.md) - implements a prompt, issue, ticket, or spec in an isolated worktree, builds it test-first, reviews the diff, opens a PR, and finishes when CI passes.
 - [tdd](skills/engineering/tdd/SKILL.md) - the test-first loop every behavior change runs: pick the seam, write the failing test, confirm it fails for the right reason, write the minimum code to pass, and refactor under green.
-- [tech-research](skills/engineering/tech-research/SKILL.md) - answers a question about third-party or external behavior from a source hierarchy (installed source and tests, vendor docs for the pinned version, specs and RFCs, release notes and issue trackers) and writes a version-pinned findings file with a citation and confidence level per claim.
-- [dep-upgrade](skills/engineering/dep-upgrade/SKILL.md) - upgrades Python dependencies with uv, reviews the lockfile diff, moves git-sourced internal packages to the same tag, and verifies the downstream suite.
-- [debug](skills/engineering/debug/SKILL.md) - reproduces a bug end to end as a user hits it before forming a fix hypothesis, then localizes and confirms the root cause.
-- [flake-hunt](skills/engineering/flake-hunt/SKILL.md) - investigates intermittent, order-dependent, seed-dependent, and CI-only test failures with fixed-count reruns, base-versus-change comparison, seed and order bisection, and a bounded quarantine policy.
+- [diagnose](skills/engineering/diagnose/SKILL.md) - reproduces a failure, narrows to the root cause with evidence, and reports the cause before any fix.
+- [prototype](skills/engineering/prototype/SKILL.md) - answers a design or feasibility question with a throwaway spike whose source is discarded.
+- [open-issue](skills/engineering/open-issue/SKILL.md) - checks for duplicates, honors the repo's issue template, writes a descriptive title and a short problem, reproduction, and acceptance-criteria body, and labels from `gh label list`.
+- [open-pr](skills/engineering/open-pr/SKILL.md) - writes the `feat(...)` or `fix(...)` title and an evergreen body, then opens the PR.
+- [review](skills/engineering/review/SKILL.md) - reviews a diff, branch, or PR for correctness, tests, flakiness, repo coding standards, structure, and conformance to the originating spec or issue.
+- [refactor](skills/engineering/refactor/SKILL.md) - improves code structure without changing behavior, guarded by an unchanged test suite.
 - [merge-conflict](skills/engineering/merge-conflict/SKILL.md) - resolves merge and rebase conflicts from both sides' intent, reruns the repository checks, and completes the operation.
-- [review](skills/engineering/review/SKILL.md) - reviews a diff, branch, or PR against the engineering standards (lint, tests, flakiness, correctness, structure) and the originating spec or issue when one can be found, and flags incidental defects.
-- [refactor](skills/engineering/refactor/SKILL.md) - improves code structure without changing behavior, guarded by an unchanged test suite, and adds characterization tests first when coverage is thin.
-- [perf](skills/engineering/perf/SKILL.md) - measure-first optimization: a numeric target, a baseline and profile from a reproducible harness, one change at a time, and a before/after report from the same harness.
-- [prototype](skills/engineering/prototype/SKILL.md) - answers a design question with a throwaway spike whose source is discarded.
-- [doc-audit](skills/engineering/doc-audit/SKILL.md) - after a code change, audits the documentation it touched (docstrings, comments, READMEs, docs, examples), rewrites stale passages in present tense, and has a subagent check the prose for plain language.
-- [mermaid](skills/engineering/mermaid/SKILL.md) - the draft, render, critique, refine loop for mermaid diagrams, checked against a layout checklist and rendered locally.
+- [doc-audit](skills/engineering/doc-audit/SKILL.md) - audits the documentation a change touched, rewrites stale passages in present tense, and checks the prose for plain language.
+- [mermaid](skills/engineering/mermaid/SKILL.md) - the draft, render, critique, refine loop for mermaid diagrams.
 
-[docs/engineering-skill-composition.md](docs/engineering-skill-composition.md) maps the entry points, components, and hand-offs between these skills.
+Skills write specs, plans, analyses, and glossaries into the repo by default (`docs/plans/`, `docs/analysis/`, `docs/UBIQUITOUS-LANGUAGE.md`).
+Tell the agent, or put a line in the repo's agent instructions (`AGENTS.md` or equivalent), not to write documents to the repo, and they go to the OS temporary directory instead.
+
+Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-STANDARDS.md` (referenced from your global agent instructions) for every repo. `retro` maintains both.
 
 ### Research
 
@@ -98,12 +93,6 @@ Each category below separates the two.
 #### User-invoked
 
 - [doc-review](skills/personal/doc-review/SKILL.md) - renders Markdown, text, HTML, PDF, or DOCX in the browser for inline comments, then returns each comment with its source location and quoted text so the document can be revised.
-- [my-voice](skills/personal/my-voice/SKILL.md) - captures how you write into `~/VOICE.md` from samples you supply, then rewrites a finished draft against it in a subagent pass limited to wording, so no fact or section changes.
-- [memory-audit](skills/personal/memory-audit/SKILL.md) - scans every agent memory directory for duplicates, contradictions, stale claims, rules a `CLAUDE.md` already states, and index drift, then asks you to rule on each memory with a case against it and applies your keep, edit, delete, and move verdicts.
-
-#### Model-invoked
-
-- [opinions](skills/personal/opinions/SKILL.md) - reads `~/OPINIONS.md` before subjective calls the user has likely formed a view on, and offers to record opinions the user states mid-task.
 
 ## Contributing
 

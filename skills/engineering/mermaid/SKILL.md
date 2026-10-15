@@ -51,5 +51,5 @@ Otherwise run the loop inline.
 
 ## Scope
 
-This skill does not decide whether a diagram belongs in the document or what it shows. The caller decides, guided by the mermaid-over-ASCII rule in `standards`, if you use it.
+This skill does not decide whether a diagram belongs in the document or what it shows. The caller decides.
 It does not edit the surrounding prose.
