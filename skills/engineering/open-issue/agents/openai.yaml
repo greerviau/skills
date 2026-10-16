@@ -1,0 +1,3 @@
+interface:
+  display_name: "Open Issue"
+  short_description: "File a GitHub issue using repository conventions"

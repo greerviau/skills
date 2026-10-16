@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # spec
 
-Run `/spec` to turn a raw request (a feature, bug fix, pipeline, or infrastructure change, in one file or many repos) into a reviewed spec.
+Invoke `/spec` in Claude Code or `$spec` in Codex to turn a raw request (a feature, bug fix, pipeline, or infrastructure change, in one file or many repos) into a reviewed spec.
 This skill plans and does not build. Implementation starts after the user reviews the spec.
 
 The spec is human-facing: it states what, why, what "done" means, what is out of scope, and the work items that deliver it. It carries no step-level detail (files to edit, commands). The implementer works that out against the code as it is then.

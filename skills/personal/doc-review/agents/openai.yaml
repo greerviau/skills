@@ -1,0 +1,6 @@
+interface:
+  display_name: "Document review"
+  short_description: "Collect inline comments on a rendered document"
+
+policy:
+  allow_implicit_invocation: false

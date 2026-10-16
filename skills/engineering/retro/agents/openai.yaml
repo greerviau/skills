@@ -1,0 +1,6 @@
+interface:
+  display_name: "Session retro"
+  short_description: "Find reusable lessons from a finished session"
+
+policy:
+  allow_implicit_invocation: false

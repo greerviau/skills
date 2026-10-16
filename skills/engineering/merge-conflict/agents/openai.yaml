@@ -1,0 +1,3 @@
+interface:
+  display_name: "Merge Conflict"
+  short_description: "Resolve a merge or rebase conflict"
