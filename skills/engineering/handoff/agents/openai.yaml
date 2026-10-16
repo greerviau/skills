@@ -1,0 +1,6 @@
+interface:
+  display_name: "Conversation handoff"
+  short_description: "Write a handoff for a fresh agent"
+
+policy:
+  allow_implicit_invocation: false

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # retro
 
-Run `/retro` after a session that went worse than it should have.
+Invoke `/retro` in Claude Code or `$retro` in Codex after a session that went worse than it should have.
 It reads the session record, proposes changes, and applies only the candidates the user accepts.
 
 ## Targets

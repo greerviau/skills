@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # doc-review
 
-Run `/doc-review` to collect a human's comments on a document in the browser, then revise the document against them.
+Invoke `/doc-review` in Claude Code or `$doc-review` in Codex to collect a human's comments on a document in the browser, then revise the document against them.
 The review page renders the original document without converting it or writing it back to disk.
 Comments are anchored to source locations, which chat feedback is not.
 

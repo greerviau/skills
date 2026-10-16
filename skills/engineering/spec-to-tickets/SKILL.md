@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # spec-to-tickets
 
-Run `/spec-to-tickets` to turn a reviewed spec (the human-facing markdown a `spec` run produces) into GitHub Issues.
+Invoke `/spec-to-tickets` in Claude Code or `$spec-to-tickets` in Codex to turn a reviewed spec (the human-facing markdown a `spec` run produces) into GitHub Issues.
 This skill picks the ticket shape and the breakdown, then files each issue.
 
 Issues are external and hard to reverse, and other people see them. Run only on explicit request, and create nothing until the user confirms the proposed breakdown.

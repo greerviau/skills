@@ -16,11 +16,17 @@ Install every skill:
 npx skills@latest add greerviau/skills
 ```
 
+To target Codex explicitly, run:
+
+```bash
+npx skills@latest add greerviau/skills --agent codex
+```
+
 Then pick the skills you want and the agents to install them on.
 
 ## Install as Claude Code plugins
 
-The skills also ship as native [Claude Code plugins](https://code.claude.com/docs/en/plugins): a read-only bundle that updates when this repo ships a new version.
+The skills also ship as native [Claude Code plugins](https://code.claude.com/docs/en/plugins), installed from this repo's marketplace and updated through Claude Code.
 
 This repo is a Claude Code plugin marketplace (`.claude-plugin/marketplace.json`) that registers the `greerviau` marketplace and serves one plugin per category.
 Install only the categories you want.
@@ -45,8 +51,8 @@ Choose by how you want to maintain the skills:
 ## Skills reference
 
 Claude Code uses `disable-model-invocation: true` to mark a skill as user-invoked.
-Skills without that field are model-invoked and available whenever the model recognizes a matching task.
-Each category below separates the two.
+Codex uses `agents/openai.yaml` with `allow_implicit_invocation: false` for the same behavior.
+Each category below separates user-invoked skills from model-invoked skills.
 
 ### Engineering
 
@@ -102,6 +108,7 @@ Maintainer scripts are in [`scripts/`](scripts):
 - `scripts/list-skills.sh` lists every skill in the repo.
 
 Add a skill by creating `skills/<category>/<name>/SKILL.md`, then register it in `package.json` (the `skills` array, for the skills.sh installer) and, for a new category, in `.claude-plugin/marketplace.json` (a new plugin entry).
+Add `agents/openai.yaml` when the skill needs Codex invocation or interface metadata.
 See [AGENTS.md](AGENTS.md) for authoring rules.
 
 ## License
