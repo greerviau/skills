@@ -1,3 +1,4 @@
+import html
 import importlib.util
 import json
 import os
@@ -24,7 +25,7 @@ class FencedCodeTests(unittest.TestCase):
         self.assertIn('data-line="1:4"', rendered)
         self.assertIn('class="language-python"', rendered)
         self.assertIn('<span class="tok-k">def</span>', rendered)
-        self.assertIn('<span class="tok-s2">&quot;x&quot;</span>', rendered)
+        self.assertIn('<span class="tok-s2">"x"</span>', html.unescape(rendered))
 
     def test_mermaid_fence_stays_plain_text(self):
         rendered = doc_review.render("```mermaid\ngraph TD; A-->B;\n```\n")
