@@ -31,6 +31,7 @@
     "./skills/engineering/mermaid",
     "./skills/engineering/tdd",
     "./skills/research/lit-research",
-    "./skills/personal/doc-review"
+    "./skills/general/doc-review",
+    "./skills/general/plain-writing"
   ]
 }
