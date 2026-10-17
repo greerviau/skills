@@ -104,7 +104,16 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
 
 Maintainer scripts are in [`scripts/`](scripts):
 
-- `scripts/link-skills.sh` symlinks every skill into `~/.claude/skills` and `~/.agents/skills` so local edits take effect immediately.
+- `scripts/link-skills.sh` links skills to this checkout for local development.
+  Run `bash scripts/link-skills.sh` from the checkout you edit.
+  Codex, Pi, and OpenCode read the links in `~/.agents/skills`; Claude Code reads `~/.claude/skills`.
+  T3 Code uses the skills of its selected harness, including Codex and Claude Code.
+  Uninstall this repository's skills from package managers and Claude plugins before linking them.
+  The script refuses to overwrite installed copies and removes links to retired skills from this checkout.
+  Edits to existing files take effect through the links; restart the harness to refresh its skill catalog after adding, renaming, or removing skills.
+  Rerun the script after adding, renaming, or removing skills.
+  Test the linker with `node --test scripts/tests/link-skills.test.cjs`.
+  Skill discovery paths are documented by [Codex](https://learn.chatgpt.com/docs/build-skills), [Pi](https://github.com/earendil-works/pi-mono/blob/main/packages/coding-agent/docs/skills.md), and [OpenCode](https://opencode.ai/docs/skills/).
 - `scripts/list-skills.sh` lists every skill in the repo.
 
 Add a skill by creating `skills/<category>/<name>/SKILL.md`, then register it in `package.json` (the `skills` array, for the skills.sh installer) and, for a new category, in `.claude-plugin/marketplace.json` (a new plugin entry).
