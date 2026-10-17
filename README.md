@@ -92,13 +92,20 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
 
 - [lit-research](skills/research/lit-research/SKILL.md) - literature search, citation-graph snowballing, bibliography reference checks, and a literature-review workflow backed by OpenAlex, Semantic Scholar, PubMed, and Crossref, with every citation taken from API records.
 
-### Personal
+### General
 
-`/plugin install greerviau-personal@greerviau`
+`/plugin install greerviau-general@greerviau`
 
 #### User-invoked
 
-- [doc-review](skills/personal/doc-review/SKILL.md) - renders Markdown, text, HTML, PDF, or DOCX in the browser for inline comments, then returns each comment with its source location and quoted text so the document can be revised.
+- [doc-review](skills/general/doc-review/SKILL.md) - renders Markdown, text, HTML, PDF, or DOCX in the browser for inline comments, then returns each comment with its source location and quoted text so the document can be revised.
+
+#### Model-invoked
+
+- [plain-writing](skills/general/plain-writing/SKILL.md) - applies plain-writing rules informed by Simplified Technical English to answers, documents, messages, and agent instructions across domains.
+  Its description requests invocation at session start, before the first response.
+  The harness and agent determine whether it loads.
+  It adapts STE principles without requiring full ASD-STE100 compliance.
 
 ## Contributing
 

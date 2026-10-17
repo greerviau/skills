@@ -51,18 +51,19 @@
       ]
     },
     {
-      "name": "greerviau-personal",
+      "name": "greerviau-general",
       "source": "./",
       "strict": false,
-      "description": "Personal skills: browser-based document review with inline comments.",
-      "category": "personal",
+      "description": "General skills: browser-based document review with inline comments and plain writing across domains.",
+      "category": "general",
       "keywords": [
-        "personal",
+        "general",
         "skills",
-        "doc-review"
+        "doc-review",
+        "plain-writing"
       ],
       "skills": [
-        "./skills/personal"
+        "./skills/general"
       ]
     }
   ]
