@@ -78,7 +78,6 @@ Each category below separates user-invoked skills from model-invoked skills.
 - [refactor](skills/engineering/refactor/SKILL.md) - improves code structure without changing behavior, guarded by an unchanged test suite.
 - [merge-conflict](skills/engineering/merge-conflict/SKILL.md) - resolves merge and rebase conflicts from both sides' intent, reruns the repository checks, and completes the operation.
 - [doc-audit](skills/engineering/doc-audit/SKILL.md) - audits the documentation a change touched, rewrites stale passages in present tense, and checks the prose for plain language.
-- [mermaid](skills/engineering/mermaid/SKILL.md) - the draft, render, critique, refine loop for mermaid diagrams.
 
 Skills write specs, plans, analyses, and glossaries into the repo by default (`docs/plans/`, `docs/analysis/`, `docs/UBIQUITOUS-LANGUAGE.md`).
 Tell the agent, or put a line in the repo's agent instructions (`AGENTS.md` or equivalent), not to write documents to the repo, and they go to the OS temporary directory instead.
@@ -102,6 +101,7 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
   It adapts STE principles without requiring full ASD-STE100 compliance.
 - [visualize](skills/general/visualize/SKILL.md) - builds the smallest diagram, plot, or interactive single-file HTML page that demonstrates a concept, then renders it and checks the render before showing it.
 - [lit-research](skills/general/lit-research/SKILL.md) - literature search, citation-graph snowballing, bibliography reference checks, and a literature-review workflow backed by OpenAlex, Semantic Scholar, PubMed, and Crossref, with every citation taken from API records.
+- [mermaid](skills/general/mermaid/SKILL.md) - the draft, render, critique, refine loop for mermaid diagrams.
 
 ## Contributing
 

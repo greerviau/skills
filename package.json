@@ -29,12 +29,12 @@
     "./skills/engineering/doc-audit",
     "./skills/engineering/handoff",
     "./skills/engineering/retro",
-    "./skills/engineering/mermaid",
     "./skills/engineering/tdd",
     "./skills/general/doc-review",
     "./skills/general/plain-writing",
     "./skills/general/teach",
     "./skills/general/visualize",
-    "./skills/general/lit-research"
+    "./skills/general/lit-research",
+    "./skills/general/mermaid"
   ]
 }

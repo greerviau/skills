@@ -9,7 +9,7 @@
       "name": "greerviau-engineering",
       "source": "./",
       "strict": false,
-      "description": "Engineering skills: planning, GitHub development workflows, test-driven development, bug diagnosis, design spikes, pull requests and issues, review, refactoring, merge-conflict resolution, doc audits, mermaid diagrams, conversation handoffs, and session retrospectives.",
+      "description": "Engineering skills: planning, GitHub development workflows, test-driven development, bug diagnosis, design spikes, pull requests and issues, review, refactoring, merge-conflict resolution, doc audits, conversation handoffs, and session retrospectives.",
       "category": "engineering",
       "keywords": [
         "engineering",
@@ -27,7 +27,6 @@
         "review",
         "refactor",
         "doc-audit",
-        "mermaid",
         "handoff",
         "retro"
       ],
@@ -39,7 +38,7 @@
       "name": "greerviau-general",
       "source": "./",
       "strict": false,
-      "description": "General skills: browser-based document review with inline comments, plain writing across domains, multi-session teaching from vetted sources, visual demonstrations, and scientific-literature research backed by OpenAlex, Semantic Scholar, PubMed, and Crossref.",
+      "description": "General skills: browser-based document review with inline comments, plain writing across domains, multi-session teaching from vetted sources, visual demonstrations, mermaid diagrams, and scientific-literature research backed by OpenAlex, Semantic Scholar, PubMed, and Crossref.",
       "category": "general",
       "keywords": [
         "general",
@@ -50,7 +49,8 @@
         "visualize",
         "lit-research",
         "literature",
-        "citations"
+        "citations",
+        "mermaid"
       ],
       "skills": [
         "./skills/general"
