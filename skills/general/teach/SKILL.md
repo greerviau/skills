@@ -8,18 +8,30 @@ disable-model-invocation: true
 # teach
 
 Learn one topic in chat.
-Every explanation cites a recorded source, the user retrieves what they learned before the topic advances, and the current directory keeps state so the next session continues from files.
+Every explanation cites a recorded source, the user retrieves what they learned before the topic advances, and the workspace directory keeps state so the next session continues from files.
 
-Run it from a directory dedicated to one topic.
-A directory holds one mission.
+## Workspace
 
-## Workspace files
+The workspace is one directory that holds one topic's state and one mission.
+Workspace paths (`MISSION.md` and the rest) resolve from the workspace directory.
+Links to `references/` resolve from this skill's folder.
 
-Read these at the start of every invocation. Create each lazily, when first needed.
+Choose the workspace before anything else:
+
+- When the session directory contains `MISSION.md`, it is the workspace. Continue from its files.
+- When the session directory is empty, make it the workspace.
+- When the session directory holds anything else, such as a code project, write nothing there.
+  Ask the user for a path, create it with `mkdir -p <path>`, and write all workspace files there.
+  Tell the user to start the next session in that path.
+  When no user can answer, stop and report that teaching needs a user.
+
+Create each file lazily, when first needed:
 
 - `MISSION.md`: why the user is learning the topic.
 - `RESOURCES.md`: vetted sources, each with a one-line note on what it covers.
 - `learning-records/NNNN-slug.md`: what the user has demonstrated, numbered from `0001`.
+
+Read every file that exists at the start of each invocation.
 
 ## Procedure
 
