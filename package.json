@@ -20,6 +20,7 @@
     "./skills/engineering/implement",
     "./skills/engineering/open-issue",
     "./skills/engineering/open-pr",
+    "./skills/engineering/stack-prs",
     "./skills/engineering/merge-conflict",
     "./skills/engineering/review",
     "./skills/engineering/refactor",
