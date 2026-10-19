@@ -53,6 +53,7 @@ Write one learning record per claim of prior knowledge, stating the depth the us
 ### 3. Ground in sources
 
 Before explaining anything, search for primary sources, recognized experts, and peer-reviewed work. Add each to `RESOURCES.md` in the format in [references/resources-format.md](references/resources-format.md).
+When the `lit-research` skill is available, use it to find scholarly sources and take each citation from its output.
 Cite a source from `RESOURCES.md` for every claim in an explanation.
 Mark a claim with no source as `unverified`.
 When no search tool is available, mark every claim `unverified` and say why.
