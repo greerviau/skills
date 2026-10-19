@@ -108,6 +108,7 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
   Its description requests invocation at session start, before the first response.
   The harness and agent determine whether it loads.
   It adapts STE principles without requiring full ASD-STE100 compliance.
+- [visualize](skills/general/visualize/SKILL.md) - builds the smallest diagram, plot, or interactive single-file HTML page that demonstrates a concept, then renders it and checks the render before showing it.
 
 ## Contributing
 

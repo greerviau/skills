@@ -34,6 +34,7 @@
     "./skills/research/lit-research",
     "./skills/general/doc-review",
     "./skills/general/plain-writing",
-    "./skills/general/teach"
+    "./skills/general/teach",
+    "./skills/general/visualize"
   ]
 }

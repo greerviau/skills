@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sine wave frequency</title>
+<style>
+  :root {
+    --bg: #fbfbfa;
+    --fg: #1d1d1b;
+    --muted: #5f5f5a;
+    --line: #d8d8d2;
+    --accent: #0b6bcb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161614;
+      --fg: #ecece8;
+      --muted: #a3a39c;
+      --line: #3a3a36;
+      --accent: #5aa9ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px 16px;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.5 Georgia, "Times New Roman", serif;
+  }
+  main { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 1.4rem; margin: 0 0 16px; }
+  figure { margin: 0 0 16px; }
+  svg { width: 100%; height: auto; display: block; border: 1px solid var(--line); }
+  figcaption { color: var(--muted); font-size: 0.95rem; margin-top: 8px; }
+  .axis { stroke: var(--line); stroke-width: 1; }
+  .curve { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+  .tick { fill: var(--muted); font: 12px sans-serif; }
+  label { display: block; font-family: sans-serif; font-size: 0.9rem; margin-bottom: 4px; }
+  input[type="range"] { width: 100%; accent-color: var(--accent); }
+  output { font-family: sans-serif; font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Doubling the frequency doubles the number of peaks in the window</h1>
+  <figure>
+    <svg id="plot" viewBox="0 0 640 280" role="img" aria-label="Sine wave plotted over one second">
+      <line class="axis" x1="40" y1="140" x2="620" y2="140"></line>
+      <line class="axis" x1="40" y1="20" x2="40" y2="260"></line>
+      <text class="tick" x="44" y="34">+1</text>
+      <text class="tick" x="44" y="256">-1</text>
+      <text class="tick" x="590" y="156">1 s</text>
+      <polyline id="curve" class="curve" points=""></polyline>
+    </svg>
+    <figcaption id="caption"></figcaption>
+  </figure>
+  <label for="freq">Frequency: <output id="freq-out" for="freq"></output> Hz</label>
+  <input id="freq" type="range" min="1" max="10" step="1" value="3">
+</main>
+<script>
+  const freq = document.getElementById("freq");
+  const freqOut = document.getElementById("freq-out");
+  const curve = document.getElementById("curve");
+  const caption = document.getElementById("caption");
+
+  function draw() {
+    const f = Number(freq.value);
+    const points = [];
+    for (let i = 0; i <= 400; i++) {
+      const t = i / 400;
+      const x = 40 + t * 580;
+      const y = 140 - Math.sin(2 * Math.PI * f * t) * 110;
+      points.push(x.toFixed(1) + "," + y.toFixed(1));
+    }
+    curve.setAttribute("points", points.join(" "));
+    freqOut.textContent = f;
+    caption.textContent = f + " Hz gives " + f + " peaks in one second.";
+  }
+
+  freq.addEventListener("input", draw);
+  draw();
+</script>
+</body>
+</html>
