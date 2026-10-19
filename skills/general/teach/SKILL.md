@@ -25,10 +25,8 @@ Read these at the start of every invocation. Create each lazily, when first need
 
 ### 1. Establish the mission
 
-When `MISSION.md` is missing, interview the user one question at a time until it holds all four sections, then write it.
+When `MISSION.md` is missing, interview the user one question at a time until it holds all four sections of [references/mission-format.md](references/mission-format.md), then write it.
 When no user can answer, stop and report that teaching needs a user.
-
-Write it in the format in [references/mission-format.md](references/mission-format.md).
 
 Push back on goals stated as "understand X". Ask what the user will do with the understanding.
 Confirm with the user before changing an existing mission, and write a learning record for the change.
@@ -73,9 +71,8 @@ Do not reveal the answer until the user commits.
 
 Write a learning record when the user shows they can use a concept correctly, discloses prior knowledge, has a misconception corrected, or shifts the mission.
 Material that was only covered does not qualify.
-When a later record contradicts an earlier one, set the earlier record's status to `superseded by NNNN`.
-
-Write it in the format in [references/learning-record-format.md](references/learning-record-format.md).
+When a later record contradicts an earlier one, mark the earlier record superseded.
+Write each record in the format in [references/learning-record-format.md](references/learning-record-format.md).
 
 When the user answers three consecutive questions correctly without hints, stop new material and propose a real task from the mission's success criteria.
 
