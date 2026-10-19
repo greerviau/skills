@@ -28,21 +28,7 @@ Read these at the start of every invocation. Create each lazily, when first need
 When `MISSION.md` is missing, interview the user one question at a time until it holds all four sections, then write it.
 When no user can answer, stop and report that teaching needs a user.
 
-```md
-# Mission: {topic}
-
-## Why
-{The concrete outcome the user wants, in 1-3 sentences.}
-
-## Success looks like
-- {A specific thing the user can do}
-
-## Constraints
-- {Time, tools, preferred teaching style}
-
-## Out of scope
-- {Adjacent topics to skip for now}
-```
+Write it in the format in [references/mission-format.md](references/mission-format.md).
 
 Push back on goals stated as "understand X". Ask what the user will do with the understanding.
 Confirm with the user before changing an existing mission, and write a learning record for the change.
@@ -55,7 +41,7 @@ Skip this step when records exist.
 
 ### 3. Ground in sources
 
-Before explaining anything, search for primary sources, recognized experts, and peer-reviewed work. Add each to `RESOURCES.md` with its note.
+Before explaining anything, search for primary sources, recognized experts, and peer-reviewed work. Add each to `RESOURCES.md` in the format in [references/resources-format.md](references/resources-format.md).
 Cite a source from `RESOURCES.md` for every claim in an explanation.
 Mark a claim with no source as `unverified`.
 When no search tool is available, mark every claim `unverified` and say why.
@@ -89,13 +75,7 @@ Write a learning record when the user shows they can use a concept correctly, di
 Material that was only covered does not qualify.
 When a later record contradicts an earlier one, set the earlier record's status to `superseded by NNNN`.
 
-```md
-# {What was learned or established}
-
-Reviewed: {YYYY-MM-DD}
-
-{1-3 sentences: what the user demonstrated, the evidence, and what it changes about the next session.}
-```
+Write it in the format in [references/learning-record-format.md](references/learning-record-format.md).
 
 When the user answers three consecutive questions correctly without hints, stop new material and propose a real task from the mission's success criteria.
 
