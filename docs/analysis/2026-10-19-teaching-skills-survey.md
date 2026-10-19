@@ -3,7 +3,7 @@
 Survey of existing teaching skills for coding agents, as input to a `/teach` skill for this repo.
 Sources were read on 2026-10-19 from the GitHub repositories named in each row.
 Star counts and push dates come from the GitHub API on that date.
-The recommendation at the end is a proposal and has not been prototyped.
+The recommendation at the end is implemented in `skills/general/teach` and has not been run against a real topic.
 
 ## Findings
 
@@ -132,7 +132,7 @@ If neither matters for the intended use, install Pocock's `teach` and stop.
 ## Recommendation
 
 Build one user-invoked `/teach` skill with a narrow job: teach one topic in the chat, grounded in sources, and persist what the user demonstrated.
-Proposed behavior:
+Behavior of `skills/general/teach`:
 
 1. Interview for the mission when `MISSION.md` is absent, then run a three-question diagnostic before any lesson.
    Record stated prior knowledge as the first learning record.
@@ -141,7 +141,7 @@ Proposed behavior:
 3. Scaffold contingently.
    Ask first, explain directly after two failed attempts, and use a worked example when the learner still stalls.
 4. Quiz with retrieval practice in chat.
-   Choose the correct answer's position by running `shuf -i 1-4 -n 1` and place it there, because instruction-level variation failed in Pocock's tests.
+   Choose the correct answer's position by running `awk 'BEGIN{srand(); print int(rand()*4)+1}'` and place it there, because instruction-level variation failed in Pocock's tests.
 5. On each invocation, read `learning-records/` and open with one retrieval question on the oldest record not reviewed in 7 days.
    This is the minimal spacing mechanism and needs no scheduler.
 6. Stop teaching new material and propose real practice when the last three quiz answers were correct without hints.
@@ -149,7 +149,7 @@ Proposed behavior:
    Leave HTML to an explicit user request.
 
 Items 4, 5, and 6 are untested.
-A prototype with a small topic would show whether the `shuf` placement removes the position bias and whether the 7-day and three-correct thresholds fit.
+A prototype with a small topic would show whether the `awk` placement removes the position bias and whether the 7-day and three-correct thresholds fit.
 
 ## Sources
 

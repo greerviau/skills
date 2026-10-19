@@ -55,13 +55,14 @@
       "name": "greerviau-general",
       "source": "./",
       "strict": false,
-      "description": "General skills: browser-based document review with inline comments and plain writing across domains.",
+      "description": "General skills: browser-based document review with inline comments, plain writing across domains, and multi-session teaching from vetted sources.",
       "category": "general",
       "keywords": [
         "general",
         "skills",
         "doc-review",
-        "plain-writing"
+        "plain-writing",
+        "teach"
       ],
       "skills": [
         "./skills/general"
