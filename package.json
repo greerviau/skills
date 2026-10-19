@@ -31,10 +31,10 @@
     "./skills/engineering/retro",
     "./skills/engineering/mermaid",
     "./skills/engineering/tdd",
-    "./skills/research/lit-research",
     "./skills/general/doc-review",
     "./skills/general/plain-writing",
     "./skills/general/teach",
-    "./skills/general/visualize"
+    "./skills/general/visualize",
+    "./skills/general/lit-research"
   ]
 }

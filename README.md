@@ -85,14 +85,6 @@ Tell the agent, or put a line in the repo's agent instructions (`AGENTS.md` or e
 
 Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-STANDARDS.md` (referenced from your global agent instructions) for every repo. `retro` maintains both.
 
-### Research
-
-`/plugin install greerviau-research@greerviau`
-
-#### Model-invoked
-
-- [lit-research](skills/research/lit-research/SKILL.md) - literature search, citation-graph snowballing, bibliography reference checks, and a literature-review workflow backed by OpenAlex, Semantic Scholar, PubMed, and Crossref, with every citation taken from API records.
-
 ### General
 
 `/plugin install greerviau-general@greerviau`
@@ -109,6 +101,7 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
   The harness and agent determine whether it loads.
   It adapts STE principles without requiring full ASD-STE100 compliance.
 - [visualize](skills/general/visualize/SKILL.md) - builds the smallest diagram, plot, or interactive single-file HTML page that demonstrates a concept, then renders it and checks the render before showing it.
+- [lit-research](skills/general/lit-research/SKILL.md) - literature search, citation-graph snowballing, bibliography reference checks, and a literature-review workflow backed by OpenAlex, Semantic Scholar, PubMed, and Crossref, with every citation taken from API records.
 
 ## Contributing
 

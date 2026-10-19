@@ -28,7 +28,7 @@ One entry per term, short and precise.
 
 - **work item**: one entry in a spec's "Work items" list, naming what it changes and the outcome that shows it is done, sized so one PR lands it. `spec-to-tickets` files each work item as at most one issue.
 
-## lit-research (skills/research/lit-research)
+## lit-research (skills/general/lit-research)
 
 - **canonical record**: the normalized paper representation all sources map into, keyed by DOI (source-native id when no DOI exists). The record dataclass in `scripts/common.py` implements it.
 - **snowballing**: expanding a paper set by walking a seed paper's citation graph, backward through its references and forward through papers citing it, until new results stop appearing (saturation).
