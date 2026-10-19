@@ -54,8 +54,7 @@ Before sending or saving prose:
 
 1. Check that the opening gives the reader useful information.
 2. Resolve ambiguous terms, pronouns, conditions, and causal relationships.
-3.
-  Delete repetition and sentences whose removal loses no information.
+3. Delete repetition and sentences whose removal loses no information.
 4. Read the result for continuity.
    Restore connections that compression removed.
 5. Check that revisions preserve the original meaning and degree of certainty.
