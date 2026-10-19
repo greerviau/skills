@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # teach
 
-Invoke `/teach` in Claude Code or `$teach` in Codex to learn one topic in chat.
+Learn one topic in chat.
 Every explanation cites a recorded source, the user retrieves what they learned before the topic advances, and the current directory keeps state so the next session continues from files.
 
 Run it from a directory dedicated to one topic.
