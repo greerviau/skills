@@ -7,8 +7,8 @@ disable-model-invocation: true
 
 # teach
 
-Learn one topic in chat.
-Every explanation cites a recorded source, the user retrieves what they learned before the topic advances, and the workspace directory keeps state so the next session continues from files.
+Teach one topic in chat across sessions.
+State lives in the workspace directory, so each session continues from files.
 
 ## Workspace
 
@@ -25,13 +25,11 @@ Choose the workspace before anything else:
   Tell the user to start the next session in that path.
   When no user can answer, stop and report that teaching needs a user.
 
-Create each file lazily, when first needed:
+Workspace files, each created when first needed and all read at the start of each invocation:
 
 - `MISSION.md`: why the user is learning the topic.
-- `RESOURCES.md`: vetted sources, each with a one-line note on what it covers.
+- `RESOURCES.md`: vetted sources.
 - `learning-records/NNNN-slug.md`: what the user has demonstrated, numbered from `0001`.
-
-Read every file that exists at the start of each invocation.
 
 ## Procedure
 
@@ -47,7 +45,6 @@ Confirm with the user before changing an existing mission, and write a learning 
 
 When `learning-records/` is empty, ask three questions before any teaching: explain the topic's core idea in their own words, apply it to a small case, and explain one prerequisite.
 Write one learning record per claim of prior knowledge, stating the depth the user showed.
-Skip this step when records exist.
 
 ### 3. Ground in sources
 
@@ -77,7 +74,6 @@ When the user's answers show the concept is too hard, teach its prerequisite fir
 
 For multiple-choice questions, make every option the same length and style.
 Run `awk 'BEGIN{srand(); print int(rand()*4)+1}'` and put the correct option at that position.
-Do not reveal the answer until the user commits.
 
 ### 6. Record and stop
 
