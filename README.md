@@ -100,6 +100,7 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
 #### User-invoked
 
 - [doc-review](skills/general/doc-review/SKILL.md) - renders Markdown, text, HTML, PDF, or DOCX in the browser for inline comments, then returns each comment with its source location and quoted text so the document can be revised.
+- [teach](skills/general/teach/SKILL.md) - teaches one topic over multiple sessions in chat, citing sources recorded in `RESOURCES.md`, quizzing for retrieval, and keeping a mission and learning records in the current directory.
 
 #### Model-invoked
 

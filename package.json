@@ -33,6 +33,7 @@
     "./skills/engineering/tdd",
     "./skills/research/lit-research",
     "./skills/general/doc-review",
-    "./skills/general/plain-writing"
+    "./skills/general/plain-writing",
+    "./skills/general/teach"
   ]
 }
