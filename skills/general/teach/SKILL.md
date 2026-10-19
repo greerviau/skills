@@ -30,6 +30,7 @@ Workspace files, each created when first needed and all read at the start of eac
 - `MISSION.md`: why the user is learning the topic.
 - `RESOURCES.md`: vetted sources.
 - `learning-records/NNNN-slug.md`: what the user has demonstrated, numbered from `0001`.
+- `visuals/`: diagrams, plots, and pages built for lessons.
 
 ## Procedure
 
@@ -37,6 +38,9 @@ Workspace files, each created when first needed and all read at the start of eac
 
 When `MISSION.md` is missing, interview the user one question at a time until it holds all four sections of [references/mission-format.md](references/mission-format.md), then write it.
 When no user can answer, stop and report that teaching needs a user.
+
+Ask how the user prefers to be taught, including whether visuals help them most, and record the answers as the teaching style under Constraints.
+Update the teaching style when the user states a new preference.
 
 Push back on goals stated as "understand X". Ask what the user will do with the understanding.
 Confirm with the user before changing an existing mission, and write a learning record for the change.
@@ -63,6 +67,13 @@ Update that record's `Reviewed:` date after the user answers.
 
 Pick the next concept from the mission and the learning records. Choose one that takes effort and is within the user's reach.
 Explain it in about 150 words, with a worked example, then ask a retrieval question that needs recall and not recognition.
+
+When the concept is a structure, a flow, a process over time, a plot of numbers, or behavior that depends on a parameter, demonstrate it with a visual: a diagram, a plot, or a small interactive page.
+Build it, render it, and look at the render before showing it, and save it in `visuals/`.
+Show the visual first, then explain in prose that labels what it shows.
+When the teaching style favors visuals, use one for every concept whose shape allows it.
+Otherwise use one when it shows the point faster than prose.
+Ask the user to predict the outcome before revealing it, and ask the retrieval question in chat after the visual.
 
 Scale support to the user's answers:
 

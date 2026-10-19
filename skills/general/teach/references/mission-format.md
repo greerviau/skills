@@ -10,7 +10,8 @@
 - {A specific thing the user can do}
 
 ## Constraints
-- {Time, tools, preferred teaching style}
+- Teaching style: {how the user prefers to be taught}
+- {Time, tools, other limits}
 
 ## Out of scope
 - {Adjacent topics to skip for now}
