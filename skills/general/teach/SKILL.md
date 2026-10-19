@@ -26,7 +26,7 @@ Read these at the start of every invocation. Create each lazily, when first need
 ### 1. Establish the mission
 
 When `MISSION.md` is missing, interview the user one question at a time until it holds all four sections, then write it.
-When no user can answer, stop and report that `/teach` needs a user.
+When no user can answer, stop and report that teaching needs a user.
 
 ```md
 # Mission: {topic}
