@@ -3,7 +3,7 @@
 Reusable agent skills for engineering and scientific research.
 Each skill is a plain-markdown procedure doc with a small YAML frontmatter header.
 
-Skills are organized into categories and ship as separately installable Claude Code plugins, so you can take the categories you want and skip the rest.
+Skills are organized into categories and ship as one Claude Code plugin.
 
 ## Install with skills.sh
 
@@ -24,29 +24,30 @@ npx skills@latest add greerviau/skills --agent codex
 
 Then pick the skills you want and the agents to install them on.
 
-## Install as Claude Code plugins
+## Install as a Claude Code plugin
 
-The skills also ship as native [Claude Code plugins](https://code.claude.com/docs/en/plugins), installed from this repo's marketplace and updated through Claude Code.
+The skills also ship as a native [Claude Code plugin](https://code.claude.com/docs/en/plugins), installed from this repo's marketplace and updated through Claude Code.
 
-This repo is a Claude Code plugin marketplace (`.claude-plugin/marketplace.json`) that registers the `greerviau` marketplace and serves one plugin per category.
-Install only the categories you want.
+This repo is a Claude Code plugin marketplace (`.claude-plugin/marketplace.json`) that registers the `greerviau` marketplace and serves the `greerviau` plugin with every skill.
 
 Inside Claude Code:
 ```bash
 /plugin marketplace add greerviau/skills
-/plugin install <plugin>@greerviau
+/plugin install greerviau@greerviau
 ```
 
 Or from your shell:
 ```bash
 claude plugin marketplace add greerviau/skills
-claude plugin install <plugin>@greerviau
+claude plugin install greerviau@greerviau
 ```
+
+The plugin replaces `greerviau-engineering` and `greerviau-general`. Uninstall both before installing it.
 
 Choose by how you want to maintain the skills:
 
-- [skills.sh](https://skills.sh/greerviau/skills) copies the skills into your project, and you edit them.
-- The plugins are read-only bundles that follow this repo as it changes.
+- [skills.sh](https://skills.sh/greerviau/skills) copies the skills you pick into your project, and you edit them.
+- The plugin is a read-only bundle that follows this repo as it changes.
 
 ## Skills reference
 
@@ -55,8 +56,6 @@ Codex uses `agents/openai.yaml` with `allow_implicit_invocation: false` for the 
 Each category below separates user-invoked skills from model-invoked skills.
 
 ### Engineering
-
-`/plugin install greerviau-engineering@greerviau`
 
 #### User-invoked
 
@@ -85,8 +84,6 @@ Tell the agent, or put a line in the repo's agent instructions (`AGENTS.md` or e
 Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-STANDARDS.md` (referenced from your global agent instructions) for every repo. `retro` maintains both.
 
 ### General
-
-`/plugin install greerviau-general@greerviau`
 
 #### User-invoked
 
@@ -119,7 +116,7 @@ Maintainer scripts are in [`scripts/`](scripts):
   Skill discovery paths are documented by [Codex](https://learn.chatgpt.com/docs/build-skills), [Pi](https://github.com/earendil-works/pi-mono/blob/main/packages/coding-agent/docs/skills.md), and [OpenCode](https://opencode.ai/docs/skills/).
 - `scripts/list-skills.sh` lists every skill in the repo.
 
-Add a skill by creating `skills/<category>/<name>/SKILL.md`, then register it in `package.json` (the `skills` array, for the skills.sh installer) and, for a new category, in `.claude-plugin/marketplace.json` (a new plugin entry).
+Add a skill by creating `skills/<category>/<name>/SKILL.md`, then register it in `package.json` (the `skills` array, for the skills.sh installer) and, for a new category, add the category directory to the plugin's `skills` array in `.claude-plugin/marketplace.json`.
 Add `agents/openai.yaml` when the skill needs Codex invocation or interface metadata.
 See [AGENTS.md](AGENTS.md) for authoring rules.
 
