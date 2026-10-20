@@ -14,6 +14,7 @@ Records that exist to capture a decision or history (ADRs, decision logs, CHANGE
 - Do not add repo layouts to documentation.
 - In prose markdown, use semantic line breaks: one sentence per line, no hard-wrapping.
 - Prefer mermaid to ASCII diagrams.
+- A diagram is documentation. When the change alters a structure or flow that a diagram shows, update the diagram and render it.
 - A code comment carries a fact the code cannot state, in at most two lines and with no example. Delete a comment that narrates the code. Do not reference this repo's issue or PR numbers in a comment.
 - A docstring states what the thing does, then parameters, return, and raises, in the language's standard format. Its summary is one line. Omit parameters the signature and types already state.
 - Use the repo's `CODING-STANDARDS.md` where it adds rules.

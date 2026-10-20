@@ -84,6 +84,8 @@ For the parent plus sub-issues shape, link the children with GitHub's native Sub
    gh api --method POST repos/<owner>/<repo>/issues/<parent_number>/sub_issues -F sub_issue_id=$child_id
    ```
 
+4. When the children have an order or dependencies, edit the parent body (`gh issue edit <parent_number> --body-file <file>`) to add a mermaid `flowchart` of the children by issue number, with each edge pointing from prerequisite to dependent. GitHub renders the block in the issue.
+
 Do not use a `- [ ] #123` task list in the parent body. It creates no parent/child relationship and does not close the parent when the children close.
 
 ## Idempotency

@@ -30,6 +30,15 @@ The spec is human-facing: it states what, why, what "done" means, what is out of
    - Risks and open questions, including external claims with their citations.
 
    Keep it to one or two screens, longer only when the scope spans repos. State each fact once and cut what a reviewer cannot act on.
+
+   Add a mermaid diagram in place of prose for each of these the spec contains:
+   - The change spans services, repos, or deployed components: a component or deployment diagram in Scope.
+   - A new or changed interaction between components: a sequence diagram in Approach.
+   - An entity gains states or its transitions change: a state diagram in Approach.
+   - A new or changed data model: a class or ER diagram in Approach.
+   - Work items whose dependencies are not a straight line: a flowchart of the work items in Work items.
+
+   Draw the system after the change, and mark the parts the change adds or alters with a stroke-based `classDef`. Render each diagram and fix its layout before saving. A spec with none of these gets no diagram.
 7. Save the spec to `docs/plans/<date>-<name>.md` in the primary repo, in kebab-case with a date prefix such as `2026-07-07-fix-xic-shard-lookup.md`.
    When the user or the repo's agent instructions (`AGENTS.md` or equivalent) say not to write documents to the repo, write it to the OS temporary directory.
 8. Update the glossary. Write new or corrected terms to the existing `UBIQUITOUS-LANGUAGE.md`, and create `docs/UBIQUITOUS-LANGUAGE.md` when none exists. Under a no-documents-in-the-repo instruction, extend an existing glossary and put new terms in the spec's text instead.
