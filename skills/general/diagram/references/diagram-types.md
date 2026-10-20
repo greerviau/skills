@@ -31,8 +31,8 @@ Each row gives the mermaid form that renders the type, and the PlantUML fallback
 | ER | `erDiagram` | Nothing for doc use |
 | Object | `classDiagram`, each class titled `class o1["o1 : Order"]` with one `field = value` per line | Instance names are not underlined |
 | Package | `classDiagram` with `namespace` blocks, or `flowchart` subgraphs for module-level dependencies | An edge into a namespace can overlap its title, so check the render |
-| Component | `flowchart` with one subgraph per component boundary | Provided and required interface symbols |
-| Deployment | `flowchart`, a subgraph per node titled `«node» name`, databases as `[(...)]` | Node boxes are flat rectangles |
+| Component | `architecture-beta`, a `group` per component boundary and a `service` per part | Provided and required interface symbols |
+| Deployment | `architecture-beta`, a `group` per host or cluster and a `service` per deployed artifact or database, with the protocol as the edge label | UML node boxes (groups render as dashed boxes) |
 | Composite structure | `flowchart` subgraph for the container, nodes for parts | Ports. Use PlantUML when ports carry the message |
 | Profile | `classDiagram` with `<<stereotype>>` or `<<metaclass>>` on its own line in the class body | Nothing for doc use |
 | Use case | `flowchart LR`, actors and use cases as stadium nodes `(["..."])`, a subgraph as the system boundary, `include` and `extend` as labeled dotted edges | Stick-figure actors and ellipses. Use PlantUML when a reader expects UML notation |
@@ -44,7 +44,23 @@ Each row gives the mermaid form that renders the type, and the PlantUML fallback
 | Timing | None. `gantt` shows durations per lifeline but not state levels | Use PlantUML |
 
 Avoid `C4Context` and `C4Component`: their labels overlap edges and the layout cannot be steered.
-`architecture-beta` renders cleanly locally, but whether GitHub's mermaid version renders it is unverified, so use `flowchart` for documents read on GitHub.
+
+GitHub renders mermaid 12.2.0 (checked 2026-10-20), the same version the local CLI installs, so a local render matches GitHub.
+To check GitHub's version again, paste a `mermaid` block containing only `info` into a GitHub comment box and open Preview without submitting.
+
+`architecture-beta` syntax, with the built-in icons `cloud`, `database`, `disk`, `internet`, and `server`:
+
+```
+architecture-beta
+  group api(cloud)[API]
+  service gw(internet)[Gateway] in api
+  service svc(server)[Orders service] in api
+  service db(database)[Postgres] in api
+  gw:R -[HTTPS]-> L:svc
+  svc:R -[SQL]-> L:db
+```
+
+Each edge names the side it leaves and enters (`T`, `B`, `L`, `R`), and `-[label]->` labels it.
 
 ## Label syntax
 
