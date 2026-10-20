@@ -3,14 +3,14 @@
   "owner": {
     "name": "Greer"
   },
-  "description": "Reusable agent skills for engineering and scientific research, one installable plugin per category.",
+  "description": "Reusable agent skills for engineering and scientific research.",
   "plugins": [
     {
-      "name": "greerviau-engineering",
+      "name": "greerviau",
       "source": "./",
       "strict": false,
-      "description": "Engineering skills: planning, GitHub development workflows, test-driven development, bug diagnosis, design spikes, pull requests and issues, review, refactoring, merge-conflict resolution, doc audits, conversation handoffs, and session retrospectives.",
-      "category": "engineering",
+      "description": "Engineering and general skills: planning, GitHub development workflows, test-driven development, bug diagnosis, design spikes, pull requests and issues, review, refactoring, merge-conflict resolution, doc audits, handoffs, retrospectives, software diagrams, document review, plain writing, teaching, visual demonstrations, and scientific-literature research.",
+      "category": "productivity",
       "keywords": [
         "engineering",
         "skills",
@@ -28,31 +28,20 @@
         "refactor",
         "doc-audit",
         "handoff",
-        "retro"
-      ],
-      "skills": [
-        "./skills/engineering"
-      ]
-    },
-    {
-      "name": "greerviau-general",
-      "source": "./",
-      "strict": false,
-      "description": "General skills: browser-based document review with inline comments, plain writing across domains, multi-session teaching from vetted sources, visual demonstrations, mermaid diagrams, and scientific-literature research backed by OpenAlex, Semantic Scholar, PubMed, and Crossref.",
-      "category": "general",
-      "keywords": [
-        "general",
-        "skills",
+        "retro",
+        "diagram",
+        "uml",
+        "mermaid",
         "doc-review",
         "plain-writing",
         "teach",
         "visualize",
         "lit-research",
         "literature",
-        "citations",
-        "mermaid"
+        "citations"
       ],
       "skills": [
+        "./skills/engineering",
         "./skills/general"
       ]
     }
