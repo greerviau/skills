@@ -35,6 +35,6 @@
     "./skills/general/teach",
     "./skills/general/visualize",
     "./skills/general/lit-research",
-    "./skills/general/mermaid"
+    "./skills/general/diagram"
   ]
 }
