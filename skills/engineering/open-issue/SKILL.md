@@ -18,7 +18,9 @@ File a GitHub issue: write its title, body, and labels, then create it.
    ```
 
    If an existing issue covers it, say so and offer to comment there instead of filing a second.
-4. If `.github/ISSUE_TEMPLATE/` holds a template that fits, use its prompts and retain its extra sections. Format the required sections below with the exact headings specified below.
+4. Find a matching issue template in `.github/ISSUE_TEMPLATE/`.
+   Use its prompts and retain its extra sections, formatting the required sections below with the exact headings specified here.
+   When no matching template exists, read [references/issue-template.md](references/issue-template.md) and fill it in.
 
 ## Write the issue
 

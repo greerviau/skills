@@ -14,17 +14,18 @@ Write a pull request's title and body, then create it.
 3. Link the issue when the request or branch context provides one, with a closing reference in the body such as `Fixes #123`.
    A same-repository reference closes the issue when the PR merges into the default branch; the branch name alone does not.
    Use `Fixes owner/repo#123` for another repository, and `Related to #123` when the PR should not close it.
-4. Body: follow the repo's PR template when one exists. Otherwise, use these exact level-two Markdown headings:
-   `## Problem`, `## Changes`, `## Evidence`, `## Additional testing required`, and `## Regressions`.
-   Put each heading on its own line.
+4. Find a matching PR template in the repository root, `.github/`, `docs/`, or `.github/PULL_REQUEST_TEMPLATE/`.
+   Use its section order and prompts, add any missing standard sections from the built-in template, and retain template-specific sections.
+   Format standard sections with the built-in template's headings and keep the Evidence format below.
+   When no matching template exists, read [references/pr-template.md](references/pr-template.md) and fill it in.
    - Problem / request: the problem or requested feature and what this PR does about it.
    - Changes: a short summary of what was done, grouped instead of file by file. When the PR changes how components interact, a state machine, or a data model, include a mermaid diagram of the result, taken from the spec when it has one.
    - Whenever the body has an Evidence section, use this exact structure, including when a repo template exists:
      ```markdown
      ## Evidence
-     #### Before
+     ### Before
      [Previous behavior or state.]
-     #### After
+     ### After
      [New behavior or state, with evidence.]
      ```
      Keep Before and After as separate subsections, not list items or inline labels. For a visual change, include before-and-after screenshots when the app can be run and captured. For other changes, show the exact test or command result, including a test that failed before and passes after. When evidence cannot be captured, state what blocked it and give the strongest verification you have. Never claim verification you did not perform.
