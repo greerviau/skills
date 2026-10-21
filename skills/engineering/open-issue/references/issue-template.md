@@ -11,4 +11,4 @@
 1. [State a concrete, checkable condition.]
 
 ## Links
-[Add relevant links that issue readers can access. Link files only when they are committed and have a remote URL. Remove this section when no links qualify.]
+[Add related issue references and other relevant links. Link files only when they are committed and have a remote URL issue readers can access. Remove this section when no links qualify.]

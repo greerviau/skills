@@ -35,7 +35,7 @@ Put each heading on its own line, followed by its content on the next line.
 - `## Reproduction` (bugs): the smallest steps that trigger it, expected versus actual behavior, and the environment.
 - `## Proposed approach` (optional): one or two sentences, only where a direction is already known. Otherwise omit the section; the issue states the problem and the spec or PR decides the solution.
 - `## Acceptance criteria`: a numbered list of what must be true to close the issue. Each is concrete and checkable ("works correctly" is not). Use numbers, not checkboxes, so a review can cite "criterion 3 unmet".
-- `## Links` (optional): specs, related issues, failing CI runs, or log excerpts. Add links only when issue readers can access them. Link files only when they are committed and have a remote URL. Do not link local paths, uncommitted files, or unpushed branches. Summarize relevant details in the issue when no readable URL exists.
+- `## Links` (optional): related issues, specs, failing CI runs, or log excerpts. Link files only when they are committed and have a remote URL issue readers can access. Do not link local paths, uncommitted files, or unpushed branches. Summarize relevant details in the issue when no readable URL exists.
 
 Cut speculation about the cause.
 Use the repo glossary's terms verbatim when one exists.

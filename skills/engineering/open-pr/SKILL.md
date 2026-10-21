@@ -11,11 +11,11 @@ Write a pull request's title and body, then create it.
 
 1. Diff against the base to see what changed. The title and body describe the branch as it stands, not how it got there.
 2. Title: conventional-commit form, `feat(...)` or `fix(...)`, with a concise scope and summary, such as `fix(worktree): keep worktree alive until PR merges`.
-3. Link the issue when the request or branch context provides one, with a closing reference in the body such as `Fixes #123`.
+3. Link the related issue whenever one exists.
+   Use a closing reference in the body such as `Fixes #123` when the PR should close it.
    A same-repository reference closes the issue when the PR merges into the default branch; the branch name alone does not.
    Use `Fixes owner/repo#123` for another repository, and `Related to #123` when the PR should not close it.
    Link a spec, plan, or other file only when it is committed and has a remote URL that PR readers can access.
-   Link related issues only when PR readers can access them.
    Do not link a local path, an uncommitted file, or an unpushed branch. Summarize the relevant details in the PR when no readable URL exists.
 4. Find a matching PR template in the repository root, `.github/`, `docs/`, or `.github/PULL_REQUEST_TEMPLATE/`.
    Use its section order and prompts, add any missing standard sections from the built-in template, and retain template-specific sections.

@@ -51,8 +51,8 @@ Fix every lint error, failing test, and flaky test you encounter, including ones
 
 ## 6. Open the PR and watch CI
 
-Push, open the PR, and reference the issue or ticket when the request came from one so merging closes it.
-Link issues only when PR readers can access them. Link specs, plans, and other files only when they are committed and have a remote URL PR readers can access. Omit local paths, uncommitted files, and unpushed branches; summarize relevant details in the PR instead.
+Push, open the PR, and link the related issue whenever one exists. Use a closing reference when the PR should close it.
+Link specs, plans, and other files only when they are committed and have a remote URL PR readers can access. Omit local paths, uncommitted files, and unpushed branches; summarize relevant details in the PR instead.
 Wait for CI. On failure, investigate, fix, and push until it passes.
 CI passing finishes the work. Do not keep watching the PR.
 
