@@ -6,9 +6,9 @@
 
 ## Evidence
 ### Before
-[Describe the previous behavior or state.]
+[Show the previous behavior or state with concise bullets, output, or a screenshot, as useful.]
 ### After
-[Describe the new behavior or state. Include screenshots for visual changes or exact command results for other changes.]
+[Show the new behavior or state with concise bullets, output, or a screenshot, as useful. Prefer bullets that make the behavior change clear. Include exact command results when they provide evidence.]
 
 ## Additional testing required
 [State what a reviewer or QA should still exercise. Write `None` when no further testing is needed.]
