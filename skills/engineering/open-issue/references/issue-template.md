@@ -11,4 +11,4 @@
 1. [State a concrete, checkable condition.]
 
 ## Links
-[Add relevant spec, issue, CI run, or log links. Remove this section when there are no links.]
+[Add relevant links that issue readers can access. Link files only when they are committed and have a remote URL. Remove this section when no links qualify.]

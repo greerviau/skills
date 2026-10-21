@@ -11,4 +11,4 @@
 1. [State a concrete, checkable condition.]
 
 ## Links
-[Add the spec URL and other useful links. Remove this section when there are no links.]
+[Add the spec and other useful links as remote URLs issue readers can access. Link files only when they are committed. Remove this section when no links qualify.]
