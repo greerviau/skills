@@ -41,7 +41,7 @@ Never run `gh stack modify`.
    ```
 
 3. To change a lower layer, check out its branch, commit there, then run `gh stack rebase --upstack` and `gh stack top`. Do not commit a lower layer's work on the top branch.
-4. When the user asks for PRs, run `gh stack submit --auto`. PRs open as drafts; `--open` opens them ready. Replace each generated title and body with text for that layer's diff, following the repo's PR template: `gh pr edit <n> --title "..." --body-file <file>`.
+4. When the user asks for PRs, run `gh stack submit --auto`. PRs open as drafts; `--open` opens them ready. Replace each generated title and body with text for that layer's diff, following the repo's PR template: `gh pr edit <n> --title "..." --body-file <file>`. Link the related issue in each applicable PR when one exists. Link files only when they are committed and have a remote URL PR readers can access. Omit local paths, uncommitted files, and unpushed branches; summarize relevant details in the PR instead.
 5. After a trunk change or a merge, run `gh stack sync`. Add `--prune` to delete merged local branches. `sync` does not create PRs, so run `submit` again after adding a layer. A non-interactive `sync` that finds diverged stacks exits 0 with `Sync aborted`: read `references/recovery.md`.
 6. A rebase conflict exits 3. After `rebase`, fix the files, `git add` them, and run `gh stack rebase --continue`. After `sync`, branches are already restored: run `gh stack rebase` to reproduce the conflict, then continue the same way.
 7. Merge only when the user asks. When no user can answer, stop after step 4.

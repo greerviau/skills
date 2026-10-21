@@ -33,7 +33,13 @@ Propose the shape with your reasoning. Decide a small or large spec without aski
 
 ## Creating the issues
 
-Each issue has a plain descriptive title, a short body (problem, acceptance criteria, links), and labels read from `gh label list`.
+Each issue has a plain descriptive title, a short body, and labels read from `gh label list`.
+Find a matching issue template in `.github/ISSUE_TEMPLATE/` and use its prompts, retaining extra sections while formatting the required sections below with the exact headings specified here.
+When no matching template exists, read [references/issue-template.md](references/issue-template.md) and fill it in.
+Use these exact level-two Markdown headings, each on its own line with its content starting on the next line: `## Problem`, `## Acceptance criteria`, and `## Links` when links are included.
+For bug issues, include `## Reproduction` after `## Problem`.
+Include `## Proposed approach` only when the spec already settles the direction.
+Use a numbered list under `## Acceptance criteria`.
 
 For every shape:
 
@@ -51,7 +57,8 @@ Pass `--repo <owner/repo>` when filing against a repo other than the working dir
 
 ### Linking the spec
 
-An issue references the spec only as a URL every reader of the issue can open.
+An issue references the spec only as a remote URL every reader of the issue can open.
+The spec must be committed and available at that URL. Do not link a local path, an uncommitted file, or an unpushed branch.
 
 Verify the URL against the repo that holds the spec:
 
@@ -59,12 +66,12 @@ Verify the URL against the repo that holds the spec:
 gh api "repos/<owner>/<repo>/contents/<path-from-repo-root>?ref=<default-branch>" -q .html_url
 ```
 
-A returned `html_url` is the link, provided the issue's readers can read that repo. The call proves the file exists, not that they can see it.
+A returned `html_url` is the link only when the issue's readers can read that repo. The call proves the file exists, not that they can see it.
 Any other result means the spec is unreachable: it is outside any repo, uncommitted, or committed only on a branch that was never pushed.
 
 Never substitute a path for the URL. A filesystem path, a workspace-relative path, a repo-relative path, or a bare filename resolves on one machine and tells other readers nothing.
 
-When the spec is unreachable, omit the reference. The implementer works from the issue's own Problem and Acceptance criteria, so a linkless issue is complete.
+When the spec is unreachable or its repo is not readable by issue readers, omit the reference. Put the necessary details in the issue's Problem and Acceptance criteria so the issue can stand alone.
 When you propose the breakdown, say which issues carry a link, so the user sees the reference was decided and not forgotten.
 
 ### Parent and sub-issues
