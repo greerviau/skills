@@ -33,7 +33,11 @@ Propose the shape with your reasoning. Decide a small or large spec without aski
 
 ## Creating the issues
 
-Each issue has a plain descriptive title, a short body (problem, acceptance criteria, links), and labels read from `gh label list`.
+Each issue has a plain descriptive title, a short body, and labels read from `gh label list`.
+Use these exact level-two Markdown headings, each on its own line with its content starting on the next line: `## Problem`, `## Acceptance criteria`, and `## Links` when links are included.
+For bug issues, include `## Reproduction` after `## Problem`.
+Include `## Proposed approach` only when the spec already settles the direction.
+Use a numbered list under `## Acceptance criteria`.
 
 For every shape:
 
