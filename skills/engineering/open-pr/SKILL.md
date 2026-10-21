@@ -1,6 +1,6 @@
 ---
 name: open-pr
-description: Use when opening or writing a pull request. Produces a concise conventional-commit title and evergreen body with problem, changes, evidence, additional testing, and regressions.
+description: Use when opening or writing a pull request. Produces a concise conventional-commit title and evergreen body with problem, changes, evidence, testing, and regressions.
 ---
 
 # open-pr
@@ -33,6 +33,7 @@ Write a pull request's title and body, then create it.
      ```
      Keep Before and After as separate subsections, not list items or inline labels. For a visual change, include before-and-after screenshots when the app can be run and captured. For other changes, show the exact test or command result, including a test that failed before and passes after. When evidence cannot be captured, state what blocked it and give the strongest verification you have. Never claim verification you did not perform.
      Choose the content for each subsection based on what demonstrates the change. Prefer concise bullet points that make behavior differences clear, and include screenshots, output, or command results when they provide stronger evidence.
+   - Testing: list the checks run and their results. State when no checks were run and why.
    - Additional testing required: what a reviewer or QA should still exercise.
    - Regressions: known or potential regressions to watch for.
 5. Keep it evergreen and short:
