@@ -6,7 +6,7 @@ description: Use when reviewing a working-tree diff, branch, or pull request. Ch
 # review
 
 Review a diff, branch, or PR and report ranked findings with a ship or don't-ship call.
-Review that diff, not the whole codebase. Report every defect you see, including incidental ones, and say an incidental one belongs on its own branch.
+Review that diff, not the whole codebase. Report every defect you see, including incidental ones, mark incidental ones as outside the diff, and ask the user which to open as GitHub issues.
 This skill reviews and does not apply changes.
 
 ## Procedure
