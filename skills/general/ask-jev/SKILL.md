@@ -1,6 +1,6 @@
 ---
 name: ask-jev
-description: Use Jev's decision API to classify, score, or estimate whether a statement applies to supplied state. Invoke when a second decision signal can help review work, inspect files, or answer a focused question. Requires JEV_API_KEY.
+description: Use Jev's decision API to classify, score, or estimate whether a statement applies to supplied state when JEV_API_KEY is available. Invoke when a second decision signal can help review work, inspect files, or answer a focused question.
 ---
 
 # ask-jev
@@ -15,8 +15,8 @@ Before preparing a request, check that `JEV_API_KEY` is set and non-empty:
 test -n "${JEV_API_KEY:-}"
 ```
 
-If it is missing, stop.
-Tell the user to create a TypeSafe API key in the [TypeSafe console](https://console.typesafe.ai/) and export it as `JEV_API_KEY`, then ask them to invoke the skill again.
+If it is missing, skip Jev and continue the task without it.
+Do not ask the user to create or export a key.
 Do not search files, shell history, or other environment variables for a key.
 
 ## Form the request
