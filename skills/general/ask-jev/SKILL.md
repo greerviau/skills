@@ -31,57 +31,37 @@ Ask several focused questions about one state in one request.
 Do not ask Jev to explain its answer or produce prose.
 
 Use only the file text or context needed to answer the questions.
-To ask about a file without loading its contents into the conversation, have Python read the file into the request's `state` field.
+Put file paths in `state_file` so the script reads them without adding their contents to the conversation.
 Do not send credentials, unrelated files, or secrets.
 Before sending sensitive project content to TypeSafe, tell the user what will be sent and ask for confirmation.
 When no user can answer, exclude that material and continue only if the remaining state supports the question.
 
 ## Send the request
 
-List models available to the key:
+Pass a JSON object with `questions` and exactly one of `state` or `state_file` to `scripts/ask_jev.py`.
+The script reads `JEV_API_KEY`, selects `jev-latest` when the API key can use it, validates the request, sends it to TypeSafe, and prints the JSON response.
+Set `model` only when you need a specific available Jev model.
+The script writes the response to standard output and errors to standard error.
 
 ```bash
-curl --fail --silent --show-error \
-  https://api.typesafe.ai/v1/models \
-  -H "Authorization: Bearer $JEV_API_KEY"
-```
-
-Use a Jev model name from that response, for example `jev-latest` when listed. The model field is required.
-
-Create the request file with Python's standard `json` module so it preserves escaping.
-Keep the API key out of the file:
-
-```bash
-request_file=$(mktemp)
-trap 'rm -f "$request_file"' EXIT
-python3 - "$request_file" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-request = {
-    "model": "jev-latest",
-    "state": Path("path/to/file").read_text(encoding="utf-8"),
-    "questions": {
-        "has_tests": {
-            "type": "noul",
-            "instructions": "Does this change include tests for the behavior it adds?",
-        }
-    },
+cat <<'JSON' | uv run --no-project skills/general/ask-jev/scripts/ask_jev.py -
+{
+  "state_file": "README.md",
+  "questions": {
+    "has_install_instructions": {
+      "type": "noul",
+      "instructions": "Does this file explain how to install the project?"
+    }
+  }
 }
-with open(sys.argv[1], "w", encoding="utf-8") as output:
-    json.dump(request, output)
-PY
-curl --fail-with-body --silent --show-error \
-  https://api.typesafe.ai/v1/systemone \
-  -H "Authorization: Bearer $JEV_API_KEY" \
-  -H "Content-Type: application/json" \
-  --data-binary @"$request_file"
+JSON
 ```
 
-Replace the example file, model, and question with the requested state and decision.
-The request reports billable input tokens in `usage.input_tokens`.
-If a timeout leaves completion unclear, ask before resending because a retry can run and incur another charge.
+Run the command from the repository root and replace `README.md` and the example question with the requested file and decision.
+When this skill is installed outside this repository, use the installed skill's path to `scripts/ask_jev.py`.
+Relative `state_file` paths resolve from the current working directory.
+The response reports billable input tokens in `usage.input_tokens`.
+If a timeout leaves completion unclear, do not retry automatically because a retry can run and incur another charge.
 When no user can answer, report the timeout as unresolved and do not retry.
 
 ## Use the result
