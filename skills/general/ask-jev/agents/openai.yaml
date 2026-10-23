@@ -1,0 +1,3 @@
+interface:
+  display_name: "Ask Jev"
+  short_description: "Ask Jev structured questions about supplied state"

@@ -99,6 +99,7 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
 - [visualize](skills/general/visualize/SKILL.md) - builds the smallest diagram, plot, or interactive single-file HTML page that demonstrates a concept, then renders it and checks the render before showing it.
 - [lit-research](skills/general/lit-research/SKILL.md) - literature search, citation-graph snowballing, bibliography reference checks, and a literature-review workflow backed by OpenAlex, Semantic Scholar, PubMed, and Crossref, with every citation taken from API records.
 - [diagram](skills/general/diagram/SKILL.md) - picks the diagram type (the 14 UML types plus ER) and runs the draft, render, critique, refine loop, with PlantUML for the types mermaid cannot draw.
+- [ask-jev](skills/general/ask-jev/SKILL.md) - sends structured questions about supplied state to Jev's decision API and reports its probabilities, labels, or scores.
 
 ## Contributing
 
