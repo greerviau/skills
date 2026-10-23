@@ -47,13 +47,16 @@ Commit, then have a subagent that did not write the change review the diff again
 Pass it the base ref and the request, and leave out the conversation that produced the change.
 Review inline when no subagent is available.
 Fix every finding in the change, then rerun step 4. Reject a finding only when it misreads the change's intent, and say why in the final report.
-Fix every lint error, failing test, and flaky test you encounter, including ones unrelated to the change. Fix an unrelated one, and any other defect found outside the change, on its own branch and PR so it does not ride in this change.
+Fix every lint error, failing test, and flaky test the change causes.
+Leave defects outside the change unfixed, including pre-existing lint errors and test failures.
+List them for the user and ask which to open as GitHub issues. When no user can answer, list them in the final report.
 
 ## 6. Open the PR and watch CI
 
 Push, open the PR, and link the related issue whenever one exists. Use a closing reference when the PR should close it.
 Link specs, plans, and other files only when they are committed and have a remote URL PR readers can access. Omit local paths, uncommitted files, and unpushed branches; summarize relevant details in the PR instead.
 Wait for CI. On failure, investigate, fix, and push until it passes.
+When the failure predates the change, stop and ask the user how to proceed. When no user can answer, report the failure and stop.
 CI passing finishes the work. Do not keep watching the PR.
 
 ## 7. Clean up

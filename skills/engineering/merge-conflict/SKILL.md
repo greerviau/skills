@@ -80,4 +80,4 @@ Confidence: <high|moderate|low>
 
 - Resume the repository's normal validation and PR workflow after completion.
 - A test failure caused by the resolved code is a bug to diagnose, separate from this resolution.
-- Flag unrelated bugs and pre-existing check failures for their own issue and branch.
+- Leave unrelated bugs and pre-existing check failures unfixed, list them for the user, and ask which to open as GitHub issues. When no user can answer, list them in the report.

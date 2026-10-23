@@ -42,6 +42,6 @@ Run this before treating a non-trivial code change as done.
 
 Do steps 1-4 yourself. Judging whether a passage is now misleading depends on change intent that a diff does not carry.
 
-Limit step 5 to prose this change wrote or rewrote. Flag pre-existing violations elsewhere and fix them on their own branch.
+Limit step 5 to prose this change wrote or rewrote. Leave pre-existing violations elsewhere unfixed, list them for the user, and ask which to open as GitHub issues. When no user can answer, list them in the final report.
 
 Skip changes with no documentation surface, such as test-only and formatting-only diffs.

@@ -15,5 +15,5 @@ Turn a symptom into a confirmed root cause before changing any code.
 4. Confirm. State the cause and the evidence: the reproduction fails because of this cause, and removing the cause makes it pass. A cause that no observation distinguishes from the alternatives is a hypothesis, so say so.
 5. Report the symptom, the cause, the evidence, and the proposed fix. Fix only when asked. The reproduction becomes the failing regression test that the fix turns green.
 
-Flag unrelated defects found along the way and leave them for their own branch.
+Leave unrelated defects found along the way unfixed, list them for the user, and ask which to open as GitHub issues. When no user can answer, list them in the report.
 Quarantine a flaky test only after diagnosis shows the cause is outside the code under test, and keep the quarantine visible and time-bounded.
