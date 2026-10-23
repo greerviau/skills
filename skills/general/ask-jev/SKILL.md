@@ -46,18 +46,33 @@ The script writes the response to standard output and errors to standard error.
 ```bash
 cat <<'JSON' | uv run --no-project skills/general/ask-jev/scripts/ask_jev.py -
 {
-  "state_file": "README.md",
+  "state_file": "src/module.py",
   "questions": {
-    "has_install_instructions": {
+    "has_obvious_bug": {
       "type": "noul",
-      "instructions": "Does this file explain how to install the project?"
+      "instructions": "Does this change introduce an obvious bug?"
+    },
+    "review_area": {
+      "type": "choice",
+      "instructions": "Which area needs the most review?",
+      "criteria": {
+        "correctness": "Behavior, logic, or edge cases",
+        "security": "Access control, secrets, or unsafe input",
+        "performance": "Runtime or resource use",
+        "style": "Naming or code organization"
+      }
+    },
+    "change_risk": {
+      "type": "score",
+      "instructions": "Rate the risk of this change causing a production issue.",
+      "criteria": ["Low", "Moderate", "High", "Critical"]
     }
   }
 }
 JSON
 ```
 
-Run the command from the repository root and replace `README.md` and the example question with the requested file and decision.
+Run the command from the repository root and replace `src/module.py` and the example questions with the requested state and decisions.
 When this skill is installed outside this repository, use the installed skill's path to `scripts/ask_jev.py`.
 Relative `state_file` paths resolve from the current working directory.
 The response reports billable input tokens in `usage.input_tokens`.
