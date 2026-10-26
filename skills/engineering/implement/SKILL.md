@@ -15,8 +15,25 @@ For a bug, reproduce it end to end the way a user hits it before changing code.
 When the approach is uncertain, answer the question with a throwaway experiment before building.
 Follow a provided plan or spec exactly.
 
-## 2. Create a worktree
+## 2. Select a worktree
 
+Inspect the current checkout before creating a worktree:
+
+```bash
+git rev-parse --show-toplevel
+git rev-parse --path-format=absolute --git-dir --git-common-dir
+git worktree list --porcelain
+git status --short --branch
+```
+
+Different Git and common directories identify a linked worktree, including when the session starts in a subdirectory.
+When the session starts in a linked worktree, continue there on its existing branch.
+When the request identifies an existing worktree, use it.
+From the main checkout, reuse a worktree whose branch and changes belong to the request.
+Preserve existing changes and commits, and do not reset or recreate a reused worktree or its branch.
+If the selected worktree has a detached HEAD, create a `feat/` or `fix/` branch at the current commit before editing.
+
+Create a worktree only when none of these cases applies.
 Work in `.worktrees/<short-description>` under the main checkout, on a `feat/` or `fix/` branch.
 The commands add `.worktrees/` to the repo's local exclude file, so `.gitignore` stays unchanged:
 
@@ -28,6 +45,9 @@ git fetch origin
 git worktree add "$wt" -b <feat|fix>/<short-description> origin/<default-branch>
 cd "$wt"
 ```
+
+For either path, record the selected worktree's absolute root as `wt`, its branch as `branch`, and whether this invocation created it.
+Run the remaining steps from `wt`.
 
 ## 3. Build test-first
 
@@ -61,12 +81,15 @@ CI passing finishes the work. Do not keep watching the PR.
 
 ## 7. Clean up
 
-When the PR is merged by the time you finish, or the user later says it merged, remove the worktree and its local branch:
+When the PR is merged by the time you finish, or the user later says it merged, remove the worktree and its local branch only if this invocation created them and the worktree is clean.
+Keep reused worktrees and branches unless the user asks to remove them.
+Use the recorded path and branch, and leave the worktree before removing it:
 
 ```bash
 common=$(git rev-parse --path-format=absolute --git-common-dir)
-git -C "$(dirname "$common")" worktree remove .worktrees/<short-description>
-git -C "$(dirname "$common")" branch -D <feat|fix>/<short-description>
+cd "$(dirname "$common")"
+git worktree remove "$wt"
+git branch -d "$branch"
 ```
 
 Otherwise leave the worktree in place for follow-up feedback.
