@@ -27,8 +27,8 @@ git status --short --branch
 ```
 
 Different Git and common directories identify a linked worktree, including when the session starts in a subdirectory.
-When the session starts in a linked worktree, continue there on its existing branch.
 When the request identifies an existing worktree, use it.
+Otherwise, when the session starts in a linked worktree, continue there on its existing branch.
 From the main checkout, reuse a worktree whose branch and changes belong to the request.
 Preserve existing changes and commits, and do not reset or recreate a reused worktree or its branch.
 If the selected worktree has a detached HEAD, create a `feat/` or `fix/` branch at the current commit before editing.
