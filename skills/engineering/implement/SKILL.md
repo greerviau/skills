@@ -29,6 +29,8 @@ git status --short --branch
 Different Git and common directories identify a linked worktree, including when the session starts in a subdirectory.
 When the request identifies an existing worktree, use it.
 Otherwise, when the session starts in a linked worktree, continue there on its existing branch.
+This includes worktrees provisioned by an agent manager such as Orca.
+Keep the supplied path and branch name even when they differ from the creation conventions below.
 From the main checkout, reuse a worktree whose branch and changes belong to the request.
 Preserve existing changes and commits, and do not reset or recreate a reused worktree or its branch.
 If the selected worktree has a detached HEAD, create a `feat/` or `fix/` branch at the current commit before editing.
@@ -82,7 +84,8 @@ CI passing finishes the work. Do not keep watching the PR.
 ## 7. Clean up
 
 When the PR is merged by the time you finish, or the user later says it merged, remove the worktree and its local branch only if this invocation created them and the worktree is clean.
-Keep reused worktrees and branches unless the user asks to remove them.
+Leave agent-managed worktree and branch cleanup to the manager.
+Keep other reused worktrees and branches unless the user asks to remove them.
 Use the recorded path and branch, and leave the worktree before removing it:
 
 ```bash
