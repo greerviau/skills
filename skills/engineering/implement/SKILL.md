@@ -15,10 +15,11 @@ For a bug, reproduce it end to end the way a user hits it before changing code.
 When the approach is uncertain, answer the question with a throwaway experiment before building.
 Follow a provided plan or spec exactly.
 
-## 2. Create a worktree
+## 2. Select a worktree
 
-Work in `.worktrees/<short-description>` under the main checkout, on a `feat/` or `fix/` branch.
-The commands add `.worktrees/` to the repo's local exclude file, so `.gitignore` stays unchanged:
+Use the requested worktree, or continue in the current linked worktree, including one created by an agent manager.
+Preserve its path, branch, changes, and commits.
+Otherwise, check `git worktree list --porcelain` for a worktree belonging to the request before creating one in `.worktrees/<short-description>` on a `feat/` or `fix/` branch:
 
 ```bash
 common=$(git rev-parse --path-format=absolute --git-common-dir)
@@ -28,6 +29,8 @@ git fetch origin
 git worktree add "$wt" -b <feat|fix>/<short-description> origin/<default-branch>
 cd "$wt"
 ```
+
+Work from the selected worktree's root, record its path as `wt` and branch as `branch`, and track whether this invocation created them.
 
 ## 3. Build test-first
 
@@ -61,12 +64,14 @@ CI passing finishes the work. Do not keep watching the PR.
 
 ## 7. Clean up
 
-When the PR is merged by the time you finish, or the user later says it merged, remove the worktree and its local branch:
+After the PR merges, remove the worktree and branch only if this invocation created them and the worktree is clean.
+Leave reused worktrees, including agent-managed ones, in place unless the user asks to remove them.
 
 ```bash
 common=$(git rev-parse --path-format=absolute --git-common-dir)
-git -C "$(dirname "$common")" worktree remove .worktrees/<short-description>
-git -C "$(dirname "$common")" branch -D <feat|fix>/<short-description>
+cd "$(dirname "$common")"
+git worktree remove "$wt"
+git branch -d "$branch"
 ```
 
 Otherwise leave the worktree in place for follow-up feedback.
