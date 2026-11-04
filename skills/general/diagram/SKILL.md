@@ -1,6 +1,10 @@
 ---
 name: diagram
-description: Use when drafting, rendering, or refining a software diagram for a doc, spec, PR, or ADR, including any UML type (class, sequence, state, activity, component, deployment, use case, timing) or an ER diagram - picks the diagram type, then runs the render-and-look loop that catches layout defects invisible in the diagram's source. Trigger on "draw this as a diagram", "make this a mermaid diagram", "draw a sequence diagram", "UML diagram", "render this diagram", "this diagram's layout is a mess", "refine this diagram".
+description: >-
+  Use when creating, rendering, or refining a software structure or flow diagram, including Mermaid, UML, and ER diagrams in docs, specs, PRs, or ADRs.
+  Apply when another task requires one of these diagrams.
+  Trigger on "draw a sequence diagram", "make a Mermaid diagram", and "fix this diagram layout".
+  Exclude numeric plots and interactive simulations.
 ---
 
 # diagram

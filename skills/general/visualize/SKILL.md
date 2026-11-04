@@ -1,6 +1,9 @@
 ---
 name: visualize
-description: Use when a concept, system, algorithm, or dataset is easier to see than to read and the user wants it drawn, plotted, demonstrated, or made interactive. Builds the smallest visual that carries the explanation, renders it, and checks the render. Trigger on "show me", "visualize this", "draw this", "plot this", "diagram", "demonstrate", "make this interactive".
+description: >-
+  Use when a diagram, plot, or interactive demonstration would explain a concept, algorithm, dataset, or parameter-dependent behavior more clearly than prose, including during teaching.
+  Trigger on "visualize this", "plot this", "demonstrate how it works", and "make this interactive".
+  Exclude software structure, UML, ER, and Mermaid layout tasks.
 ---
 
 # visualize

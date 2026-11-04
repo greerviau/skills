@@ -1,6 +1,8 @@
 ---
 name: plain-writing
-description: Use at the start of every session, before the first response. Apply when drafting or revising prose throughout the conversation, including answers, documents, messages, and agent instructions.
+description: >-
+  Use at session start before the first response, and whenever drafting or revising prose, including answers, documents, messages, comments, and agent instructions.
+  Apply across domains even when the user does not request a writing review.
 ---
 
 Use [ASD-STE100 Simplified Technical English](https://www.asd-ste100.org/) as a reference for clear prose.

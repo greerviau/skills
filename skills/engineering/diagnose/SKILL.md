@@ -1,6 +1,8 @@
 ---
 name: diagnose
-description: Use when something is broken and the cause is unknown - a failing test, a crash, wrong output, an intermittent failure, or a user-reported bug. Reproduces it, narrows to the root cause with evidence, and reports the cause before any fix. Trigger on "why is this failing", "what's causing", "track down", "it's broken when", "sometimes fails".
+description: >-
+  Use when a failure has an unknown cause, including failing tests, crashes, wrong output, and intermittent bugs.
+  Trigger on requests to debug, reproduce, investigate, or explain a failure, and before fixing a bug whose cause has not been established.
 ---
 
 # diagnose

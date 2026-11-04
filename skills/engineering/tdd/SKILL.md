@@ -1,6 +1,9 @@
 ---
 name: tdd
-description: Use whenever implementing or changing behavior in code, including every feature and bug fix - write the failing test first, confirm it fails for the right reason, then the minimum code to green, then refactor. Trigger on "TDD this", "test-drive this", "write the test first", "red, green, refactor".
+description: >-
+  Use before implementing any code behavior change, including features and bug fixes, even when the user does not ask for tests.
+  Trigger on "TDD this", "test-drive this", and "write the test first".
+  Exclude prose, configuration edits without behavior changes, and behavior-preserving refactors already covered by passing tests.
 ---
 
 # tdd

@@ -1,6 +1,9 @@
 ---
 name: stack-prs
-description: Use when splitting work into dependent pull requests, or when a stack is checked out. Builds, submits, syncs, and merges GitHub stacked PRs with the `gh stack` extension. Trigger on "stack these PRs", "split this into a stack", "dependent PRs", "gh stack".
+description: >-
+  Use when creating, splitting, submitting, syncing, or merging dependent pull requests with gh stack, and when the current change belongs to an existing PR stack.
+  Trigger on "stack these PRs", "split this into dependent PRs", and "gh stack".
+  Exclude unrelated PRs that have no branch dependencies.
 ---
 
 # stack-prs

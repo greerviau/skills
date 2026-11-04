@@ -1,16 +1,16 @@
 ---
 name: doc-review
-description: Render Markdown, text, HTML, PDF, or DOCX documents for browser-based inline comments and return the comments with source locations.
-disable-model-invocation: true
+description: >-
+  Use when the user asks to annotate a document in the browser, leave inline comments, or collect human feedback anchored to passages in Markdown, text, HTML, PDF, or DOCX.
+  Trigger on "open this for inline review" and "let me comment on this document".
+  Exclude requests for the agent to critique prose or audit code documentation.
 ---
 
 # doc-review
 
-Invoke `/doc-review` in Claude Code or `$doc-review` in Codex to collect a human's comments on a document in the browser, then revise the document against them.
+Collect a human's comments on a document in the browser when the user asks for inline annotation, then revise the document against them.
 The review page renders the original document without converting it or writing it back to disk.
 Comments are anchored to source locations, which chat feedback is not.
-
-Run it only when the user asks. Handing a document back in chat is the default.
 
 The mechanism is `scripts/doc_review.py`. Do not rebuild any part of it (renderer, comment UI, transport) inline.
 

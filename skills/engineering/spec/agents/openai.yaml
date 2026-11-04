@@ -3,4 +3,4 @@ interface:
   short_description: "Turn a request into a reviewed spec"
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

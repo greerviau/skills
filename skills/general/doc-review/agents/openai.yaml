@@ -3,4 +3,4 @@ interface:
   short_description: "Collect inline comments on a rendered document"
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

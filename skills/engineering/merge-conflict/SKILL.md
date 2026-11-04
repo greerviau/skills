@@ -1,6 +1,8 @@
 ---
 name: merge-conflict
-description: Use when a Git merge or rebase has conflicts that need semantic resolution. Inspects both changes and their intent, resolves each conflict without inventing behavior, reruns the repository checks, and completes the operation. Trigger on "resolve this merge conflict", "I'm in a merge conflict", "fix these rebase conflicts", "the rebase is stuck", "continue this rebase", "finish this merge".
+description: >-
+  Use when Git reports unmerged paths or a merge or rebase stops on conflicts, including conflicts encountered during other work.
+  Trigger on "resolve these conflicts", "fix the rebase", "continue this rebase", and "finish this merge".
 ---
 
 Resolve an active Git merge or rebase by keeping the intent of both sides where they are compatible and choosing the behavior the integration target requires where they are not.

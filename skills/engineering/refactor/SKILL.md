@@ -1,6 +1,9 @@
 ---
 name: refactor
-description: Use when improving the structure of working code without changing its behavior (reducing duplication, clarifying names, simplifying control flow, aligning with conventions), guarded by an unchanged test suite. Adds characterization tests first when coverage is thin, then refactors in small behavior-preserving steps. Trigger on "clean this up", "refactor this", "reduce duplication", "simplify this code", "tidy up", "make this more maintainable".
+description: >-
+  Use when restructuring working code while preserving observable behavior, including deduplication, renaming, and control-flow simplification.
+  Trigger on "refactor", "clean up this code", "reduce duplication", and "make this more maintainable".
+  Exclude behavior changes and prose cleanup.
 ---
 
 # refactor

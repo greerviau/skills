@@ -1,8 +1,10 @@
 ---
 name: teach
-description: Teach one topic over multiple sessions from vetted sources, quizzing for retrieval and recording what the user has demonstrated.
+description: >-
+  Use when the user asks for guided learning, tutoring, retrieval quizzes, or a continuing course on a topic, and when resuming a teaching workspace with MISSION.md and learning records.
+  Trigger on "teach me", "tutor me", "quiz me", and "continue our lesson".
+  Exclude one-off factual answers and explanations without a tutoring request.
 argument-hint: "What would you like to learn?"
-disable-model-invocation: true
 ---
 
 # teach

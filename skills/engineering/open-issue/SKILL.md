@@ -1,6 +1,9 @@
 ---
 name: open-issue
-description: Use when filing a GitHub issue, either standalone ("open an issue for this", "file a bug for X") or as the issue-first step before any code change. Checks for duplicates, honors `.github/ISSUE_TEMPLATE/`, writes a plain descriptive title and a short body (Problem, Reproduction, Acceptance criteria), and labels from the repo's real labels read with `gh label list`, then creates the issue. Trigger on "open an issue", "file a bug", "create a ticket for this", "write the issue for this work".
+description: >-
+  Use when the user asks to file, open, create, or draft a GitHub issue or bug report, including "create a ticket for this".
+  Exclude coordinated issue breakdowns from reviewed specs.
+  Finding a bug alone does not trigger issue creation.
 ---
 
 # open-issue

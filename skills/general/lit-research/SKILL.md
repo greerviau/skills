@@ -1,6 +1,10 @@
 ---
 name: lit-research
-description: Use for scientific-literature searches, citation-graph expansion, bibliography verification, and literature reviews. Grounds every citation in script output from OpenAlex, Semantic Scholar, PubMed, or Crossref.
+description: >-
+  Use when searching scientific papers, tracing citations, verifying bibliographic references, or writing a literature review.
+  Apply when an answer requires finding or confirming scholarly sources.
+  Trigger on "find papers", "check these citations", "related work", and "literature review".
+  Exclude general web research without scholarly sources.
 ---
 
 # lit-research
