@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: 'Use when a disposable experiment can resolve uncertainty about a design choice, API behavior, or implementation feasibility.'
+description: Use when a disposable experiment can resolve uncertainty about a design choice, API behavior, or implementation feasibility.
 argument-hint: "What question should the spike answer?"
 ---
 

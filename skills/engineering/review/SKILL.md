@@ -1,6 +1,6 @@
 ---
 name: review
-description: 'Use when reviewing a code diff, branch, commit, or pull request, including independent review before shipping.'
+description: Use when reviewing a code diff, branch, commit, or pull request, including independent review before shipping.
 ---
 
 # review

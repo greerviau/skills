@@ -1,6 +1,6 @@
 ---
 name: merge-conflict
-description: 'Use when resolving Git merge or rebase conflicts, including conflicts encountered during other work.'
+description: Use when resolving Git merge or rebase conflicts, including conflicts encountered during other work.
 ---
 
 Resolve an active Git merge or rebase by keeping the intent of both sides where they are compatible and choosing the behavior the integration target requires where they are not.

@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: 'Use when restructuring working code without changing observable behavior, including deduplication, renaming, and simplification.'
+description: Use when restructuring working code without changing observable behavior, including deduplication, renaming, and simplification.
 ---
 
 # refactor

@@ -1,6 +1,6 @@
 ---
 name: open-issue
-description: 'Use when the user asks to draft or file a standalone GitHub issue, bug report, or ticket.'
+description: Use when the user asks to draft or file a standalone GitHub issue, bug report, or ticket.
 ---
 
 # open-issue

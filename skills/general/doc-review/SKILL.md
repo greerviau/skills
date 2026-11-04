@@ -1,6 +1,6 @@
 ---
 name: doc-review
-description: 'Use when the user asks to annotate a document in the browser or collect human comments anchored to passages.'
+description: Use when the user asks to annotate a document in the browser or collect human comments anchored to passages.
 ---
 
 # doc-review

@@ -1,6 +1,6 @@
 ---
 name: stack-prs
-description: 'Use when creating or managing dependent pull requests, or working on a change in an existing PR stack.'
+description: Use when creating or managing dependent pull requests, or working on a change in an existing PR stack.
 ---
 
 # stack-prs

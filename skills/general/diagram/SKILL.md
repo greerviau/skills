@@ -1,6 +1,6 @@
 ---
 name: diagram
-description: 'Use when creating, rendering, or refining software diagrams, including Mermaid, UML, and ER diagrams.'
+description: Use when creating, rendering, or refining software diagrams, including Mermaid, UML, and ER diagrams.
 ---
 
 # diagram

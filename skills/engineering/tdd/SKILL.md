@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: 'Use before implementing any code behavior change, including features and bug fixes, even when tests are not explicitly requested.'
+description: Use before implementing any code behavior change, including features and bug fixes, even when tests are not explicitly requested.
 ---
 
 # tdd

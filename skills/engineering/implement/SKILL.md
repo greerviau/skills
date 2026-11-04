@@ -1,6 +1,6 @@
 ---
 name: implement
-description: 'Use when the user asks to implement a feature, fix a bug, or execute a plan in a Git repo.'
+description: Use when the user asks to implement a feature, fix a bug, or execute a plan in a Git repo.
 ---
 
 # implement

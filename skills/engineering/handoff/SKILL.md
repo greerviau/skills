@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: 'Use when the user asks to summarize the current session so another agent or a fresh session can continue the work.'
+description: Use when the user asks to summarize the current session so another agent or a fresh session can continue the work.
 argument-hint: "What will the next session be used for?"
 ---
 

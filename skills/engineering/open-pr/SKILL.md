@@ -1,6 +1,6 @@
 ---
 name: open-pr
-description: 'Use when creating a pull request or writing or revising its title and description.'
+description: Use when creating a pull request or writing or revising its title and description.
 ---
 
 # open-pr

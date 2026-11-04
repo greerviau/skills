@@ -1,6 +1,6 @@
 ---
 name: ask-jev
-description: 'Use when JEV_API_KEY is available and a second decision signal would help classify, score, or assess supplied state.'
+description: Use when JEV_API_KEY is available and a second decision signal would help classify, score, or assess supplied state.
 ---
 
 # ask-jev

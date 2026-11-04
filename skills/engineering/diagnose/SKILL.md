@@ -1,6 +1,6 @@
 ---
 name: diagnose
-description: 'Use when investigating or fixing a failure whose cause is unknown, including crashes, incorrect output, and flaky tests.'
+description: Use when investigating or fixing a failure whose cause is unknown, including crashes, incorrect output, and flaky tests.
 ---
 
 # diagnose

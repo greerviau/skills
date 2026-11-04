@@ -1,6 +1,6 @@
 ---
 name: plain-writing
-description: 'Use at session start before the first response, and whenever drafting or revising prose across domains.'
+description: Use at session start before the first response, and whenever drafting or revising prose across domains.
 ---
 
 Use [ASD-STE100 Simplified Technical English](https://www.asd-ste100.org/) as a reference for clear prose.

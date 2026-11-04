@@ -1,6 +1,6 @@
 ---
 name: lit-research
-description: 'Use when searching scientific literature, tracing citations, verifying bibliographic references, or writing a literature review.'
+description: Use when searching scientific literature, tracing citations, verifying bibliographic references, or writing a literature review.
 ---
 
 # lit-research

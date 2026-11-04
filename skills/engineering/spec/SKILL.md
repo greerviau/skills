@@ -1,6 +1,6 @@
 ---
 name: spec
-description: 'Use when the user asks to write a software spec or settle requirements, scope, and design before implementation.'
+description: Use when the user asks to write a software spec or settle requirements, scope, and design before implementation.
 ---
 
 # spec

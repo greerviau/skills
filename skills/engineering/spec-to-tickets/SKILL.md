@@ -1,6 +1,6 @@
 ---
 name: spec-to-tickets
-description: 'Use when the user asks to turn a reviewed spec or agreed work items into GitHub issues, an epic, or sub-issues.'
+description: Use when the user asks to turn a reviewed spec or agreed work items into GitHub issues, an epic, or sub-issues.
 argument-hint: "Path to the spec (optional if inferable from context)"
 ---
 

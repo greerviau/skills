@@ -1,6 +1,6 @@
 ---
 name: visualize
-description: 'Use when plots or interactive demonstrations help explain concepts, algorithms, or data. Exclude software structure and flow diagrams.'
+description: Use when plots or interactive demonstrations help explain concepts, algorithms, or data. Exclude software structure and flow diagrams.
 ---
 
 # visualize

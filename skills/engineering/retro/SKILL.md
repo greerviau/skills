@@ -1,6 +1,6 @@
 ---
 name: retro
-description: 'Use when the user asks to analyze a coding session for lessons to incorporate into coding standards or skills.'
+description: Use when the user asks to analyze a coding session for lessons to incorporate into coding standards or skills.
 ---
 
 # retro

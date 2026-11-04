@@ -1,6 +1,6 @@
 ---
 name: doc-audit
-description: 'Use when writing code documentation or comments, and before completing code changes that affect existing documentation.'
+description: Use when writing code documentation or comments, and before completing code changes that affect existing documentation.
 ---
 
 # doc-audit

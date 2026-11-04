@@ -1,6 +1,6 @@
 ---
 name: teach
-description: 'Use when the user asks for tutoring, quizzes, or guided learning across sessions, and when continuing an existing lesson.'
+description: Use when the user asks for tutoring, quizzes, or guided learning across sessions, and when continuing an existing lesson.
 argument-hint: "What would you like to learn?"
 ---
 
