@@ -1,9 +1,6 @@
 ---
 name: doc-audit
-description: >-
-  Use when code changes affect documentation, examples, docstrings, or comments, and when writing or revising those surfaces.
-  Apply before completing a code change with a documentation surface.
-  Exclude document annotation sessions and prose unrelated to code.
+description: 'Use when code changes affect documentation, examples, docstrings, or comments, and when writing or revising those surfaces. Apply before completing a code change with a documentation surface. Exclude document annotation sessions and prose unrelated to code.'
 ---
 
 # doc-audit

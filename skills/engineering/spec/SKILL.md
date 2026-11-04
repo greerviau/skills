@@ -1,9 +1,6 @@
 ---
 name: spec
-description: >-
-  Use when the user asks to turn a software request into a spec, define requirements or acceptance criteria, or resolve scope and design questions before implementation.
-  Trigger on "write a spec", "spec this out", and "plan this feature".
-  Exclude execution of an already settled plan and small changes whose requirements are already clear.
+description: 'Use when the user asks to turn a software request into a spec, define requirements or acceptance criteria, or resolve scope and design questions before implementation. Trigger on "write a spec", "spec this out", and "plan this feature". Exclude execution of an already settled plan and small changes whose requirements are already clear.'
 ---
 
 # spec

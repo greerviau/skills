@@ -1,9 +1,6 @@
 ---
 name: open-issue
-description: >-
-  Use when the user asks to file, open, create, or draft a GitHub issue or bug report, including "create a ticket for this".
-  Exclude coordinated issue breakdowns from reviewed specs.
-  Finding a bug alone does not trigger issue creation.
+description: 'Use when the user asks to file, open, create, or draft a GitHub issue or bug report, including "create a ticket for this". Exclude coordinated issue breakdowns from reviewed specs. Finding a bug alone does not trigger issue creation.'
 ---
 
 # open-issue

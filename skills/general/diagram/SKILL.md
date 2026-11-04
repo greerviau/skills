@@ -1,10 +1,6 @@
 ---
 name: diagram
-description: >-
-  Use when creating, rendering, or refining a software structure or flow diagram, including Mermaid, UML, and ER diagrams in docs, specs, PRs, or ADRs.
-  Apply when another task requires one of these diagrams.
-  Trigger on "draw a sequence diagram", "make a Mermaid diagram", and "fix this diagram layout".
-  Exclude numeric plots and interactive simulations.
+description: 'Use when creating, rendering, or refining a software structure or flow diagram, including Mermaid, UML, and ER diagrams in docs, specs, PRs, or ADRs. Apply when another task requires one of these diagrams. Trigger on "draw a sequence diagram", "make a Mermaid diagram", and "fix this diagram layout". Exclude numeric plots and interactive simulations.'
 ---
 
 # diagram

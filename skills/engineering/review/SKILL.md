@@ -1,9 +1,6 @@
 ---
 name: review
-description: >-
-  Use when the user asks for code review of a working-tree diff, branch, commit, or pull request, and when an implementation workflow requires independent review.
-  Trigger on "review this PR", "check this diff", and "find bugs in this change".
-  Exclude requests to apply fixes or review document prose.
+description: 'Use when the user asks for code review of a working-tree diff, branch, commit, or pull request, and when an implementation workflow requires independent review. Trigger on "review this PR", "check this diff", and "find bugs in this change". Exclude requests to apply fixes or review document prose.'
 ---
 
 # review

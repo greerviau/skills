@@ -1,9 +1,6 @@
 ---
 name: prototype
-description: >-
-  Use when a design or implementation decision depends on unverified library, API, runtime, or feasibility behavior that a disposable experiment can settle.
-  Apply during planning or implementation when that uncertainty blocks a choice.
-  Trigger on "spike this", "prototype this approach", and "try it before we build it".
+description: 'Use when a design or implementation decision depends on unverified library, API, runtime, or feasibility behavior that a disposable experiment can settle. Apply during planning or implementation when that uncertainty blocks a choice. Trigger on "spike this", "prototype this approach", and "try it before we build it".'
 argument-hint: "What question should the spike answer?"
 ---
 

@@ -1,9 +1,6 @@
 ---
 name: tdd
-description: >-
-  Use before implementing any code behavior change, including features and bug fixes, even when the user does not ask for tests.
-  Trigger on "TDD this", "test-drive this", and "write the test first".
-  Exclude prose, configuration edits without behavior changes, and behavior-preserving refactors already covered by passing tests.
+description: 'Use before implementing any code behavior change, including features and bug fixes, even when the user does not ask for tests. Trigger on "TDD this", "test-drive this", and "write the test first". Exclude prose, configuration edits without behavior changes, and behavior-preserving refactors already covered by passing tests.'
 ---
 
 # tdd

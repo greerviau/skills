@@ -1,9 +1,6 @@
 ---
 name: doc-review
-description: >-
-  Use when the user asks to annotate a document in the browser, leave inline comments, or collect human feedback anchored to passages in Markdown, text, HTML, PDF, or DOCX.
-  Trigger on "open this for inline review" and "let me comment on this document".
-  Exclude requests for the agent to critique prose or audit code documentation.
+description: 'Use when the user asks to annotate a document in the browser, leave inline comments, or collect human feedback anchored to passages in Markdown, text, HTML, PDF, or DOCX. Trigger on "open this for inline review" and "let me comment on this document". Exclude requests for the agent to critique prose or audit code documentation.'
 ---
 
 # doc-review
