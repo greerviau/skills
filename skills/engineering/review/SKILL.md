@@ -1,6 +1,6 @@
 ---
 name: review
-description: Use when reviewing a working-tree diff, branch, or pull request. Checks correctness, tests, flakiness, coding standards, structure, and conformance to an originating issue or spec when available.
+description: Use when reviewing a code diff, branch, commit, or pull request, including independent review before shipping.
 ---
 
 # review

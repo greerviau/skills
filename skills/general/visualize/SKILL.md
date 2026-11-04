@@ -1,6 +1,6 @@
 ---
 name: visualize
-description: Use when a concept, system, algorithm, or dataset is easier to see than to read and the user wants it drawn, plotted, demonstrated, or made interactive. Builds the smallest visual that carries the explanation, renders it, and checks the render. Trigger on "show me", "visualize this", "draw this", "plot this", "diagram", "demonstrate", "make this interactive".
+description: Use when plots or interactive demonstrations help explain concepts, algorithms, or data. Exclude software structure and flow diagrams.
 ---
 
 # visualize

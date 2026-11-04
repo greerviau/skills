@@ -1,13 +1,12 @@
 ---
 name: retro
-description: Review a finished coding session for lessons that should update coding standards or skills.
-disable-model-invocation: true
+description: Use when the user asks to analyze a coding session for lessons to incorporate into coding standards or skills.
 ---
 
 # retro
 
-Invoke `/retro` in Claude Code or `$retro` in Codex after a session that went worse than it should have.
-It reads the session record, proposes changes, and applies only the candidates the user accepts.
+Read the session record when the user asks for lessons from a coding session.
+Propose changes and apply only the candidates the user accepts.
 
 ## Targets
 

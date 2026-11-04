@@ -1,6 +1,6 @@
 ---
 name: ask-jev
-description: Use Jev's decision API to classify, score, or estimate whether a statement applies to supplied state when JEV_API_KEY is available. Invoke when a second decision signal can help review work, inspect files, or answer a focused question.
+description: Use when JEV_API_KEY is available and a second decision signal would help classify, score, or assess supplied state.
 ---
 
 # ask-jev

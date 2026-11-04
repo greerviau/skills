@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Use for development work in a git repo - implementing a feature or fix from a prompt, issue, ticket, or spec, executing a plan, or shipping a change as a pull request.
+description: Use when the user asks to implement a feature, fix a bug, or execute a plan in a Git repo.
 ---
 
 # implement

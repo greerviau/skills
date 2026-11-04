@@ -25,8 +25,11 @@ Cut the second kind.
 
 - Give each skill one job and state its defining constraint near the top.
 - Treat the frontmatter description as a context pointer.
-  Model-invoked descriptions name the trigger boundary and keep distinct trigger phrases.
-  User-invoked descriptions give a short summary without trigger lists.
+  Every skill supports model invocation.
+  Descriptions state when to use the skill, with concrete task conditions and trigger phrases where they help selection.
+  Add exclusions where similar skills could be confused.
+  Keep human-facing summaries in `agents/openai.yaml` and the README.
+  Keep model invocation enabled in frontmatter and Codex policy.
 - Choose a leading term that names the skill's central behavior, then reuse it in the description and procedure.
 - Make each phase executable with an observable completion condition.
   Prefer a real command, output, or artifact to a generic quality claim.

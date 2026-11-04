@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Use when a design choice, library or API behavior, or feasibility question is uncertain and a disposable experiment would settle it before committing to an approach - while planning, specifying, or mid-implementation. Builds a throwaway spike, records the evidence, and discards the code. Trigger on "prototype this", "spike this", "validate this approach", "will this work", "try it before we build it".
+description: Use when a disposable experiment can resolve uncertainty about a design choice, API behavior, or implementation feasibility.
 argument-hint: "What question should the spike answer?"
 ---
 

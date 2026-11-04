@@ -1,16 +1,15 @@
 ---
 name: spec-to-tickets
-description: Turn a reviewed spec into GitHub Issues, choosing a ticket shape sized to its scope.
+description: Use when the user asks to turn a reviewed spec or agreed work items into GitHub issues, an epic, or sub-issues.
 argument-hint: "Path to the spec (optional if inferable from context)"
-disable-model-invocation: true
 ---
 
 # spec-to-tickets
 
-Invoke `/spec-to-tickets` in Claude Code or `$spec-to-tickets` in Codex to turn a reviewed spec (the human-facing markdown a `spec` run produces) into GitHub Issues.
+Turn a reviewed spec into GitHub issues when the user asks to file its work items.
 This skill picks the ticket shape and the breakdown, then files each issue.
 
-Issues are external and hard to reverse, and other people see them. Run only on explicit request, and create nothing until the user confirms the proposed breakdown.
+Create nothing until the user confirms the proposed breakdown.
 
 ## Preflight
 

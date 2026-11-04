@@ -51,21 +51,17 @@ Choose by how you want to maintain the skills:
 
 ## Skills reference
 
-Claude Code uses `disable-model-invocation: true` to mark a skill as user-invoked.
-Codex uses `agents/openai.yaml` with `allow_implicit_invocation: false` for the same behavior.
-Each category below separates user-invoked skills from model-invoked skills.
+Every skill supports model invocation.
+Each `SKILL.md` description states when the model should use it, including boundaries between related workflows.
+Human-facing summaries live below and in `agents/openai.yaml`.
+Skills that create issues or apply proposed rule changes retain their workflow-specific confirmation steps.
 
 ### Engineering
-
-#### User-invoked
 
 - [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed spec. It interviews the user, explores the code, researches external behavior, checks each decision against the code, extends the repo's `UBIQUITOUS-LANGUAGE.md`, and writes a short human-facing spec whose work items become tickets.
 - [spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md) - turns a reviewed spec into GitHub Issues, choosing a single-issue, flat, or parent-with-sub-issues shape from the spec's scope.
 - [handoff](skills/engineering/handoff/SKILL.md) - compacts the current conversation into a handoff document for another agent.
 - [retro](skills/engineering/retro/SKILL.md) - reads a finished session's log and proposes updates to the repo's or the global `CODING-STANDARDS.md`, or changes to a skill.
-
-#### Model-invoked
-
 - [implement](skills/engineering/implement/SKILL.md) - implements a prompt, issue, ticket, or spec in an isolated worktree, builds it test-first, reviews the diff, opens a PR, and finishes when CI passes.
 - [tdd](skills/engineering/tdd/SKILL.md) - the test-first loop every behavior change runs: pick the seam, write the failing test, confirm it fails for the right reason, write the minimum code to pass, and refactor under green.
 - [diagnose](skills/engineering/diagnose/SKILL.md) - reproduces a failure, narrows to the root cause with evidence, and reports the cause before any fix.
@@ -85,13 +81,8 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
 
 ### General
 
-#### User-invoked
-
 - [doc-review](skills/general/doc-review/SKILL.md) - renders Markdown, text, HTML, PDF, or DOCX in the browser for inline comments, then returns each comment with its source location and quoted text so the document can be revised.
 - [teach](skills/general/teach/SKILL.md) - teaches one topic over multiple sessions in chat, citing sources recorded in `RESOURCES.md`, quizzing for retrieval, and keeping a mission and learning records in the current directory.
-
-#### Model-invoked
-
 - [plain-writing](skills/general/plain-writing/SKILL.md) - applies plain-writing rules informed by Simplified Technical English to answers, documents, messages, and agent instructions across domains.
   Its description requests invocation at session start, before the first response.
   The harness and agent determine whether it loads.

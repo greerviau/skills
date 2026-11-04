@@ -3,4 +3,4 @@ interface:
   short_description: "Write a handoff for a fresh agent"
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

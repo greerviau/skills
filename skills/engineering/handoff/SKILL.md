@@ -1,11 +1,11 @@
 ---
 name: handoff
-description: Compact the current conversation into a handoff document for another agent to pick up.
+description: Use when the user asks to summarize the current session so another agent or a fresh session can continue the work.
 argument-hint: "What will the next session be used for?"
-disable-model-invocation: true
 ---
 
-Invoke `/handoff` in Claude Code or `$handoff` in Codex to write a document summarizing the current conversation so a fresh agent can continue the work. Save it to the OS temporary directory, not the current workspace.
+Write a document summarizing the current conversation so a fresh agent can continue the work.
+Save it to the OS temporary directory.
 
 The reader is an agent. Give exact paths, symbols, commands, and what was tried and what happened, in terse prose, with unverified items marked. Omit motivation and reassurance.
 

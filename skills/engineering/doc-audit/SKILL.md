@@ -1,6 +1,6 @@
 ---
 name: doc-audit
-description: Use after code changes or when writing documentation or comments. Audits the touched documentation surface, updates stale prose, and checks it against the plain-language rules.
+description: Use when writing code documentation or comments, and before completing code changes that affect existing documentation.
 ---
 
 # doc-audit

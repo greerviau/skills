@@ -1,6 +1,6 @@
 ---
 name: open-pr
-description: Use when opening or writing a pull request. Produces a concise conventional-commit title and evergreen body with the sections that apply to the change.
+description: Use when creating a pull request or writing or revising its title and description.
 ---
 
 # open-pr

@@ -1,8 +1,7 @@
 ---
 name: teach
-description: Teach one topic over multiple sessions from vetted sources, quizzing for retrieval and recording what the user has demonstrated.
+description: Use when the user asks for tutoring, quizzes, or guided learning across sessions, and when continuing an existing lesson.
 argument-hint: "What would you like to learn?"
-disable-model-invocation: true
 ---
 
 # teach
