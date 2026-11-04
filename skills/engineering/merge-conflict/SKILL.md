@@ -1,6 +1,6 @@
 ---
 name: merge-conflict
-description: 'Use when Git reports unmerged paths or a merge or rebase stops on conflicts, including conflicts encountered during other work. Trigger on "resolve these conflicts", "fix the rebase", "continue this rebase", and "finish this merge".'
+description: 'Use when resolving Git merge or rebase conflicts, including conflicts encountered during other work.'
 ---
 
 Resolve an active Git merge or rebase by keeping the intent of both sides where they are compatible and choosing the behavior the integration target requires where they are not.

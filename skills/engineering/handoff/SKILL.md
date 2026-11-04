@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: 'Use when the user asks to hand off the current conversation, prepare context for a fresh agent or session, or save a continuation summary. Trigger on "handoff", "write a handover", and "summarize this session for the next agent". Exclude delegation of a new task to a running worker.'
+description: 'Use when the user asks to summarize the current session so another agent or a fresh session can continue the work.'
 argument-hint: "What will the next session be used for?"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: visualize
-description: 'Use when a diagram, plot, or interactive demonstration would explain a concept, algorithm, dataset, or parameter-dependent behavior more clearly than prose, including during teaching. Trigger on "visualize this", "plot this", "demonstrate how it works", and "make this interactive". Exclude software structure, UML, ER, and Mermaid layout tasks.'
+description: 'Use when plots or interactive demonstrations help explain concepts, algorithms, or data. Exclude software structure and flow diagrams.'
 ---
 
 # visualize

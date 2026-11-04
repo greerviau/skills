@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: 'Use when restructuring working code while preserving observable behavior, including deduplication, renaming, and control-flow simplification. Trigger on "refactor", "clean up this code", "reduce duplication", and "make this more maintainable". Exclude behavior changes and prose cleanup.'
+description: 'Use when restructuring working code without changing observable behavior, including deduplication, renaming, and simplification.'
 ---
 
 # refactor

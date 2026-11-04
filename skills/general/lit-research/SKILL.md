@@ -1,6 +1,6 @@
 ---
 name: lit-research
-description: 'Use when searching scientific papers, tracing citations, verifying bibliographic references, or writing a literature review. Apply when an answer requires finding or confirming scholarly sources. Trigger on "find papers", "check these citations", "related work", and "literature review". Exclude general web research without scholarly sources.'
+description: 'Use when searching scientific literature, tracing citations, verifying bibliographic references, or writing a literature review.'
 ---
 
 # lit-research

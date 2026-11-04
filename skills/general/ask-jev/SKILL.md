@@ -1,6 +1,6 @@
 ---
 name: ask-jev
-description: 'Use when JEV_API_KEY is available and a focused classification, score, or probability about supplied state would help resolve a concrete review or inspection decision. Trigger on requests to ask Jev or get a second decision signal. Exclude open-ended research, factual lookup, and tasks without a defined decision question.'
+description: 'Use when JEV_API_KEY is available and a second decision signal would help classify, score, or assess supplied state.'
 ---
 
 # ask-jev

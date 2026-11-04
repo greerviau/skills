@@ -1,6 +1,6 @@
 ---
 name: open-pr
-description: 'Use when creating a pull request or drafting or revising its title and description, including the PR step of an authorized implementation workflow. Trigger on "open a PR", "file a pull request", and "write the PR description". Exclude requests limited to reviewing an existing PR.'
+description: 'Use when creating a pull request or writing or revising its title and description.'
 ---
 
 # open-pr

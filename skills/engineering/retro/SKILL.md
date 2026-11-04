@@ -1,6 +1,6 @@
 ---
 name: retro
-description: 'Use when the user asks to review a coding session for reusable lessons, explain repeated agent mistakes, or improve coding standards or skill instructions based on session evidence. Trigger on "retro", "what should we learn from this session", and "update our rules from these mistakes". Exclude ordinary code review and direct skill edits without session analysis.'
+description: 'Use when the user asks to analyze a coding session for lessons to incorporate into coding standards or skills.'
 ---
 
 # retro

@@ -1,6 +1,6 @@
 ---
 name: teach
-description: 'Use when the user asks for guided learning, tutoring, retrieval quizzes, or a continuing course on a topic, and when resuming a teaching workspace with MISSION.md and learning records. Trigger on "teach me", "tutor me", "quiz me", and "continue our lesson". Exclude one-off factual answers and explanations without a tutoring request.'
+description: 'Use when the user asks for tutoring, quizzes, or guided learning across sessions, and when continuing an existing lesson.'
 argument-hint: "What would you like to learn?"
 ---
 

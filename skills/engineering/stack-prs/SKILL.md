@@ -1,6 +1,6 @@
 ---
 name: stack-prs
-description: 'Use when creating, splitting, submitting, syncing, or merging dependent pull requests with gh stack, and when the current change belongs to an existing PR stack. Trigger on "stack these PRs", "split this into dependent PRs", and "gh stack". Exclude unrelated PRs that have no branch dependencies.'
+description: 'Use when creating or managing dependent pull requests, or working on a change in an existing PR stack.'
 ---
 
 # stack-prs

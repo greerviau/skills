@@ -1,6 +1,6 @@
 ---
 name: spec-to-tickets
-description: 'Use when the user asks to turn a reviewed spec or agreed work items into GitHub issues, an epic, or sub-issues. Trigger on "turn this spec into tickets", "file the work items", and "create issues from this plan". Exclude a standalone bug report and requests to write a spec without filing issues.'
+description: 'Use when the user asks to turn a reviewed spec or agreed work items into GitHub issues, an epic, or sub-issues.'
 argument-hint: "Path to the spec (optional if inferable from context)"
 ---
 
