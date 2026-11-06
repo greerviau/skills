@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Use when the user asks to implement a feature, fix a bug, or execute a plan in a Git repo.
+description: Use for any request to implement a feature, fix a bug or issue, resolve a ticket, or execute a plan or spec in a Git repo, including "ship a PR" and work delegated from another thread. Use before editing code. Not for review-only or refactor-only requests.
 ---
 
 # implement
@@ -61,6 +61,9 @@ Link specs, plans, and other files only when they are committed and have a remot
 Wait for CI. On failure, investigate, fix, and push until it passes.
 When the failure predates the change, stop and ask the user how to proceed. When no user can answer, report the failure and stop.
 CI passing finishes the work. Do not keep watching the PR.
+When the repo has no `.github/workflows` directory, no check will report.
+Skip the wait, do not watch the PR, and say in the final report that the repo has no CI.
+Opening the PR finishes the work.
 
 ## 7. Clean up
 

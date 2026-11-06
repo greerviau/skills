@@ -62,7 +62,7 @@ Skills that create issues or apply proposed rule changes retain their workflow-s
 - [spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md) - turns a reviewed spec into GitHub Issues, choosing a single-issue, flat, or parent-with-sub-issues shape from the spec's scope.
 - [handoff](skills/engineering/handoff/SKILL.md) - compacts the current conversation into a handoff document for another agent.
 - [retro](skills/engineering/retro/SKILL.md) - reads a finished session's log and proposes updates to the repo's or the global `CODING-STANDARDS.md`, or changes to a skill.
-- [implement](skills/engineering/implement/SKILL.md) - implements a prompt, issue, ticket, or spec in an isolated worktree, builds it test-first, reviews the diff, opens a PR, and finishes when CI passes.
+- [implement](skills/engineering/implement/SKILL.md) - implements a prompt, issue, ticket, or spec in an isolated worktree, builds it test-first, reviews the diff, opens a PR, and finishes when CI passes or, in a repo with no CI, when the PR is open.
 - [tdd](skills/engineering/tdd/SKILL.md) - the test-first loop every behavior change runs: pick the seam, write the failing test, confirm it fails for the right reason, write the minimum code to pass, and refactor under green.
 - [diagnose](skills/engineering/diagnose/SKILL.md) - reproduces a failure, narrows to the root cause with evidence, and reports the cause before any fix.
 - [prototype](skills/engineering/prototype/SKILL.md) - answers a design or feasibility question with a throwaway spike whose source is discarded.
