@@ -66,6 +66,7 @@ Skills that create issues or apply proposed rule changes retain their workflow-s
 - [tdd](skills/engineering/tdd/SKILL.md) - the test-first loop every behavior change runs: pick the seam, write the failing test, confirm it fails for the right reason, write the minimum code to pass, and refactor under green.
 - [diagnose](skills/engineering/diagnose/SKILL.md) - reproduces a failure, narrows to the root cause with evidence, and reports the cause before any fix.
 - [prototype](skills/engineering/prototype/SKILL.md) - answers a design or feasibility question with a throwaway spike whose source is discarded.
+- [mockup](skills/engineering/mockup/SKILL.md) - creates reviewable UI mockups for a feature or a multi-page redesign, with responsive and interactive states before implementation.
 - [open-issue](skills/engineering/open-issue/SKILL.md) - checks for duplicates, honors the repo's issue template, writes a descriptive title and a short problem, reproduction, and acceptance-criteria body, and labels from `gh label list`.
 - [open-pr](skills/engineering/open-pr/SKILL.md) - writes the `feat(...)` or `fix(...)` title and an evergreen body, then opens the PR.
 - [stack-prs](skills/engineering/stack-prs/SKILL.md) - builds, submits, syncs, and merges GitHub stacked PRs with the `gh stack` extension, using the non-interactive form of each command.
