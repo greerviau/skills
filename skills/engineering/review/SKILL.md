@@ -13,7 +13,8 @@ This skill reviews and does not apply changes.
 
 1. Scope the diff: working tree, branch against base, or GitHub PR.
 2. Correctness. Read the changed code for bugs, missed cases, and broken callers.
-3. Mechanical checks. Run a subagent for this in parallel with step 4:
+3. Mechanical checks. Delegate these checks in parallel with step 4 when delegation is available and permitted.
+   When already running as a child reviewer, or when another child cannot start, run the checks yourself:
    - Lint: run the repo's linter. Any new violation fails.
    - Tests: run the suite. Confirm the diff adds or updates tests that exercise the change.
    - Test-first: run `scripts/tests_fail_on_base.sh <base> '<test paths>' -- <test command>`. Each added test must fail or error on the base. Skip documentation-only, formatting-only, and rename-only changes.

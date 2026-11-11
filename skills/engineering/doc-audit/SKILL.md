@@ -37,6 +37,8 @@ Run this before treating a non-trivial code change as done.
 1. List what the change touched: functions, modules, behaviors, and the comment lines it adds. Take the comments from the diff, not from memory.
 2. Find the documentation covering that surface: docstrings on changed functions, surrounding comments, the nearest directory README, `docs/` files describing the feature, and examples that demonstrate it.
 3. Check each against the code. Rewrite anything stale to current behavior instead of appending a change note (see the decision-history exception above).
+   For a claim about a limit, timeout, retry, default, failure mode, or charge, read the enforcing code and its conditions.
+   Name the enforcing function in the audit note and qualify claims the code does not guarantee.
 4. Note what you checked and updated, so the audit is visible.
 5. Check language. Dispatch a subagent with the passages you wrote or rewrote and the plain-language rules above. It reports each violation as `path:line`, the rule, and a rewrite, and does not edit. Apply the result. Run the check inline when no subagent is available.
 

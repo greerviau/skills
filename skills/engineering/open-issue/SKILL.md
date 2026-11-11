@@ -5,7 +5,9 @@ description: Use when the user asks to draft or file a standalone GitHub issue, 
 
 # open-issue
 
-File a GitHub issue: write its title, body, and labels, then create it.
+Write a GitHub issue's title, body, and labels.
+Create it when the user asks to file or open an issue and its scope is determined.
+For a draft or evaluation request, return the draft without creating it.
 
 ## Preflight
 
@@ -65,5 +67,7 @@ gh issue create --title "<title>" --body "<body>" --label "<label>,<label>"
 Add `--assignee`, `--milestone`, or `--project` when the user names one.
 Report the issue number and URL. The branch and the PR's closing reference need the number.
 
-Create nothing until the user confirms the title, body, and labels.
-When no user can answer, file without asking and record any assumption in the issue body.
+An explicit request to file the issue authorizes creation after the duplicate check without another confirmation of the same scope.
+Ask for missing information that changes the target repository or requested scope before creating it.
+When no user can answer, report the unresolved detail and leave creation pending.
+Do not require an issue as a prerequisite to a PR unless repository policy requires one.
