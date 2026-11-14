@@ -42,8 +42,6 @@ claude plugin marketplace add greerviau/skills
 claude plugin install greerviau@greerviau
 ```
 
-The plugin replaces `greerviau-engineering` and `greerviau-general`. Uninstall both before installing it.
-
 Choose by how you want to maintain the skills:
 
 - [skills.sh](https://skills.sh/greerviau/skills) copies the skills you pick into your project, and you edit them.
