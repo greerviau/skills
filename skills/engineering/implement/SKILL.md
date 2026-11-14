@@ -51,6 +51,8 @@ Report blocked outcomes and user-approved scope changes without describing unfin
 ## 5. Review
 
 Commit, then have a fresh subagent that did not write the change review the diff against `origin/<default-branch>` when delegation is available and permitted.
+Run the reviewer on a model from a different provider than the model that wrote the change, unless the user selects a reviewer.
+When no other provider is available, use a model from the same provider.
 Pass it the base ref and the request, and leave out the conversation that produced the change.
 When delegation is prohibited or no reviewer can start, review inline and state in the PR that independent review remains unperformed.
 Continue other validation and report the restriction.
