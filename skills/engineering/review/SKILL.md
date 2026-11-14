@@ -9,6 +9,10 @@ Review a diff, branch, or PR and report ranked findings with a ship or don't-shi
 Review that diff, not the whole codebase. Report every defect you see, including incidental ones, mark incidental ones as outside the diff, and ask the user which to open as GitHub issues.
 This skill reviews and does not apply changes.
 
+For independent review, run this procedure in a fresh subagent on a model from a different provider than the model that wrote the change, unless the user selects a reviewer.
+When no other provider is available, use a fresh subagent from the same provider.
+When already running as that subagent, review directly.
+
 ## Procedure
 
 1. Scope the diff: working tree, branch against base, or GitHub PR.
