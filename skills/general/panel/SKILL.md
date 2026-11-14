@@ -27,12 +27,13 @@ A judge is a model plus a launch method that can run it (see step 4).
 Before round 1, send each judge a one-line prompt through its launch method and confirm that it answers.
 When a judge does not answer, tell the user and ask for a replacement, and do not substitute a model yourself. When no user can answer, stop and report the judge that failed.
 
-Create the ledger and one directory per judge as separate temporary directories, so that no judge directory contains or sits beside the ledger or another judge's directory.
-Give each judge a short id (`j1`, `j2`, ...):
+Create the ledger and each judge directory with separate `mktemp -d` calls.
+The judge prompt sets the read boundary, and these commands do not restrict filesystem reads.
+Give each judge a short id (`j1`, `j2`, ...) and add one line per judge to `judges.tsv`:
 
 ```bash
 ledger=$(mktemp -d)
-printf 'j1\t<model>\t<launch method>\t%s\n' "$(mktemp -d)" >> "$ledger/judges.tsv"   # one line per judge
+printf 'j1\t<model>\t<launch method>\t%s\n' "$(mktemp -d)" >> "$ledger/judges.tsv"
 ```
 
 For work in a Git repository, record the starting point once.
@@ -69,25 +70,28 @@ Start at round 1.
 Replace each judge's `work` directory with a fresh snapshot of the current work.
 
 For Git work, build the snapshot commit with a temporary index, so the user's index stays unchanged.
-Then give each judge a new repository whose only history is the starting point and the snapshot, so the judge cannot see your branches or revision commits:
+Then give each judge a new repository whose only history is the starting point and the snapshot, so the judge cannot see your branches or revision commits.
+`snapshot` also deletes the judge's previous work directory and review:
 
 ```bash
 export GIT_INDEX_FILE="$ledger/index"
 git read-tree HEAD && git add -A
 snap=$(git commit-tree "$(git write-tree)" -p "$base" -m "Proposed change")
 unset GIT_INDEX_FILE
-while IFS=$'\t' read -r id model launch jdir; do
-  rm -rf "$jdir/work" && git init -q "$jdir/work"
-  git archive "$base" | tar -x -C "$jdir/work"
-  git -C "$jdir/work" add -A
-  git -C "$jdir/work" -c user.name=panel -c user.email=panel@localhost commit -qm "Starting point"
-  git -C "$jdir/work" rm -rq . && git archive "$snap" | tar -x -C "$jdir/work"
-  git -C "$jdir/work" add -A
-  git -C "$jdir/work" -c user.name=panel -c user.email=panel@localhost commit -qm "Proposed change"
-done < "$ledger/judges.tsv"
+snapshot() {
+  rm -rf "$1/work" "$1/review.md" "$ledger/export-index" && git init -q "$1/work"
+  GIT_INDEX_FILE="$ledger/export-index" git --work-tree="$1/work" read-tree --reset -u "$base"
+  git -C "$1/work" add -A
+  git -C "$1/work" -c user.name=panel -c user.email=panel@localhost commit -q --allow-empty -m "Starting point"
+  GIT_INDEX_FILE="$ledger/export-index" git --work-tree="$1/work" read-tree --reset -u "$snap"
+  git -C "$1/work" add -A
+  git -C "$1/work" -c user.name=panel -c user.email=panel@localhost commit -q --allow-empty -m "Proposed change"
+}
+while IFS=$'\t' read -r id model launch jdir; do snapshot "$jdir"; done < "$ledger/judges.tsv"
 ```
 
-For other work, delete each `work` directory and copy the artifact into it again.
+When the repository has submodules, copy each submodule's checked-out files into every `work` directory and commit them in the "Proposed change" commit.
+For other work, delete each judge's `work` directory and `review.md`, and copy the artifact into `work` again.
 For visual work, render the screenshots the prompt names into each `work` directory.
 
 Launch every judge in parallel as a fresh session whose only input is its `prompt.md`.
@@ -123,7 +127,7 @@ score=$(head -1 "$f" | grep -E '^SCORE: ([1-9]|10)$')
 [ -n "$score" ] && [ "$(grep -c '^SCORE:' "$f")" -eq 1 ] && echo "${score#SCORE: }" || echo invalid
 ```
 
-When a review is invalid, relaunch that judge once as a fresh session.
+When a review is invalid, rebuild that judge's `work` directory from the same snapshot, then relaunch the judge once as a fresh session.
 When it is invalid again, stop and report the judge that failed.
 
 Move each review into the ledger and append its score to `$ledger/scores.tsv`:
@@ -139,19 +143,23 @@ Launch a fresh consolidator subagent, without your conversation history, with [r
 Any available model can consolidate.
 Fill `{{REVIEW_FILES}}` with this round's ledger review paths, `{{PREVIOUS_FEEDBACK}}` with `$ledger/feedback-round-<n-1>.md` or `none`, and `{{FEEDBACK_FILE}}` with `$ledger/feedback-round-<n>.md`.
 
-Check that the feedback file cites every finding id from this round exactly once, without reading the reviews:
+Check that the feedback file exists and cites every finding id from this round exactly once and no other id, without reading the reviews:
 
 ```bash
+fb="$ledger/feedback-round-<n>.md"
+test -s "$fb" || echo "feedback file missing"
 for f in "$ledger"/round-<n>-*.md; do
   id=$(basename "$f" .md); id=${id#round-<n>-}
   grep -oE '^F[0-9]+' "$f" | sed "s/^/$id./"
 done | sort -u > "$ledger/expected"
-grep -oE '\bj[0-9]+\.F[0-9]+\b' "$ledger/feedback-round-<n>.md" | sort > "$ledger/cited"
-comm -23 "$ledger/expected" "$ledger/cited"   # missing ids
-uniq -d "$ledger/cited"                       # ids cited more than once
+grep -oE '\bj[0-9]+\.F[0-9]+\b' "$fb" | sort > "$ledger/cited"
+sort -u "$ledger/cited" | diff "$ledger/expected" -
+uniq -d "$ledger/cited"
 ```
 
-When either command prints ids, relaunch the consolidator once and name those ids.
+The check passes when the commands print nothing.
+The `diff` lines marked `<` are missing ids, the lines marked `>` are ids that no review contains, and `uniq -d` prints ids cited more than once.
+When the check fails, relaunch the consolidator once and name the failing ids or the missing file.
 When the check fails again, stop and report a consolidation failure.
 
 ## 6. Decide
