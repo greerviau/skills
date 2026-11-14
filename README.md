@@ -91,6 +91,7 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
 - [diagram](skills/general/diagram/SKILL.md) - picks the diagram type (the 14 UML types plus ER) and runs the draft, render, critique, refine loop, with PlantUML for the types mermaid cannot draw.
 - [ask-jev](skills/general/ask-jev/SKILL.md) - sends structured questions about supplied state to Jev's decision API and reports its probabilities, labels, or scores.
 - [council](skills/general/council/SKILL.md) - does the requested work, then has judges from different providers score it out of 10 without seeing the threshold or earlier scores, merges their findings, and revises until every judge reaches the threshold or the round limit ends the loop. It runs only when the user asks for the council.
+- [cook](skills/general/cook/SKILL.md) - takes a task the user will not watch to its end, whether code, research, writing, or operations. It asks every open question in one interview at the start, then works unattended, proves the deliverable meets each acceptance criterion, and reports once. A code change ends in a PR, and cook waits for CI and review bots. It never merges a PR, and it deploys, publishes, or sends only when the user explicitly allows it.
 
 ## Contributing
 

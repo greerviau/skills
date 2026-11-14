@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cook"
+  short_description: "Ask every question up front, then take a task to its end unattended"
+
+policy:
+  allow_implicit_invocation: true

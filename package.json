@@ -38,6 +38,7 @@
     "./skills/general/lit-research",
     "./skills/general/diagram",
     "./skills/general/ask-jev",
-    "./skills/general/council"
+    "./skills/general/council",
+    "./skills/general/cook"
   ]
 }
