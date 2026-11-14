@@ -47,4 +47,4 @@ One entry per term, short and precise.
 - **judge**: one model on the panel. It scores the work from 1 to 10 and lists findings, and it never sees the threshold, earlier rounds, or other judges' output.
 - **threshold**: the score every judge must reach in the same round for the panel to pass the work.
 - **round**: one scoring of the current work by every judge. The **round limit** caps the number of rounds.
-- **consolidated feedback**: the merged list of findings from one round, written by a consolidator subagent. It cites every judge finding id, and it is the only judge output the worker reads.
+- **consolidated feedback**: the merged list of findings from one round, written by a consolidator subagent. It cites every judge finding id, and the worker reads it and the scores in place of the raw reviews.

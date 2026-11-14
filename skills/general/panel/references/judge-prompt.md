@@ -9,9 +9,10 @@ Score the work on its own merits.
 
 {{WORK}}
 
-Read, build, and run whatever you need.
-Change files only inside `{{WORK_DIR}}`.
-Your changes there are discarded.
+The work is in `{{WORK_DIR}}`.
+Read, build, and run whatever you need inside it.
+Do not read or change files outside it, except to write `{{REVIEW_FILE}}`.
+Your changes inside it are discarded.
 
 ## Score
 
