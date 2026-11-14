@@ -4,6 +4,10 @@ When a browser automation tool is available, use it to load the page, resize the
 Run the audit by passing the contents of `scripts/audit.js` (in this skill's folder) to its evaluate call, which returns the JSON result.
 Use this route for pages served by a dev server.
 
+Capture review screenshots with motion settled: emulate `prefers-reduced-motion: reduce`, or inject `*,*::before,*::after{animation:none!important;transition:none!important}` into a scratch copy.
+When a capture shows a half-faded element, capture it again with motion off before debugging the page.
+Never change the product's motion to fix a capture.
+
 ## Headless browser
 
 Without browser automation, use `chrome-headless-shell`, which renders at any window width.
