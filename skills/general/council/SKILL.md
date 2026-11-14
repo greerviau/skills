@@ -12,6 +12,7 @@ Revise and rescore until every judge scores at or above the **threshold** in the
 
 Take the judges, the threshold, and the round limit from the request.
 When any of them is missing, ask for all missing values in one question before you start, and offer the defaults: the latest flagship model from three providers other than your own at high reasoning effort, threshold 8, and 3 rounds. When no user can answer, use the defaults and list them in the report.
+When fewer than three other providers are available, offer the top model of each available provider plus the other top-tier models of your own provider, and name each candidate model from the capability listing in the question.
 
 In T3 Code, resolve the models with `orchestrator_capabilities` and start each judge with `delegate_task`.
 Elsewhere, use the harness's subagent tool with its model option.
@@ -23,8 +24,11 @@ The prompt contains:
 
 - The user's request, without the council instructions.
 - Where the work is and how to view it, for example `git diff <base>` for code or screenshot files for visual work, and that the review is read-only.
-- The scale: 9 means a demanding expert would accept the work as it is, 7 means it meets the task with defects an expert would fix first, and 5 means major parts are missing or wrong.
-- The output: write every change that would raise the score, most important first, with its location and fix, to `<review dir>/<judge id>.md`, then reply with only `SCORE: <n>`.
+- The scale, in whole numbers: 9 means a demanding expert would accept the work as it is, 7 means it meets the task with defects an expert would fix first, and 5 means major parts are missing or wrong.
+- The output: in `<review dir>/<judge id>.md`, first list the changes without which you would not score the work 9, or write `None` when you would.
+  Then list every other change that would raise the score, most important first.
+  Give each change its location and fix.
+  Then reply with only `SCORE: <n>`.
 
 Leave the threshold, the round number, earlier scores and findings, and any mention of revisions out of the prompt.
 
@@ -40,10 +44,11 @@ When a judge replies without a valid score, relaunch it once, then record `no sc
 
 Have a fresh subagent read the round's review files and write one merged list of findings.
 It merges duplicates and names the judges who raised each one, keeps every finding's location and fix, and lists findings that ask for opposite changes as conflicts.
+The merged list puts each judge's 9-blocking changes first.
 Read the merged list and the scores, not the review files.
 
 Stop when every judge scores at or above the threshold, or when the round reaches the limit.
-Otherwise fix each finding you agree with, record each rejected finding with its reason, pick a side on each conflict, and start the next round.
+Otherwise fix each finding you agree with, the 9-blocking findings before any others, record each rejected finding with its reason, pick a side on each conflict, and start the next round.
 Reject findings that ask for work outside the request.
 Commit messages for revisions describe the change and do not mention the council or a round.
 
