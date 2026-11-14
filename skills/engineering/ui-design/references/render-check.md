@@ -54,5 +54,6 @@ An empty line means the audit did not finish within the time budget, or axe-core
 
 - Contrast over images and gradients, which axe reports as needing review instead of as a violation.
 - Focus visibility: walk Tab with browser automation, or screenshot after focusing each control in a scratch copy.
-- Overlapping text and controls, and content hidden under fixed headers or bars. Read them in the screenshots.
+- Overlapping text and controls, and content hidden under fixed headers or bars.
+  Read them in the screenshots.
 - Motion: check final states and `prefers-reduced-motion`.

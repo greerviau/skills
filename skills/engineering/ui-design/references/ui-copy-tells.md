@@ -2,7 +2,8 @@
 
 Interface text reads as model-written when it would fit any product.
 Replace each tell with a fact from the request, the product, or its data.
-One tell proves little. Repeats and clusters are the signal.
+One tell proves little.
+Repeats and clusters are the signal.
 
 ## Never use
 
@@ -22,17 +23,22 @@ One tell proves little. Repeats and clusters are the signal.
 - Two-fragment headings: "Twelve rooms. Three ways to stay."
 - Number-pair headings: "Four projects, four different problems."
 - Contrast frames and their substitutes, counted together: "not X but Y", "rather than", "instead of", "without the".
-- Negation runs: "No forms, no back-and-forth." Keep one only when each item is a claim the user can check.
+- Negation runs: "No forms, no back-and-forth."
+  Keep one only when each item is a claim the user can check.
 - The trailing -ing clause: ", ensuring a smooth start".
 - The reveal: "The result? Three hours back." and "One thing changed: X".
 - Exclamation marks.
 
 ## Patterns
 
-- Virtue words about the product: honest, simple, calm, thoughtful, intentional, genuinely, truly, actually. Show the quality with a fact.
-- Every card and paragraph the same length and the same arc. Spend words where the product has the most to say.
-- A quip or moral at the end of each paragraph. End on information.
-- Default microcopy under hand-tuned headings. Write the error, empty, and confirmation text in the same voice.
+- Virtue words about the product: honest, simple, calm, thoughtful, intentional, genuinely, truly, actually.
+  Show the quality with a fact.
+- Every card and paragraph the same length and the same arc.
+  Spend words where the product has the most to say.
+- A quip or moral at the end of each paragraph.
+  End on information.
+- Default microcopy under hand-tuned headings.
+  Write the error, empty, and confirmation text in the same voice.
 - "Most popular" on the middle pricing tier, and three polished testimonials, without data behind them.
 
 ## Over-correction

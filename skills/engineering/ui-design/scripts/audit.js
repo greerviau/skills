@@ -20,7 +20,7 @@
   const describe = el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (el.classList.length ? '.' + [...el.classList].join('.') : '');
   const run = async () => {
     await loadAxe();
-    const result = await window.axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag22aa', 'best-practice'] });
+    const result = await window.axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'] });
     const overflow = [...document.querySelectorAll('body *')]
       .filter(el => el.id !== 'audit' && el.getBoundingClientRect().right > innerWidth + 1 && !insideScroller(el))
       .map(describe);
