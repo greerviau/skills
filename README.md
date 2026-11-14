@@ -116,3 +116,12 @@ See [AGENTS.md](AGENTS.md) for authoring rules.
 ## License
 
 MIT, see [LICENSE](LICENSE).
+
+## Attribution
+
+These skills draw on the following collections:
+
+- [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock.
+- [t3dotgg/tstack](https://github.com/t3dotgg/tstack) by Theo Browne.
+- [taste-skill](https://github.com/Leonxlnx/taste-skill) by Leonxlnx.
+  The `ui-design` design standard and UI copy tells are adapted from it under the MIT License, Copyright (c) 2026 Leonxlnx.
