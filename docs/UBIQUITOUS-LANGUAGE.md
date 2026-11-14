@@ -24,6 +24,11 @@ One entry per term, short and precise.
 
 - **throwaway spike**: a disposable implementation that answers one design question. Its source is discarded and never merged into production.
 
+## ui-design (skills/engineering/ui-design)
+
+- **design standard**: the layout, type, colour, component, motion, and state rules `ui-design` applies wherever the project's own design system sets nothing.
+- **mockup**: a standalone, reviewable UI artifact built before implementation. Building it leaves application source, dependencies, and configuration unchanged.
+
 ## spec (skills/engineering/spec, skills/engineering/spec-to-tickets)
 
 - **work item**: one entry in a spec's "Work items" list, naming what it changes and the outcome that shows it is done, sized so one PR lands it. `spec-to-tickets` files each work item as at most one issue.

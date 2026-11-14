@@ -9,7 +9,7 @@
       "name": "greerviau",
       "source": "./",
       "strict": false,
-      "description": "Engineering and general skills: planning, GitHub development workflows, test-driven development, bug diagnosis, design spikes, pull requests and issues, review, refactoring, merge-conflict resolution, doc audits, handoffs, retrospectives, software diagrams, document review, plain writing, teaching, visual demonstrations, and scientific-literature research.",
+      "description": "Engineering and general skills: planning, GitHub development workflows, test-driven development, bug diagnosis, design spikes, UI design and mockups, pull requests and issues, review, refactoring, merge-conflict resolution, doc audits, handoffs, retrospectives, software diagrams, document review, plain writing, teaching, visual demonstrations, and scientific-literature research.",
       "category": "productivity",
       "keywords": [
         "engineering",
@@ -23,6 +23,7 @@
         "tdd",
         "diagnose",
         "prototype",
+        "ui-design",
         "mockup",
         "merge-conflict",
         "review",
