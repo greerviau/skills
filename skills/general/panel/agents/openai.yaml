@@ -1,6 +1,0 @@
-interface:
-  display_name: "Panel"
-  short_description: "Revise work until a panel of model judges scores it at a threshold"
-
-policy:
-  allow_implicit_invocation: true

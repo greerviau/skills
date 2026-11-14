@@ -1,11 +1,11 @@
 ---
-name: panel
-description: Use only when the user explicitly asks for a panel of judges, for example "use the panel", "run this past the panel", or "until the panel scores 8". Do not use for an ordinary review, critique, or quality request that does not name a panel.
+name: council
+description: Use only when the user explicitly asks for a council of judges, for example "use the council", "run this past the council", or "until the council scores 8". Do not use for an ordinary review, critique, or quality request that does not name a council.
 ---
 
-# panel
+# council
 
-Do the requested work, then have a **panel** of **judges**, one model from each of several providers, score it out of 10.
+Do the requested work, then have a **council** of **judges**, one model from each of several providers, score it out of 10.
 Revise and rescore until every judge scores at or above the **threshold** in the same **round**, or until the round limit is reached.
 
 ## Set up
@@ -21,7 +21,7 @@ Create a review directory outside the work tree with `mktemp -d`.
 Before round 1, write the judge prompt once, and send it unchanged to every judge in every round.
 The prompt contains:
 
-- The user's request, without the panel instructions.
+- The user's request, without the council instructions.
 - Where the work is and how to view it, for example `git diff <base>` for code or screenshot files for visual work, and that the review is read-only.
 - The scale: 9 means a demanding expert would accept the work as it is, 7 means it meets the task with defects an expert would fix first, and 5 means major parts are missing or wrong.
 - The output: write every change that would raise the score, most important first, with its location and fix, to `<review dir>/<judge id>.md`, then reply with only `SCORE: <n>`.
@@ -45,7 +45,7 @@ Read the merged list and the scores, not the review files.
 Stop when every judge scores at or above the threshold, or when the round reaches the limit.
 Otherwise fix each finding you agree with, record each rejected finding with its reason, pick a side on each conflict, and start the next round.
 Reject findings that ask for work outside the request.
-Commit messages for revisions describe the change and do not mention the panel or a round.
+Commit messages for revisions describe the change and do not mention the council or a round.
 
 ## Report
 
@@ -53,7 +53,7 @@ Report the outcome (passed in round `<n>`, or stopped at the round limit), the s
 When the work ends in a pull request, put the table in the PR description by editing it, and do not post a comment:
 
 ```markdown
-## Panel review
+## Council review
 
 Threshold: 8. Rounds: 2.
 
