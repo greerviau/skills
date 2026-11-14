@@ -40,3 +40,10 @@ One entry per term, short and precise.
 - **reference-check**: verifying a bibliography entry against Crossref: the DOI resolves, the metadata matches, and the work is not retracted. An entry that cannot be confidently matched is reported as *unverifiable* and never corrected by guess.
 - **screening**: judging each candidate paper against the review's inclusion criteria. The agent does this step, not a script.
 - **annotated bibliography**: the lit-review deliverable, the screened paper set with a short relevance note per paper, every entry sourced from script output.
+
+## council (skills/general/council)
+
+- **council**: the judges that score one piece of work, one model from each of several providers, each started as a fresh session every round.
+- **judge**: one model on the council. It scores the work out of 10 and lists findings, and it never sees the threshold, earlier rounds, or other judges' output.
+- **threshold**: the score every judge must reach in the same round for the council to pass the work.
+- **round**: one scoring of the current work by every judge. The round limit caps the number of rounds.

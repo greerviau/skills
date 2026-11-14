@@ -1,0 +1,6 @@
+interface:
+  display_name: "Council"
+  short_description: "Revise work until a council of model judges scores it at a threshold"
+
+policy:
+  allow_implicit_invocation: true

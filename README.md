@@ -92,6 +92,7 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
 - [lit-research](skills/general/lit-research/SKILL.md) - literature search, citation-graph snowballing, bibliography reference checks, and a literature-review workflow backed by OpenAlex, Semantic Scholar, PubMed, and Crossref, with every citation taken from API records.
 - [diagram](skills/general/diagram/SKILL.md) - picks the diagram type (the 14 UML types plus ER) and runs the draft, render, critique, refine loop, with PlantUML for the types mermaid cannot draw.
 - [ask-jev](skills/general/ask-jev/SKILL.md) - sends structured questions about supplied state to Jev's decision API and reports its probabilities, labels, or scores.
+- [council](skills/general/council/SKILL.md) - does the requested work, then has judges from different providers score it out of 10 without seeing the threshold or earlier scores, merges their findings, and revises until every judge reaches the threshold or the round limit ends the loop. It runs only when the user asks for the council.
 
 ## Contributing
 

@@ -37,6 +37,7 @@
     "./skills/general/visualize",
     "./skills/general/lit-research",
     "./skills/general/diagram",
-    "./skills/general/ask-jev"
+    "./skills/general/ask-jev",
+    "./skills/general/council"
   ]
 }
