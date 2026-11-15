@@ -24,6 +24,14 @@ One entry per term, short and precise.
 
 - **throwaway spike**: a disposable implementation that answers one design question. Its source is discarded and never merged into production.
 
+## benchmark (skills/engineering/benchmark)
+
+- **limiter**: the resource or code path that bounds a measured result, such as a core, a lock, the disk, the network, or the load generator, found from a profile or system counters taken during a run.
+
+## verify (skills/engineering/verify)
+
+- **recipe**: a project-local skill named `verify-<app>` that records how to launch, check, drive, and clean up the app, plus a feature map with one file per user-facing feature.
+
 ## ui-design (skills/engineering/ui-design)
 
 - **design standard**: the layout, type, colour, component, motion, and state rules `ui-design` applies wherever the project's own design system sets nothing.

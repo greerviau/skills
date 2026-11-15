@@ -63,12 +63,15 @@ Skills that create issues or apply proposed rule changes retain their workflow-s
 - [implement](skills/engineering/implement/SKILL.md) - implements a prompt, issue, ticket, or spec in an isolated worktree, builds it test-first, reviews the diff, opens a PR, and finishes when CI passes or, in a repo with no CI, when the PR is open.
 - [tdd](skills/engineering/tdd/SKILL.md) - the test-first loop every behavior change runs: pick the seam, write the failing test, confirm it fails for the right reason, write the minimum code to pass, and refactor under green.
 - [diagnose](skills/engineering/diagnose/SKILL.md) - reproduces a failure, narrows to the root cause with evidence, and reports the cause before any fix.
+- [why](skills/engineering/why/SKILL.md) - answers why code, a design, or a value is the way it is from the commits, PRs, reviews, and issues that shaped it, citing each source and marking inferences.
+- [benchmark](skills/engineering/benchmark/SKILL.md) - vets a performance number before it is reported or acted on: names what limits it, checks that each side was tuned, counts errors, repeats alternating runs, measures the end-to-end share, and confirms the timed work ran.
 - [prototype](skills/engineering/prototype/SKILL.md) - answers a design or feasibility question with a throwaway spike whose source is discarded.
 - [ui-design](skills/engineering/ui-design/SKILL.md) - builds, restyles, or mocks up UI to a design standard for layout, type, colour, components, motion, and states, then renders it at desktop and phone widths and runs an axe-core accessibility and overflow audit before showing it. A mockup is a standalone artifact that leaves application source unchanged.
 - [open-issue](skills/engineering/open-issue/SKILL.md) - checks for duplicates, honors the repo's issue template, writes a descriptive title and a short problem, reproduction, and acceptance-criteria body, and labels from `gh label list`.
 - [open-pr](skills/engineering/open-pr/SKILL.md) - writes the `feat(...)` or `fix(...)` title and an evergreen body, then opens the PR.
 - [stack-prs](skills/engineering/stack-prs/SKILL.md) - builds, submits, syncs, and merges GitHub stacked PRs with the `gh stack` extension, using the non-interactive form of each command.
 - [review](skills/engineering/review/SKILL.md) - reviews a diff, branch, or PR for correctness, tests, flakiness, repo coding standards, structure, and conformance to the originating spec or issue.
+- [verify](skills/engineering/verify/SKILL.md) - proves a change works by driving the running app the way a user does and keeping the evidence. On first use in a repo it writes a project-local `verify-<app>` skill with launch, health-check, drive, and cleanup steps and a feature map, and runs it once before relying on it.
 - [refactor](skills/engineering/refactor/SKILL.md) - improves code structure without changing behavior, guarded by an unchanged test suite.
 - [merge-conflict](skills/engineering/merge-conflict/SKILL.md) - resolves merge and rebase conflicts from both sides' intent, reruns the repository checks, and completes the operation.
 - [doc-audit](skills/engineering/doc-audit/SKILL.md) - audits the documentation a change touched, rewrites stale passages in present tense, and checks the prose for plain language.
@@ -125,3 +128,5 @@ These skills draw on the following collections:
 - [t3dotgg/tstack](https://github.com/t3dotgg/tstack) by Theo Browne.
 - [taste-skill](https://github.com/Leonxlnx/taste-skill) by Leonxlnx.
   The `ui-design` design standard and UI copy tells are adapted from it under the MIT License, Copyright (c) 2026 Leonxlnx.
+- [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan.
+  `benchmark`, `verify`, and `why` are adapted from it under the MIT License, Copyright (c) 2026 Lauren Tan.
