@@ -1,7 +1,8 @@
 # skills
 
-Reusable agent skills for engineering and scientific research.
-Each skill is a plain-markdown procedure doc with a small YAML frontmatter header.
+Reusable agent skills for engineering, scientific research, and productivity.
+
+Designed to get the most out of agents without sacrificing reliability or correctness.
 
 Skills are organized into categories and ship as one Claude Code plugin.
 
