@@ -32,7 +32,7 @@ Follow the user's requested voice and the document's purpose when they require a
 - Replace long noun chains with explicit subjects and verbs.
 - Prefer short, familiar words.
   Remove inflated adjectives, filler, stock transitions, and commentary about the answer.
-- Remove the patterns of machine-written prose: "serves as" or "stands as" in place of "is", trailing "-ing" phrases that comment on the sentence ("highlighting...", "ensuring..."), items grouped in threes when the content has another count, "from X to Y" when X and Y are not ends of one scale, claims attributed to unnamed experts or reports, and the words "delve", "pivotal", "crucial", "underscore", "showcase", "landscape", "tapestry", "testament", "leverage", and "utilize".
+- Remove the patterns of machine-written prose: "serves as" or "stands as" in place of "is", trailing "-ing" phrases that comment on the sentence ("highlighting...", "ensuring..."), items grouped in threes when the content has another count, "from X to Y" when X and Y are not ends of one scale, claims attributed to unnamed experts or reports, and the words "delve", "pivotal", "crucial", "underscore", "showcase", "landscape", "tapestry", "testament", "leverage", and "utilize" when a plainer word fits.
 - Describe mechanisms directly.
   Replace figurative language when it obscures what happens.
 - Use complete sentences.

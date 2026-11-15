@@ -19,7 +19,8 @@ Writing the implementation first and the test afterward is not test-driven and i
 
 ## Rules
 
-- Check each test against two edits. Break the behavior (return a wrong value, skip an effect, or do it twice), and the test must fail. Restructure the internals while keeping every observable result, and the test must pass. Rewrite or delete a test that fails either check. Derive expected values from the requirement, never from a run of the code under test.
+- Check each test against two edits, and revert both afterward. Break the behavior (return a wrong value, skip an effect, or do it twice), and the test must fail. Restructure the internals while keeping every observable result, and the test must pass. Rewrite or delete a test that fails either check.
+- Derive expected values from the requirement, never from a run of the code under test.
 - A bug fix starts from its reproduction, which becomes a regression test that fails before the fix and passes after.
 - Changes with no behavior to test are exempt: documentation, comments, formatting, and renames the existing suite covers. Changes another guard proves are also exempt: dependency upgrades (the existing suite), refactors (characterization tests), performance work (a benchmark), and prototypes (discarded).
 - Flakiness is a defect. Do not use unseeded randomness, real clocks, order-dependent tests, or un-stubbed network calls.

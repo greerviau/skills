@@ -13,6 +13,7 @@ The **deliverable** is what the finished task produces: a PR for a code change i
 
 ## 1. Interview
 
+Create the **decision log**, a TSV file in the OS temporary directory with the columns `time`, `decision`, `reason`, `evidence`, and `result`.
 Before asking anything, read the request, the files or systems it touches, and any agent instructions that apply, and answer every question you can from them.
 Then ask the user about everything that remains, with a question tool available in the current mode (`AskUserQuestion` in Claude Code, `request_user_input` in Codex).
 When no question tool is available, send the questions as one message and end the turn, and start work when the answers arrive.
@@ -29,11 +30,10 @@ Cover:
 
 Put your recommended option first in each question, and include the context needed to answer it without reading the thread.
 Do not ask about choices that have a conventional default or that are cheap to reverse.
-Decide those yourself and record them for the report.
+Decide those yourself and record them in the decision log.
 Stop asking when no open question would change the result.
-When no user can answer, take your recommended options, record them as decisions, and treat every permission question as refused.
+When no user can answer, take your recommended options, record them in the decision log, and treat every permission question as refused.
 
-Create the **decision log**, a TSV file in the OS temporary directory with the columns `time`, `decision`, `reason`, `evidence`, and `result`.
 Post the **brief** as a message: the deliverable, the acceptance criteria, each answer, which finalizing actions are allowed, and the decision log's path.
 Start work without waiting for a reply to the brief.
 
@@ -70,7 +70,8 @@ For a code change in a repo, implement it and open a PR.
 
 Decide each issue that comes up mid-run from the brief and sensible defaults.
 Append a row to the decision log as you make each decision, change direction, revert work, reject a review finding, or finish a criterion's proof.
-Each row's evidence is a pointer, such as a commit, `file:line`, command, or path. Never edit an earlier row; add a row that supersedes it.
+Each row's evidence is a pointer, such as a commit, `file:line`, command, or path.
+Never edit an earlier row; add a row that supersedes it.
 A step is **blocked** when it needs an action outside the grant, a secret or access you do not have, or a choice the brief does not settle and that changes the result.
 When a step is blocked, finish every part of the task that does not depend on it, then go to step 6.
 

@@ -14,8 +14,9 @@ This skill reviews and does not apply changes.
 1. Scope the diff: working tree, branch against base, or GitHub PR.
 2. Correctness. Read the changed code for bugs, missed cases, and broken callers.
    Follow the change past where a symbol search stops: the source of each library call it changes, at the pinned version and any local patch, and data that crosses a boundary, such as serialized fields, API responses, DB columns, wire formats, config keys, feature flags, and other languages reading the same bytes.
-   When the change looks risky, name the one fact it is safe because of.
+   When the change looks risky, name the fact that makes it safe.
    Prove each correctness finding and that fact with a run against the real code: a failing test, a repro script, or command output that shows the behavior. Report the command and its output with the finding, or mark the finding unproven.
+   Write repro scripts and tests outside the reviewed tree, in the OS temporary directory or a scratch copy.
 3. Mechanical checks. Delegate these checks in parallel with step 4 when delegation is available and permitted.
    When already running as a child reviewer, or when another child cannot start, run the checks yourself:
    - Lint: run the repo's linter. Any new violation fails.
@@ -34,5 +35,5 @@ This skill reviews and does not apply changes.
    - New concepts: when a concept enters the design, the interfaces around it are re-derived instead of keeping the old shape for compatibility.
    - Navigability: a concept lives in one place under its glossary name, and code that changes together lives together.
 5. Conformance. Find the originating issue or spec: a linked issue, a spec path in the PR body, or one the user supplies. When none resolves, write "no originating spec located, conformance not assessed" and skip this step. Never reconstruct a spec from the diff. Otherwise report scope drift, missing requirements, and out-of-scope additions.
-6. Report findings most severe first, one or two sentences each naming the location and the fix. Include no summary of the diff, no list of checks that passed, and no closing restatement. End with the ship or don't-ship call.
+6. Report findings most severe first, one or two sentences each naming the location and the fix, followed by the proving command and its output or the word "unproven". Put the fact that makes a risky change safe next to the ship call. Include no summary of the diff, no list of checks that passed, and no closing restatement. End with the ship or don't-ship call.
    When no user can answer and the review runs as a gate, emit a machine-readable verdict followed by the ranked findings.

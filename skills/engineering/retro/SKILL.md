@@ -34,14 +34,15 @@ When the user or the repo's agent instructions (`AGENTS.md` or equivalent) say n
 
    Cite each moment by log line number and a short quote. A candidate without a cited moment is dropped.
 
-3. Route each moment to one target. For a coding mistake, take the first level that makes the mistake impossible or fail loudly:
+3. Route each moment to one target. For a coding mistake, take the first level below that works:
    1. Remove the wrong path: give each piece of state one owner and each task one supported way, hide internals so the wrong import fails, replace hand-synced lists with one source, and delete old code an agent would copy.
    2. Make the bad state fail to typecheck.
    3. Add a lint or CI rule whose error names the file, type, or function to use instead. When the pattern is already common, fail only on new occurrences.
    4. Add a test at the behavior's real entry point.
    5. Write a rule in a `CODING-STANDARDS.md` or a skill, only for a judgment call no check can decide.
 
-   Read the target first. When an existing written rule already covers the moment and the mistake happened anyway, the candidate moves that rule to a check. Otherwise it clarifies the rule and adds no second one. Drop a one-off finding about the changed code.
+   Read the target first. When an existing written rule already covers the moment, move it to the first check level that works, and when no level works, clarify the rule instead of adding a second one.
+   Drop a one-off finding about the changed code.
 
 4. Look for deletions. For each rule or skill instruction the session exercised, check whether it fired on correct work or changed nothing, and propose deleting it. Propose deleting a written rule that a check now enforces.
 
@@ -50,6 +51,6 @@ When the user or the repo's agent instructions (`AGENTS.md` or equivalent) say n
 6. Ask which candidates to apply. When no user can answer, stop after the report. Never apply your own candidates.
 
 7. Apply the accepted candidates and show the diff.
-   Before keeping a check, reproduce the session's mistake on a scratch copy and show the check fails on it, with the same command locally and in CI.
+   Before keeping a check, reproduce the session's mistake on a scratch copy and show that the command CI runs fails on it.
    A repo-specific change belongs in that repo's PR: use its open PR when one covers the session, otherwise open one.
    A skill change goes on a branch in the skills checkout with its own PR, and reaches installed copies only after the plugin is updated.
