@@ -6,45 +6,20 @@ Designed to get the most out of agents without sacrificing reliability or correc
 
 ## Install with skills.sh
 
-The [skills.sh](https://skills.sh/greerviau/skills) installer copies the skills into your project so you can edit them.
-It fetches this repo directly, with no cloning or symlinking.
-
-Install every skill:
+[skills.sh](https://skills.sh/greerviau/skills) copies the skills you pick into your project, where you can edit them.
 
 ```bash
 npx skills@latest add greerviau/skills
 ```
 
-To target Codex explicitly, run:
-
-```bash
-npx skills@latest add greerviau/skills --agent codex
-```
-
-Then pick the skills you want and the agents to install them on.
-
 ## Install as a Claude Code plugin
 
-The skills also ship as a native [Claude Code plugin](https://code.claude.com/docs/en/plugins), installed from this repo's marketplace and updated through Claude Code.
+The [Claude Code plugin](https://code.claude.com/docs/en/plugins) is a read-only bundle that updates as this repo changes.
 
-This repo is a Claude Code plugin marketplace (`.claude-plugin/marketplace.json`) that registers the `greerviau` marketplace and serves the `greerviau` plugin with every skill.
-
-Inside Claude Code:
 ```bash
 /plugin marketplace add greerviau/skills
 /plugin install greerviau@greerviau
 ```
-
-Or from your shell:
-```bash
-claude plugin marketplace add greerviau/skills
-claude plugin install greerviau@greerviau
-```
-
-Choose by how you want to maintain the skills:
-
-- [skills.sh](https://skills.sh/greerviau/skills) copies the skills you pick into your project, and you edit them.
-- The plugin is a read-only bundle that follows this repo as it changes.
 
 ## Skills reference
 
@@ -97,23 +72,7 @@ Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-
 
 ## Contributing
 
-Maintainer scripts are in [`scripts/`](scripts):
-
-- `scripts/link-skills.sh` links skills to this checkout for local development.
-  Run `bash scripts/link-skills.sh` from the checkout you edit.
-  Codex, Pi, and OpenCode read the links in `~/.agents/skills`; Claude Code reads `~/.claude/skills`.
-  T3 Code uses the skills of its selected harness, including Codex and Claude Code.
-  Uninstall this repository's skills from package managers and Claude plugins before linking them.
-  The script refuses to overwrite installed copies and removes links to retired skills from this checkout.
-  Edits to existing files take effect through the links; restart the harness to refresh its skill catalog after adding, renaming, or removing skills.
-  Rerun the script after adding, renaming, or removing skills.
-  Test the linker with `node --test scripts/tests/link-skills.test.cjs`.
-  Skill discovery paths are documented by [Codex](https://learn.chatgpt.com/docs/build-skills), [Pi](https://github.com/earendil-works/pi-mono/blob/main/packages/coding-agent/docs/skills.md), and [OpenCode](https://opencode.ai/docs/skills/).
-- `scripts/list-skills.sh` lists every skill in the repo.
-
-Add a skill by creating `skills/<category>/<name>/SKILL.md`, then register it in `package.json` (the `skills` array, for the skills.sh installer) and, for a new category, add the category directory to the plugin's `skills` array in `.claude-plugin/marketplace.json`.
-Add `agents/openai.yaml` when the skill needs Codex invocation or interface metadata.
-See [AGENTS.md](AGENTS.md) for authoring rules.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
