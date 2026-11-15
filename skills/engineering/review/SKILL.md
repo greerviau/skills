@@ -13,6 +13,9 @@ This skill reviews and does not apply changes.
 
 1. Scope the diff: working tree, branch against base, or GitHub PR.
 2. Correctness. Read the changed code for bugs, missed cases, and broken callers.
+   Follow the change past where a symbol search stops: the source of each library call it changes, at the pinned version and any local patch, and data that crosses a boundary, such as serialized fields, API responses, DB columns, wire formats, config keys, feature flags, and other languages reading the same bytes.
+   When the change looks risky, name the one fact it is safe because of.
+   Prove each correctness finding and that fact with a run against the real code: a failing test, a repro script, or command output that shows the behavior. Report the command and its output with the finding, or mark the finding unproven.
 3. Mechanical checks. Delegate these checks in parallel with step 4 when delegation is available and permitted.
    When already running as a child reviewer, or when another child cannot start, run the checks yourself:
    - Lint: run the repo's linter. Any new violation fails.
