@@ -1,0 +1,6 @@
+interface:
+  display_name: "Benchmark"
+  short_description: "Vet a performance number before reporting or acting on it"
+
+policy:
+  allow_implicit_invocation: true

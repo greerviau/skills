@@ -1,0 +1,6 @@
+interface:
+  display_name: "Verify"
+  short_description: "Drive the running app like a user to prove a change works"
+
+policy:
+  allow_implicit_invocation: true
