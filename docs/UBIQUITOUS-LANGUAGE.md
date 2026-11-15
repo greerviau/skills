@@ -30,7 +30,7 @@ One entry per term, short and precise.
 
 ## verify (skills/engineering/verify)
 
-- **recipe**: a project-local skill named `verify-<app>` that records how to launch, check, drive, and clean up the app, plus a feature map with one file per user-facing feature.
+- **recipe**: a project-local skill named `verify-<app>` that records how to launch the app, run the doctor check, drive it, capture evidence, and clean up, plus a feature map with one file per user-facing feature.
 
 ## ui-design (skills/engineering/ui-design)
 

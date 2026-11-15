@@ -1,6 +1,6 @@
 # Build the recipe
 
-The recipe's reader is an agent that has never seen the app and reads it cold, mid-task.
+Write the recipe for an agent that has never seen the app.
 
 ## 1. Read the repo
 
@@ -12,7 +12,7 @@ Answer these from the code, docs, and scripts, and ask the user only what you ca
 - Observe: what evidence can be captured, such as screenshots, terminal transcripts, response bodies, logs, exit codes, and database state.
 - Isolate: whether two instances can run side by side with separate ports, data directories, and profiles.
 
-When the checkout does not build or start, fix that or report it precisely before writing the recipe.
+When the checkout does not build or start, report the failing command and its output, and stop without changing app code.
 When an irrelevant missing asset blocks startup, such as a sample config or a static directory the app never serves, the recipe may create it, labeled as verification setup, and remove it in cleanup.
 
 ## 2. Write the recipe
@@ -26,13 +26,13 @@ Fill each section from what step 1 found, with real commands and selectors from 
 - Launch: the exact command that starts an instance from an empty data directory, including migrations and seed data, and the signal that it is ready to use. A process that answers a health check while its init scripts still run is not ready. Record the PID. For a short-lived CLI or TUI, launch builds the binary or installs dependencies once, and each drive starts in its own PTY or tmux session.
 - Doctor: one read-only check that the instance is worth driving: the process is up, the build matches the checkout, the port belongs to this instance, and auth is valid.
 - Drive: the harness commands, using stable handles such as ARIA labels, data attributes, prompt strings, and route paths, never coordinates or tab order.
-- Evidence: what to capture for each proof and the directory it goes to, outside anything cleanup removes.
+- Evidence: what to capture for each proof and the directory it goes to, outside the checkout and outside anything cleanup removes.
 - Cleanup: how to stop the instances a run started, by recorded PID, never by process name, and remove scratch state while keeping evidence.
 - Helpers: each script the recipe ships is executable, and the recipe shows how to call it.
 
 ## 3. Seed the feature map
 
-Create `features/README.md` as an index and one file per user-facing feature, starting with the 3 to 5 most used, found from routes, commands, menus, or docs.
+Create `verify-<app>/features/README.md` as an index, with one file per user-facing feature beside it, starting with the 3 to 5 most used, found from routes, commands, menus, or docs.
 Each feature file has these sections:
 
 - `Sub-features`

@@ -71,7 +71,7 @@ Skills that create issues or apply proposed rule changes retain their workflow-s
 - [open-pr](skills/engineering/open-pr/SKILL.md) - writes the `feat(...)` or `fix(...)` title and an evergreen body, then opens the PR.
 - [stack-prs](skills/engineering/stack-prs/SKILL.md) - builds, submits, syncs, and merges GitHub stacked PRs with the `gh stack` extension, using the non-interactive form of each command.
 - [review](skills/engineering/review/SKILL.md) - reviews a diff, branch, or PR for correctness, tests, flakiness, repo coding standards, structure, and conformance to the originating spec or issue.
-- [verify](skills/engineering/verify/SKILL.md) - proves a change works by driving the running app the way a user does and keeping the evidence. On first use in a repo it writes a project-local `verify-<app>` skill with launch, health-check, drive, and cleanup steps and a feature map, and runs it once before relying on it.
+- [verify](skills/engineering/verify/SKILL.md) - proves a change works by driving the running app the way a user does and keeping the evidence. On first use in a repo it writes a project-local `verify-<app>` skill with launch, doctor, drive, evidence, and cleanup steps and a feature map, and runs it once before relying on it.
 - [refactor](skills/engineering/refactor/SKILL.md) - improves code structure without changing behavior, guarded by an unchanged test suite.
 - [merge-conflict](skills/engineering/merge-conflict/SKILL.md) - resolves merge and rebase conflicts from both sides' intent, reruns the repository checks, and completes the operation.
 - [doc-audit](skills/engineering/doc-audit/SKILL.md) - audits the documentation a change touched, rewrites stale passages in present tense, and checks the prose for plain language.
@@ -129,4 +129,4 @@ These skills draw on the following collections:
 - [taste-skill](https://github.com/Leonxlnx/taste-skill) by Leonxlnx.
   The `ui-design` design standard and UI copy tells are adapted from it under the MIT License, Copyright (c) 2026 Leonxlnx.
 - [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan.
-  `benchmark`, `verify`, and `why` are adapted from it under the MIT License, Copyright (c) 2026 Lauren Tan.
+  `benchmark`, `verify`, `why`, and parts of `retro`, `review`, `tdd`, `diagnose`, `cook`, and `plain-writing` are adapted from it under the MIT License, Copyright (c) 2026 Lauren Tan.
