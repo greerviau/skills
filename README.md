@@ -4,8 +4,6 @@ Reusable agent skills for engineering, scientific research, and productivity.
 
 Designed to get the most out of agents without sacrificing reliability or correctness.
 
-Skills are organized into categories and ship as one Claude Code plugin.
-
 ## Install with skills.sh
 
 The [skills.sh](https://skills.sh/greerviau/skills) installer copies the skills into your project so you can edit them.
