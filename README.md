@@ -1,8 +1,8 @@
 # skills
 
 Reusable agent skills for engineering, scientific research, and productivity.
+
 Designed to get the most out of agents without sacrificing reliability or correctness.
-Each skill is a plain-markdown procedure doc with a small YAML frontmatter header.
 
 ## Install with skills.sh
 
