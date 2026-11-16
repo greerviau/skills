@@ -32,7 +32,7 @@ git worktree add "$wt" -b <feat|fix>/<short-description> origin/<default-branch>
 cd "$wt"
 ```
 
-Work from the selected worktree's root, record its path as `wt` and branch as `branch`, and track whether this invocation created them.
+Work from the selected worktree's root, record its path as `wt` and branch as `branch`, and track whether this invocation created them directly and owns their lifecycle.
 
 ## 3. Build test-first
 
@@ -78,8 +78,8 @@ Do not keep watching the PR after its checks finish, or when no checks are expec
 
 ## 7. Clean up
 
-After the PR merges, remove the worktree and branch only if this invocation created them and the worktree is clean.
-Leave reused worktrees, including agent-managed ones, in place unless the user asks to remove them.
+After the PR merges, remove the worktree and branch only if this invocation created them directly, owns their lifecycle, and the worktree is clean.
+Leave externally managed or reused worktrees in place unless the user explicitly requests removal.
 
 ```bash
 common=$(git rev-parse --path-format=absolute --git-common-dir)
