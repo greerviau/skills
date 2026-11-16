@@ -1,6 +1,6 @@
 # skills
 
-Reusable agent skills for engineering, scientific research, and productivity.
+The agent skills I use everyday for engineering, scientific research, and productivity.
 
 Designed to get the most out of agents without sacrificing reliability or correctness.
 
