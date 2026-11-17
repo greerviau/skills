@@ -38,8 +38,7 @@ The spec is human-facing: it states what, why, what "done" means, what is out of
    - Work items whose dependencies are not a straight line: a flowchart of the work items in Work items.
 
    Draw the system after the change, and mark the parts the change adds or alters with a stroke-based `classDef`. Render each diagram and fix its layout before saving. A spec with none of these gets no diagram.
-7. Save the spec to `docs/plans/<date>-<name>.md` in the primary repo, in kebab-case with a date prefix such as `2026-07-07-fix-xic-shard-lookup.md`.
-   When the user or the repo's agent instructions (`AGENTS.md` or equivalent) say not to write documents to the repo, write it to the OS temporary directory.
+7. Save the spec to the OS temporary directory, in kebab-case with a date prefix such as `2026-07-07-fix-xic-shard-lookup.md`. Never write or commit it to a repo.
 8. Update the glossary. Write new or corrected terms to the existing `UBIQUITOUS-LANGUAGE.md`, and create `docs/UBIQUITOUS-LANGUAGE.md` when none exists. Under a no-documents-in-the-repo instruction, extend an existing glossary and put new terms in the spec's text instead.
    One entry per term: the term, its precise meaning, and where useful the code artifacts that embody it. Scope entries to the repo, in present tense, with no planning status. Add a term only when it names a domain concept people could misunderstand. A repo with distinct bounded contexts gives each its own glossary, and the root glossary maps them.
 9. Report the file paths with a one-line description each, and ask how to proceed: file the work items as issues, implement them in order, or iterate on the spec.

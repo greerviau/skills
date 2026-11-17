@@ -32,5 +32,5 @@ A choice between options is never a ballpark.
 Lead with the verdict: faster, slower, no measurable difference, or inconclusive.
 Give the number with its unit, the run count, the range, and the limiter, for example "p50 41 ms to 33 ms, median of 7 runs per side, range 32 to 35 ms after, bound by JSON parsing on one core."
 The verdict is inconclusive when the limiter is unnamed, a side ran untuned, or question 4 or 7 went unchecked. Name the gap.
-Write the runs, ranges, and limiter evidence to `docs/analysis/<date>-<name>.md`, or to the OS temporary directory when the user or the repo's agent instructions (`AGENTS.md` or equivalent) say not to write documents to the repo.
-A PR body carries one primary number and points to that file.
+Write the runs, ranges, and limiter evidence to `<date>-<name>.md` in the OS temporary directory, never to the repo.
+A PR body carries the primary number with its run count, range, and limiter, and the command that reproduces it.
