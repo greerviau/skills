@@ -27,9 +27,9 @@ Write a pull request's title and body, then create it.
      When included, use this exact structure, including when a repo template exists:
      ```markdown
      ## Evidence
-     ### Before
+     Before:
      [Previous behavior or state.]
-     ### After
+     After:
      [New behavior or state, with evidence.]
      ```
      Keep Before and After as separate subsections, not list items or inline labels. For a visual change, include before-and-after screenshots when the app can be run and captured. For other changes, include relevant command output or test results when they show the change. When useful evidence cannot be captured, state what blocked it and give the strongest verification you have. Never claim verification you did not perform.
