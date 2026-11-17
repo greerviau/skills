@@ -50,8 +50,9 @@ Skills that create issues or apply proposed rule changes retain their workflow-s
 - [merge-conflict](skills/engineering/merge-conflict/SKILL.md) - resolves merge and rebase conflicts from both sides' intent, reruns the repository checks, and completes the operation.
 - [doc-audit](skills/engineering/doc-audit/SKILL.md) - audits the documentation a change touched, rewrites stale passages in present tense, and checks the prose for plain language.
 
-Skills write specs, plans, analyses, and glossaries into the repo by default (`docs/plans/`, `docs/analysis/`, `docs/UBIQUITOUS-LANGUAGE.md`).
-Tell the agent, or put a line in the repo's agent instructions (`AGENTS.md` or equivalent), not to write documents to the repo, and they go to the OS temporary directory instead.
+Skills write working documents (specs, plans, analyses, benchmark and prototype results, mockups) to the OS temporary directory and never commit them.
+They write documentation of the system as it is now (`UBIQUITOUS-LANGUAGE.md`, `CODING-STANDARDS.md`, `verify-<app>` recipes) into the repo.
+Tell the agent, or put a line in the repo's agent instructions (`AGENTS.md` or equivalent), not to write documents to the repo, and that documentation stays local instead.
 
 Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-STANDARDS.md` (referenced from your global agent instructions) for every repo. `retro` maintains both.
 

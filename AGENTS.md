@@ -38,4 +38,6 @@ Cut the second kind.
 - Apply the no-op test and the duplication test to each sentence.
   Delete instructions that do not change behavior, and keep each rule in the one skill that applies it.
 - Keep execution instructions in `SKILL.md` and human-facing explanation in a separate docs surface when the repo has one.
-- Write documents a skill produces (specs, plans, analyses, glossaries) into the repo by default, and write them to the OS temporary directory when the user or the repo's agent instructions (`AGENTS.md` or equivalent) say not to write documents to the repo. Do not add a setting for this.
+- Write working documents a skill produces (specs, plans, analyses, benchmark and prototype results, mockups) to the OS temporary directory, never to the repo.
+  Write documentation of the system as it is now (glossaries, coding standards, verify recipes) into the repo, and keep it local when the user or the repo's agent instructions (`AGENTS.md` or equivalent) say not to write documents to the repo.
+  Do not add a setting for either.

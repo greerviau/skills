@@ -101,7 +101,7 @@ In the project, add a token before hard-coding a new value.
 For a mockup:
 - The request determines whether the output is temporary or kept and whether version control or publication is wanted.
 - Use the requested location and format.
-  Otherwise save it in the repo, or in the OS temporary directory when repository instructions prohibit it.
+  Otherwise save it in the OS temporary directory.
 - Prefer standalone HTML, CSS, and JavaScript.
   A single file is sufficient for one feature.
   For several screens, share assets and add a gallery or navigation when it helps review.
