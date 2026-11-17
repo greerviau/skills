@@ -16,8 +16,11 @@ One entry per term, short and precise.
 
 ## architecture-survey (skills/engineering/architecture-survey)
 
-- **deepening candidate**: a proposed restructure that puts more behavior behind a smaller interface, so callers learn less and changes concentrate in one module. The survey rates each one Strong, Worth exploring, or Speculative.
-- **deletion test**: inlining a module into its callers to judge it. Complexity that disappears marks a pass-through. Complexity that reappears in each caller marks a module that earns its place.
+- **deepening candidate**: a proposed restructure that puts more behavior behind a smaller interface, so callers learn less and changes concentrate in one module.
+  The survey rates each one Strong, Worth exploring, or Speculative.
+- **deletion test**: inlining a module into its callers to judge it.
+  Complexity that disappears marks a pass-through.
+  Complexity that reappears in each caller marks a module that earns its place.
 
 ## merge-conflict (skills/engineering/merge-conflict)
 
