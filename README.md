@@ -46,7 +46,8 @@ Skills that create issues or apply proposed rule changes retain their workflow-s
 - [stack-prs](skills/engineering/stack-prs/SKILL.md) - builds, submits, syncs, and merges GitHub stacked PRs with the `gh stack` extension, using the non-interactive form of each command.
 - [review](skills/engineering/review/SKILL.md) - reviews a diff, branch, or PR for correctness, tests, flakiness, repo coding standards, structure, and conformance to the originating spec or issue.
 - [verify](skills/engineering/verify/SKILL.md) - proves a change works by driving the running app the way a user does and keeping the evidence. On first use in a repo it writes a project-local `verify-<app>` skill with launch, doctor, drive, evidence, and cleanup steps and a feature map, and runs it once before relying on it.
-- [refactor](skills/engineering/refactor/SKILL.md) - improves code structure without changing behavior, guarded by an unchanged test suite.
+- [refactor](skills/engineering/refactor/SKILL.md) - improves code structure without changing behavior, guarded by a test suite that keeps its intent.
+- [architecture-survey](skills/engineering/architecture-survey/SKILL.md) - surveys a codebase's hot spots, or the area an upcoming change touches, for deepening candidates that put more behavior behind a smaller interface. It filters each with the deletion test, rates it Strong, Worth exploring, or Speculative, writes a report with before and after diagrams to the OS temporary directory, and stops for a pick without changing code.
 - [merge-conflict](skills/engineering/merge-conflict/SKILL.md) - resolves merge and rebase conflicts from both sides' intent, reruns the repository checks, and completes the operation.
 - [doc-audit](skills/engineering/doc-audit/SKILL.md) - audits the documentation a change touched, rewrites stale passages in present tense, and checks the prose for plain language.
 
