@@ -1,0 +1,6 @@
+interface:
+  display_name: "Architecture survey"
+  short_description: "Rank deepening candidates in a codebase without changing code"
+
+policy:
+  allow_implicit_invocation: true
