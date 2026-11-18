@@ -5,7 +5,7 @@ description: Use for any request to implement a feature, fix a bug or issue, res
 
 # implement
 
-Implement the request in an isolated worktree, build behavior changes test-first, and open a PR.
+Implement the request in the current checkout, build behavior changes test-first, and open a PR.
 The request can be a one-line prompt, an issue, a ticket, or a spec. Do not require an issue and do not create one.
 
 ## 1. Ground
@@ -17,22 +17,11 @@ For a bug, reproduce it end to end the way a user hits it before changing code.
 When the approach is uncertain, answer the question with a throwaway experiment before building.
 Follow a provided plan or spec exactly.
 
-## 2. Select a worktree
+## 2. Select a branch
 
-Use the requested worktree, or continue in the current linked worktree, including one created by an agent manager.
-Preserve its path, branch, changes, and commits.
-Otherwise, check `git worktree list --porcelain` for a worktree belonging to the request before creating one in `.worktrees/<short-description>` on a `feat/` or `fix/` branch:
-
-```bash
-common=$(git rev-parse --path-format=absolute --git-common-dir)
-grep -qxF '.worktrees/' "$common/info/exclude" || echo '.worktrees/' >> "$common/info/exclude"
-wt="$(dirname "$common")/.worktrees/<short-description>"
-git fetch origin
-git worktree add "$wt" -b <feat|fix>/<short-description> origin/<default-branch>
-cd "$wt"
-```
-
-Work from the selected worktree's root, record its path as `wt` and branch as `branch`, and track whether this invocation created them directly and owns their lifecycle.
+Work in the current checkout. Do not create, switch, or remove worktrees; the user or their tool manages them.
+When the checkout is on the default branch, create a `feat/` or `fix/` branch before editing.
+Otherwise keep the current branch, its changes, and its commits.
 
 ## 3. Build test-first
 
@@ -75,17 +64,3 @@ When the failure predates the change, stop and ask the user how to proceed. When
 Finish when the requested outcomes are covered, required validation passes, and the PR is open.
 Report any blocked outcome or validation without claiming completion.
 Do not keep watching the PR after its checks finish, or when no checks are expected.
-
-## 7. Clean up
-
-After the PR merges, remove the worktree and branch only if this invocation created them directly, owns their lifecycle, and the worktree is clean.
-Leave externally managed or reused worktrees in place unless the user explicitly requests removal.
-
-```bash
-common=$(git rev-parse --path-format=absolute --git-common-dir)
-cd "$(dirname "$common")"
-git worktree remove "$wt"
-git branch -d "$branch"
-```
-
-Otherwise leave the worktree in place for follow-up feedback.
