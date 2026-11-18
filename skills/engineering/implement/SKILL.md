@@ -10,7 +10,7 @@ The request can be a one-line prompt, an issue, a ticket, or a spec. Do not requ
 
 ## 1. Ground
 
-Read the request and the code it touches. Read the repo's `CODING-STANDARDS.md` and `UBIQUITOUS-LANGUAGE.md` when they exist, and use the glossary's terms verbatim.
+Read the request and the code it touches. Read the repo's `CODING-STANDARDS.md` and `GLOSSARY.md` when they exist, and use the glossary's terms verbatim.
 Identify every requested outcome, including the acceptance criteria in a linked issue or spec.
 Splitting work across PRs does not narrow the original request.
 For a bug, reproduce it end to end the way a user hits it before changing code.

@@ -74,4 +74,4 @@ echo "10.1038/s41586-020-2649-2" | uv run reference_check.py -
 4. Run the final citation list through `reference_check.py`.
 5. Deliver an annotated bibliography, or a synthesis matrix (themes by papers) if the user wants one. For each paper, give the full citation with DOI and a short relevance note based on the record's abstract or TLDR.
 
-The repo glossary, `docs/UBIQUITOUS-LANGUAGE.md`, defines the terms used here (canonical record, snowballing, reference-check, screening, annotated bibliography).
+The repo glossary, `GLOSSARY.md`, defines the terms used here (canonical record, snowballing, reference-check, screening, annotated bibliography).

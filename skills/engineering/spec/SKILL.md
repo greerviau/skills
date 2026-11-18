@@ -12,7 +12,7 @@ The spec is human-facing: it states what, why, what "done" means, what is out of
 
 ## Procedure
 
-1. Skim the territory. Identify the outcome and the kind of work, find which repos and subsystems are involved, and read the repo's `UBIQUITOUS-LANGUAGE.md` files for the affected contexts.
+1. Skim the territory. Identify the outcome and the kind of work, find which repos and subsystems are involved, and read the repo's `GLOSSARY.md` files for the affected contexts.
 2. Interview the user about what the request leaves unclear: success criteria, scope boundaries, constraints, design forks, and ambiguous domain terms. Keep asking until the answers stop changing the spec.
    When no user can answer, resolve what exploration can, take the most defensible call on the rest, and record each assumption under "Risks and open questions".
 3. Explore the code. Fan discovery out to read-only subagents in parallel when subagents are available and ask for paths, signatures, and short excerpts, not whole files. Check whether the request spans more than one repo. For a bug, find how to reproduce it end to end. Find how the change can be proven end to end with the repo's existing tests or entry points.
@@ -42,8 +42,8 @@ The spec is human-facing: it states what, why, what "done" means, what is out of
 
    Draw the system after the change, and mark the parts the change adds or alters with a stroke-based `classDef`. Render each diagram and fix its layout before saving. A spec with none of these gets no diagram.
 7. Save the spec to the OS temporary directory, in kebab-case with a date prefix such as `2026-07-07-fix-xic-shard-lookup.md`. Never write or commit it to a repo.
-8. Update the glossary. Write new or corrected terms to the existing `UBIQUITOUS-LANGUAGE.md`, and create `docs/UBIQUITOUS-LANGUAGE.md` when none exists. Under a no-documents-in-the-repo instruction, extend an existing glossary and put new terms in the spec's text instead.
-   One entry per term: the term, its precise meaning, and where useful the code artifacts that embody it. Scope entries to the repo, in present tense, with no planning status. Add a term only when it names a domain concept people could misunderstand. A repo with distinct bounded contexts gives each its own glossary, and the root glossary maps them.
+8. Update the glossary. Write new or corrected terms to the existing `GLOSSARY.md`, and create `GLOSSARY.md` at the repo root when none exists. Under a no-documents-in-the-repo instruction, extend an existing glossary and put new terms in the spec's text instead.
+   One entry per term: the term, its precise meaning, and where useful the code artifacts that embody it. Scope entries to the repo, in present tense, with no planning status. Add a term only when it names a domain concept people could misunderstand. A repo with distinct bounded contexts gives each its own `GLOSSARY.md` in the context's root directory, and the repo-root glossary maps them.
 9. Report the file paths with a one-line description each, and ask how to proceed: file the work items as issues, implement them in order, or iterate on the spec.
    Stop for the answer. When no user can answer, report the spec path and the recorded assumptions and stop without executing.
    When the spec supersedes an open PR, say so in the spec and close the PR.

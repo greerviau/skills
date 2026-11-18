@@ -30,7 +30,7 @@ Skills that create issues or apply proposed rule changes retain their workflow-s
 
 ### Engineering
 
-- [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed spec. It interviews the user, explores the code, researches external behavior, checks each decision against the code, extends the repo's `UBIQUITOUS-LANGUAGE.md`, and writes a short human-facing spec whose work items become tickets.
+- [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed spec. It interviews the user, explores the code, researches external behavior, checks each decision against the code, extends the repo's `GLOSSARY.md`, and writes a short human-facing spec whose work items become tickets.
 - [spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md) - turns a reviewed spec into GitHub Issues, choosing a single-issue, flat, or parent-with-sub-issues shape from the spec's scope.
 - [handoff](skills/engineering/handoff/SKILL.md) - compacts the current conversation into a handoff document for another agent.
 - [retro](skills/engineering/retro/SKILL.md) - reads a finished session's log and proposes, for each mistake, the strongest fix that works: a structural change, a type, a lint or CI rule, or a test that fails on the mistake, and a written rule in a `CODING-STANDARDS.md` or a skill only for judgment calls.
@@ -52,7 +52,7 @@ Skills that create issues or apply proposed rule changes retain their workflow-s
 - [doc-audit](skills/engineering/doc-audit/SKILL.md) - audits the documentation a change touched, rewrites stale passages in present tense, and checks the prose for plain language.
 
 Skills write working documents (specs, plans, analyses, benchmark and prototype results, mockups) to the OS temporary directory and never commit them.
-They write documentation of the system as it is now (`UBIQUITOUS-LANGUAGE.md`, `CODING-STANDARDS.md`, `verify-<app>` recipes) into the repo.
+They write documentation of the system as it is now (`GLOSSARY.md`, `CODING-STANDARDS.md`, `verify-<app>` recipes) into the repo.
 Tell the agent, or put a line in the repo's agent instructions (`AGENTS.md` or equivalent), not to write documents to the repo, and that documentation stays local instead.
 
 Coding rules live in `<repo>/CODING-STANDARDS.md` for one repo and in `~/CODING-STANDARDS.md` (referenced from your global agent instructions) for every repo. `retro` maintains both.

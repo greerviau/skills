@@ -32,7 +32,7 @@ This skill reads code and changes none of it.
 
    Drop generated and vendored paths from the result.
    Widen the window when the history is short or the changes are spread evenly.
-   Read `UBIQUITOUS-LANGUAGE.md`, `CODING-STANDARDS.md`, and decision records (`docs/adr/`, `docs/decisions/`) that cover the scoped area.
+   Read `GLOSSARY.md`, `CODING-STANDARDS.md`, and decision records (`docs/adr/`, `docs/decisions/`) that cover the scoped area.
    The scope is done when you can name the paths you will survey and why.
 2. Explore the scoped paths.
    Fan discovery out to read-only subagents in parallel when subagents are available, and ask for paths, signatures, call sites, and short excerpts, not whole files.
