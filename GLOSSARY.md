@@ -1,4 +1,4 @@
-# Ubiquitous language
+# Glossary
 
 Shared vocabulary between specs, conversation, and code in this repo.
 One entry per term, short and precise.

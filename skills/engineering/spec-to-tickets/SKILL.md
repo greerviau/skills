@@ -42,7 +42,7 @@ Use a numbered list under `## Acceptance criteria`.
 
 For every shape:
 
-- Titles and bodies use the spec's ubiquitous-language terms verbatim, with no coined synonyms.
+- Titles and bodies use the terms of the spec and the repo's `GLOSSARY.md` verbatim, with no coined synonyms.
 - An issue links the spec only when the spec is reachable (see Linking the spec).
 - Nothing is created until the user confirms the shape and breakdown.
 
