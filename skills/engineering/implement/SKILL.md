@@ -53,7 +53,7 @@ List them for the user and ask which to open as GitHub issues. When no user can 
 ## 6. Open the PR and watch CI
 
 Open the PR only after step 5's findings are fixed and step 4 passes on the final commit.
-Do not open a PR, draft or ready, to hold work in progress: a draft runs the same workflows on every push.
+Do not open a PR, draft or ready, to hold work in progress.
 Push, open the PR, and link the related issue whenever one exists. Use a closing reference when the PR should close it.
 Link specs, plans, and other files only when they are committed and have a remote URL PR readers can access. Omit local paths, uncommitted files, and unpushed branches; summarize relevant details in the PR instead.
 Inspect workflow event triggers and path filters, required checks, and checks on the pushed PR head.

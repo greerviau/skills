@@ -43,4 +43,4 @@ Write a pull request's title and body, then create it.
    - Aim for about 200 words and rarely exceed 400. Check with `wc -w`, because authors read their own drafts as short. Leave diagram source out of the count.
    - Cut what the diff already shows: file walkthroughs, signatures, line counts, quoted code. State each fact once. Link an accessible spec or issue for depth.
 6. Open the PR with the title and body, for example with `gh pr create`.
-   Open it ready for review unless the user asks for a draft: a draft runs the same pull request workflows on every push.
+   Open it ready for review unless the user asks for a draft.
