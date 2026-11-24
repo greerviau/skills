@@ -66,7 +66,7 @@ The grant does not bypass a harness or system approval prompt.
 ## 3. Work
 
 Do the task with the smallest change or output that meets the acceptance criteria.
-For a code change in a repo, implement it and open a PR.
+For a code change in a repo, implement it, and open the PR in step 5, after step 4's review findings are fixed and validation passes.
 
 Decide each issue that comes up mid-run from the brief and sensible defaults.
 Append a row to the decision log as you make each decision, change direction, revert work, reject a review finding, or finish a criterion's proof.

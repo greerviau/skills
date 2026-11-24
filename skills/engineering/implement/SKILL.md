@@ -52,6 +52,8 @@ List them for the user and ask which to open as GitHub issues. When no user can 
 
 ## 6. Open the PR and watch CI
 
+Open the PR only after step 5's findings are fixed and step 4 passes on the final commit.
+Do not open a PR, draft or ready, to hold work in progress.
 Push, open the PR, and link the related issue whenever one exists. Use a closing reference when the PR should close it.
 Link specs, plans, and other files only when they are committed and have a remote URL PR readers can access. Omit local paths, uncommitted files, and unpushed branches; summarize relevant details in the PR instead.
 Inspect workflow event triggers and path filters, required checks, and checks on the pushed PR head.
@@ -59,6 +61,7 @@ Workflow files with only manual or release triggers do not imply PR checks will 
 Wait for checks that are required or expected for this PR, using the host's supported wait mechanism.
 When a required check cannot trigger, report the configuration blocker instead of waiting for it to appear.
 When no checks are expected and none are pending or required, report that state and skip the wait.
+Once the PR is open, push only fixes for failing checks and for feedback from reviewers or the user, and batch each round of fixes into one push.
 On failure caused by the change, investigate, fix, and push until it passes.
 When the failure predates the change, stop and ask the user how to proceed. When no user can answer, report the failure and stop.
 Finish when the requested outcomes are covered, required validation passes, and the PR is open.
