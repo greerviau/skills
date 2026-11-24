@@ -31,8 +31,7 @@ Run the typechecker and the test file you are changing after each edit.
 
 ## 4. Validate
 
-Run the full test suite, the linter, the typechecker, and every other check the repo's pull request workflows run that can run locally, such as titer.
-Read `.github/workflows` (or the repo's CI config) to find them.
+Run the full test suite, the linter, and the typechecker.
 Exercise a change with a runtime surface end to end through its real entry point.
 Audit every comment the change adds and every documentation surface it touches, and rewrite what went stale.
 Before opening the PR, map each requested outcome to its implementation and verification.
