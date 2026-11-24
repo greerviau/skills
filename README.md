@@ -30,7 +30,7 @@ Skills that create issues or apply proposed rule changes retain their workflow-s
 
 ### Engineering
 
-- [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed spec. It interviews the user, explores the code, researches external behavior, checks each decision against the code, extends the repo's `GLOSSARY.md`, and writes a short human-facing spec whose work items become tickets.
+- [spec](skills/engineering/spec/SKILL.md) - turns a raw request into a reviewed spec. It explores the code first, then interviews the user in rounds of numbered questions with a recommended answer each, so the user makes every design decision before anything is written. It writes the spec only when the user says to, extends the repo's `GLOSSARY.md`, and keeps the spec short and human-facing, with work items that become tickets.
 - [spec-to-tickets](skills/engineering/spec-to-tickets/SKILL.md) - turns a reviewed spec into GitHub Issues, choosing a single-issue, flat, or parent-with-sub-issues shape from the spec's scope.
 - [handoff](skills/engineering/handoff/SKILL.md) - compacts the current conversation into a handoff document for another agent.
 - [retro](skills/engineering/retro/SKILL.md) - reads a finished session's log and proposes, for each mistake, the strongest fix that works: a structural change, a type, a lint or CI rule, or a test that fails on the mistake, and a written rule in a `CODING-STANDARDS.md` or a skill only for judgment calls.
