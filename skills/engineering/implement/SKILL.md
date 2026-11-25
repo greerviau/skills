@@ -41,10 +41,7 @@ Report blocked outcomes and user-approved scope changes without describing unfin
 
 ## 5. Review
 
-Commit, then measure the change: sum the added and deleted lines in `git diff --numstat origin/<default-branch>...HEAD`, leaving out generated files and lockfiles.
-When the total exceeds about 400, split the change into stacked PRs that reviewers can assess independently, and measure each layer against the layer below it.
-When no clean split exists, ask the user. When no user can answer, keep one PR and say in its body why it stays whole.
-Then have a fresh subagent that did not write the change review the diff against `origin/<default-branch>` when delegation is available and permitted.
+Commit, then have a fresh subagent that did not write the change review the diff against `origin/<default-branch>` when delegation is available and permitted.
 Run the reviewer on a model from a different provider than the model that wrote the change, unless the user selects a reviewer.
 When no other provider is available, use a model from the same provider.
 Pass it the base ref and the request, and leave out the conversation that produced the change.
