@@ -10,8 +10,6 @@ Write a pull request's title and body, then create it.
 ## Procedure
 
 1. Diff against the base to see what changed. The title and body describe the branch as it stands, not how it got there.
-   Read the repo's AI usage policy when one exists, such as `AI_POLICY.md` or an AI section in `CONTRIBUTING.md`, and disclose AI use in the body and any new commits the way it requires.
-   Otherwise keep the attribution the harness adds.
 2. Title: conventional-commit form, `feat(...)` or `fix(...)`, with a concise scope and summary, such as `fix(worktree): keep worktree alive until PR merges`.
 3. Link the related issue whenever one exists.
    Use a closing reference in the body such as `Fixes #123` when the PR should close it.

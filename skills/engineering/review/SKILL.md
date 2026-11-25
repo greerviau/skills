@@ -32,7 +32,6 @@ This skill reviews and does not apply changes.
      An import, collection, setup, or unrelated failure leaves the test unproven, so report it as unproven.
      Remove the copy afterward (`git worktree remove --force "$wt"`).
    - Flakiness: grep added tests for unseeded `random`, real clocks (`now()`, `sleep`), order dependence, and un-stubbed network.
-   - AI policy: when the repo has an AI usage policy, such as `AI_POLICY.md` or an AI section in `CONTRIBUTING.md`, `git log <base>..<head> --format='%an <%ae>%n%b'` and the PR body disclose AI use the way it requires.
    - Repo rules: check the diff against the repo's `CODING-STANDARDS.md` and `GLOSSARY.md` when they exist. Grep added identifiers for abbreviations and for synonyms of glossary terms. List the comments the diff adds with `git diff <base>..HEAD | grep -E -C2 '^\+.*(#|//|/\*|--|<!--)'`, which over-collects on purpose, and settle each against the surrounding code. A comment that restates the code, carries an example, or references this repo's issue or PR number is a finding.
 4. Structure. Judge with these lenses and cite the one a finding breaks:
    - Depth: a **deep module** hides substantial functionality behind a narrow interface.
