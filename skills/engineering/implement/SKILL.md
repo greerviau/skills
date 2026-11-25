@@ -11,6 +11,7 @@ The request can be a one-line prompt, an issue, a ticket, or a spec. Do not requ
 ## 1. Ground
 
 Read the request and the code it touches. Read the repo's `CODING-STANDARDS.md` and `GLOSSARY.md` when they exist, and use the glossary's terms verbatim.
+Read the repo's AI usage policy when one exists, such as `AI_POLICY.md` or an AI section in `CONTRIBUTING.md`, and disclose AI use in commits and the PR the way it requires.
 Identify every requested outcome, including the acceptance criteria in a linked issue or spec.
 Splitting work across PRs does not narrow the original request.
 For a bug, reproduce it end to end the way a user hits it before changing code.
@@ -40,7 +41,10 @@ Report blocked outcomes and user-approved scope changes without describing unfin
 
 ## 5. Review
 
-Commit, then have a fresh subagent that did not write the change review the diff against `origin/<default-branch>` when delegation is available and permitted.
+Commit, then measure the change: sum the added and deleted lines in `git diff --numstat origin/<default-branch>...HEAD`, leaving out generated files and lockfiles.
+When the total exceeds about 400, split the change into stacked PRs that reviewers can assess independently, and measure each layer against the layer below it.
+When no clean split exists, ask the user. When no user can answer, keep one PR and say in its body why it stays whole.
+Then have a fresh subagent that did not write the change review the diff against `origin/<default-branch>` when delegation is available and permitted.
 Run the reviewer on a model from a different provider than the model that wrote the change, unless the user selects a reviewer.
 When no other provider is available, use a model from the same provider.
 Pass it the base ref and the request, and leave out the conversation that produced the change.
@@ -55,7 +59,6 @@ List them for the user and ask which to open as GitHub issues. When no user can 
 
 Open the PR only after step 5's findings are fixed and step 4 passes on the final commit.
 Do not open a PR, draft or ready, to hold work in progress.
-Run `git diff --stat origin/<default-branch>...HEAD`. When the change exceeds about 400 changed lines, excluding generated files and lockfiles, split it into stacked PRs that each review on their own, or ask the user. When no user can answer, open one PR and state its size in the body.
 Push, open the PR, and link the related issue whenever one exists. Use a closing reference when the PR should close it.
 Link specs, plans, and other files only when they are committed and have a remote URL PR readers can access. Omit local paths, uncommitted files, and unpushed branches; summarize relevant details in the PR instead.
 Inspect workflow event triggers and path filters, required checks, and checks on the pushed PR head.

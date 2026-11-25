@@ -10,6 +10,8 @@ Write a pull request's title and body, then create it.
 ## Procedure
 
 1. Diff against the base to see what changed. The title and body describe the branch as it stands, not how it got there.
+   Read the repo's AI usage policy when one exists, such as `AI_POLICY.md` or an AI section in `CONTRIBUTING.md`, and disclose AI use in the body and any new commits the way it requires.
+   Otherwise keep the attribution the harness adds.
 2. Title: conventional-commit form, `feat(...)` or `fix(...)`, with a concise scope and summary, such as `fix(worktree): keep worktree alive until PR merges`.
 3. Link the related issue whenever one exists.
    Use a closing reference in the body such as `Fixes #123` when the PR should close it.
@@ -23,7 +25,8 @@ Write a pull request's title and body, then create it.
    When no matching template exists, read [references/pr-template.md](references/pr-template.md) and fill it in.
    - Problem / request: the problem or requested feature and what this PR does about it.
    - Changes: a short summary of what was done, grouped instead of file by file. When the PR changes how components interact, a state machine, or a data model, include a mermaid diagram of the result, taken from the spec when it has one.
-   - Review focus: include this section when parts of the change need human judgment. List up to three places, such as a design choice made without the user, or a risky change and the fact that makes it safe.
+   - Review focus: include this section when parts of the change need human judgment.
+     List up to three places, such as a design choice made without the user, or a risky change and the fact that makes it safe.
    - Include Evidence when screenshots, output, or another concrete artifact helps show the change. Omit it when the change has no useful before-and-after evidence, such as a new skill or other text-only addition.
      When included, use this exact structure, including when a repo template exists:
      ```markdown
@@ -44,4 +47,3 @@ Write a pull request's title and body, then create it.
    - Cut what the diff already shows: file walkthroughs, signatures, line counts, quoted code. State each fact once. Link an accessible spec or issue for depth.
 6. Open the PR with the title and body, for example with `gh pr create`.
    Open it ready for review unless the user asks for a draft.
-   When the repo has an AI usage policy (`AI_POLICY.md`, or an AI section in `CONTRIBUTING.md` at the root or in `.github/`), disclose AI use in the body and commits the way it requires. Otherwise keep the attribution the harness adds.
