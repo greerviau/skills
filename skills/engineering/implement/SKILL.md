@@ -28,6 +28,7 @@ Otherwise keep the current branch, its changes, and its commits.
 Every behavior change is test-driven: write a failing test at the real entry point, confirm it fails because the behavior is missing, write the minimum code to pass, then refactor under green.
 Record each red run's test name and failure message for the PR.
 Run the typechecker and the test file you are changing after each edit.
+Delete the code, tests, config, and docs the change makes dead or redundant.
 
 ## 4. Validate
 
